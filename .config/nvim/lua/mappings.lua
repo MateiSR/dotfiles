@@ -45,3 +45,5 @@ vim.keymap.set("n", "H", "^")
 vim.keymap.set("n", "L", "$")
 -- escape from insert mode
 vim.keymap.set("i", "jj", "<Esc>")
+-- open copilot chat
+vim.keymap.set("n", "<leader>cc", ":CopilotChatOpen<CR>", {})

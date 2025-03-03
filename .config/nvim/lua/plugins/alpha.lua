@@ -1,23 +1,24 @@
 return {
   -- https://github.com/adibhanna/nvim/blob/main/lua/plugins/alfa-nvim.lua
   "goolord/alpha-nvim",
-   dependencies = {
+  dependencies = {
     "nvim-tree/nvim-web-devicons",
-  }, enabled = true,
+  },
+  enabled = true,
   event = "VimEnter",
   lazy = true,
   opts = function()
     local dashboard = require("alpha.themes.dashboard")
---     local logo = [[
--- ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
--- ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
--- ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
--- ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
--- ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
--- ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
---     ]]
+    --     local logo = [[
+    -- ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+    -- ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+    -- ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+    -- ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+    -- ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+    -- ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
+    --     ]]
 
-     local logo = [[
+    local logo = [[
                                                      
               ████ ██████           █████      ██
              ███████████             █████ 
@@ -34,7 +35,8 @@ return {
       dashboard.button("n", " " .. " New file", ":ene <BAR> startinsert <CR>"),
       dashboard.button("r", " " .. " Recent files", ":Telescope oldfiles <CR>"),
       dashboard.button("g", " " .. " Find text", ":Telescope live_grep <CR>"),
-      dashboard.button("s", " " .. "Restore Session", '<cmd>lua require("persistence").load()<cr>'),
+      dashboard.button("C", " " .. " Copilot Chat", ":CopilotChatOpen<CR>"),
+      dashboard.button("s", " " .. " Restore Session", '<cmd>lua require("persistence").load()<cr>'),
       dashboard.button("c", " " .. " Config", ":e ~/.config/nvim/ <CR>"),
       dashboard.button("l", "󰒲 " .. " Lazy", ":Lazy<CR>"),
       dashboard.button("q", " " .. " Quit", ":qa<CR>"),
