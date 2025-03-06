@@ -27,6 +27,8 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 -- Join the current line with the next line and keep the cursor in place
 vim.keymap.set("n", "J", "mzJ`z")
+-- Join the current line with previous line and keep the cursor in place
+vim.keymap.set("n", "K", "mzkJ`z")
 -- Scroll down by half a screen and center the cursor
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 -- Scroll up by half a screen and center the cursor
@@ -47,3 +49,26 @@ vim.keymap.set("n", "L", "$")
 vim.keymap.set("i", "jj", "<Esc>")
 -- open copilot chat
 vim.keymap.set("n", "<leader>cc", ":CopilotChatOpen<CR>", {})
+
+-- disable arrow keys
+vim.keymap.set({ "n", "v", "i" }, "<Up>", "<Nop>", { noremap = true })
+vim.keymap.set({ "n", "v", "i" }, "<Down>", "<Nop>", { noremap = true })
+vim.keymap.set({ "n", "v", "i" }, "<Left>", "<Nop>", { noremap = true })
+vim.keymap.set({ "n", "v", "i" }, "<Right>", "<Nop>", { noremap = true })
+
+-- ctrl-d, ctrl-u
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true })
+
+-- shift-o, shift-a, shift-i
+-- keep as default
+
+-- di (delete inside "...")
+-- (same for ci, yi, vi, etc.)
+-- keep as default
+
+-- r, shift-r (replace mode)
+-- keep as default
+
+-- shift-@ q, qq, q
+-- keep as default
