@@ -72,3 +72,25 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true })
 
 -- shift-@ q, qq, q
 -- keep as default
+
+-- Set help command for man pager
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "man",
+  callback = function()
+    -- Set F to show table of contents
+    vim.api.nvim_buf_set_keymap(
+      0,
+      "n",
+      "F",
+      "<cmd>lua require('man').show_toc()<CR>",
+      { noremap = true, silent = true }
+    )
+
+    -- Unbind q for recording macros
+    vim.api.nvim_buf_set_keymap(0, "n", "q", "", { noremap = true })
+    vim.api.nvim_buf_set_keymap(0, "n", "qq", "", { noremap = true })
+
+    -- Set q to quit
+    vim.api.nvim_buf_set_keymap(0, "n", "q", ":q<CR>", { noremap = true, silent = true })
+  end,
+})

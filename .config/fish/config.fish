@@ -127,3 +127,6 @@ set -g theme_nerd_fonts yes
 
 # Created by `pipx` on 2024-06-05 20:15:03
 set PATH $PATH /home/matei/.local/bin
+
+# Nvim man page
+set -gx MANPAGER 'nvim +Man!'
