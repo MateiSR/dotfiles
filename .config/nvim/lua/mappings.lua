@@ -37,8 +37,6 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv", { noremap = true })
 -- Move to the previous search result and center the cursor
 vim.keymap.set("n", "N", "Nzzzv", { noremap = true })
--- Disable the 'Q' key in normal mode (prevents entering Ex mode)
-vim.keymap.set("n", "Q", "<nop>")
 -- Easy redo
 vim.keymap.set("n", "U", "<C-r>")
 -- Move to the beginning of the line
@@ -85,12 +83,5 @@ vim.api.nvim_create_autocmd("FileType", {
       "<cmd>lua require('man').show_toc()<CR>",
       { noremap = true, silent = true }
     )
-
-    -- Unbind q for recording macros
-    vim.api.nvim_buf_set_keymap(0, "n", "q", "", { noremap = true })
-    vim.api.nvim_buf_set_keymap(0, "n", "qq", "", { noremap = true })
-
-    -- Set q to quit
-    vim.api.nvim_buf_set_keymap(0, "n", "q", ":q<CR>", { noremap = true, silent = true })
   end,
 })
