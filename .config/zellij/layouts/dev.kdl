@@ -1,0 +1,32 @@
+ layout {
+     default_tab_template {
+         pane size=1 borderless=true {
+             plugin location="zellij:tab-bar"
+         }
+         children
+         pane size=2 borderless=true {
+             plugin location="zellij:status-bar"
+         }
+     }
+     
+     tab name="editor" focus=true {
+        pane split_direction="horizontal" {
+           pane command="nvim"
+      }
+     }
+     
+     tab name="terminal #1" {
+        pane split_direction="vertical" {
+           pane
+           pane
+        }
+     }
+     
+    tab name="terminal #2" {
+         pane
+     }
+
+     tab name="top" {
+         pane command="htop"
+     }
+ }
