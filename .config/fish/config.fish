@@ -11,8 +11,6 @@ set -x EDITOR /usr/bin/nvim
 # GPG's TTY variable
 set -x GPG_TTY (tty)
 
-# Set wine prefix
-set -x WINEPREFIX /essd/wine
 
 # Aliases
 alias la='tree'
@@ -36,6 +34,8 @@ alias ga='git add -p'
 alias gcoall='git checkout -- .'
 alias gr='git remote'
 alias gre='git reset'
+
+alias lg='lazygit'
 
 # Docker aliases
 alias dco='docker compose'
