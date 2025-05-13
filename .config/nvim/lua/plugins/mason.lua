@@ -27,13 +27,13 @@ local servers = {
 
 return {
 	{
-		"williamboman/mason.nvim",
+		"mason-org/mason.nvim",
 		config = function()
 			require("mason").setup()
 		end,
 	},
 	{
-		"williamboman/mason-lspconfig.nvim",
+		"mason-org/mason-lspconfig.nvim",
 		config = function()
 			require("mason-lspconfig").setup({
 				ensure_installed = servers,
@@ -48,6 +48,19 @@ return {
 			for _, server in ipairs(servers) do
 				lspconfig[server].setup({})
 			end
+
+			lspconfig.eslint.setup({
+				settings = {
+					packageManager = "yarn",
+				},
+				---@diagnostic disable-next-line: unused-local
+				on_attach = function(client, bufnr)
+					vim.api.nvim_create_autocmd("BufWritePre", {
+						buffer = bufnr,
+						command = "EslintFixAll",
+					})
+				end,
+			})
 
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
