@@ -11,7 +11,6 @@ set -x EDITOR /usr/bin/nvim
 # GPG's TTY variable
 set -x GPG_TTY (tty)
 
-
 # Aliases
 alias la='tree'
 alias cat='bat'
@@ -43,6 +42,7 @@ alias dps='docker ps'
 alias dpa='docker ps -a'
 alias dl='docker ps -l -q'
 alias dx='docker exec -it'
+alias dka="docker kill $(docker ps -q)"
 
 # Directory navigation aliases
 alias ..='cd ..'
