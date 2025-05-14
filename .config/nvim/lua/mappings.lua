@@ -1,4 +1,4 @@
-vim.keymap.set("n", "<C-s>", ":up<CR>", {})
+vim.keymap.set("n", "<C-s>", ":up<CR>", { noremap = true, silent = true })
 -- bind quickfix
 vim.keymap.set("n", "<leader>q", ":copen<CR>", {})
 -- bind qf close
