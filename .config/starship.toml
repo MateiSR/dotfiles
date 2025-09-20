@@ -1,23 +1,25 @@
+
 format = """
-[░▒▓](#d5c9ab)\
-[ ⋏ ](bg:#d5c9ab fg:#2f383e)\
-[](bg:#995900 fg:#d5c9ab)\
+[░▒▓](#c5bfae)\
+[ ⋏ ](bg:#c5bfae fg:#28231d)\
+[](bg:#b36b20 fg:#c5bfae)\
 $directory\
-[](fg:#995900 bg:#4f5b58)\
+[](fg:#b36b20 bg:#423a31)\
 $git_branch\
 $git_status\
-[](fg:#4f5b58 bg:#3a484a)\
+[](fg:#423a31 bg:#28231d)\
 $nodejs\
 $rust\
 $golang\
 $php\
-[](fg:#3a484a bg:#2f383e)\
 $time\
-[ ](fg:#2f383e)\
+[ ](fg:#28231d)\
 \n$character"""
 
 [directory]
-style = "fg:#d3c6aa bg:#995900"
+# Style uses the new bronze accent for the background.
+# Foreground is a dark color for high contrast.
+style = "fg:#28231d bg:#b36b20" # CHANGED: Using the new accent color
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
@@ -30,36 +32,37 @@ truncation_symbol = "…/"
 
 [git_branch]
 symbol = ""
-style = "bg:#4f5b58"
-format = '[[ $symbol $branch ](fg:#995900 bg:#4f5b58)]($style)'
+# Style uses the first step down in the color fade (a warm, dark gray).
+style = "bg:#423a31"
+format = '[[ $symbol $branch ](fg:#c5bfae bg:#423a31)]($style)'
 
 [git_status]
-style = "bg:#4f5b58"
-format = '[[($all_status$ahead_behind )](fg:#995900 bg:#4f5b58)]($style)'
+style = "bg:#423a31"
+format = '[[($all_status$ahead_behind )](fg:#c5bfae bg:#423a31)]($style)'
 
 [nodejs]
 symbol = ""
-style = "bg:#3a484a"
-format = '[[ $symbol ($version) ](fg:#995900 bg:#3a484a)]($style)'
+# Style uses the darkest gray, blending into the terminal background.
+style = "bg:#28231d"
+format = '[[ $symbol ($version) ](fg:#c5bfae bg:#28231d)]($style)'
 
 [rust]
 symbol = ""
-style = "bg:#3a484a"
-format = '[[ $symbol ($version) ](fg:#995900 bg:#3a484a)]($style)'
+style = "bg:#28231d"
+format = '[[ $symbol ($version) ](fg:#c5bfae bg:#28231d)]($style)'
 
 [golang]
 symbol = ""
-style = "bg:#3a484a"
-format = '[[ $symbol ($version) ](fg:#995900 bg:#3a484a)]($style)'
+style = "bg:#28231d"
+format = '[[ $symbol ($version) ](fg:#c5bfae bg:#28231d)]($style)'
 
 [php]
 symbol = ""
-style = "bg:#3a484a"
-format = '[[ $symbol ($version) ](fg:#995900 bg:#3a484a)]($style)'
+style = "bg:#28231d"
+format = '[[ $symbol ($version) ](fg:#c5bfae bg:#28231d)]($style)'
 
 [time]
 disabled = false
 time_format = "%R" # Hour:Minute Format
-style = "bg:#2f383e"
-format = '[[  $time ](fg:#d3c6aa bg:#2f383e)]($style)'
-
+style = "bg:#28231d"
+format = '[[  $time ](fg:#c5bfae bg:#28231d)]($style)'
