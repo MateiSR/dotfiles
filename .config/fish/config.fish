@@ -11,10 +11,11 @@ set -x EDITOR /usr/bin/nvim
 # GPG's TTY variable
 set -x GPG_TTY (tty)
 
+# Set wine prefix
+set -x WINEPREFIX /essd/wine
+
 # Aliases
-alias la='tree'
-alias cat='bat'
-alias ssh="kitty +kitten ssh"
+alias c='bat'
 alias vv="~/.config/dotfiles/scripts/vv.sh"
 
 # Git aliases
@@ -90,8 +91,8 @@ alias http='xh'
 # fish_vi_key_bindings
 
 # Eza aliases
-alias ls='eza -l --icons --git -a'
-alias lr='eza --tree --level=2 --long --icons --git'
+alias l='eza -l --icons --git -a'
+alias la='eza --tree --level=2 --long --icons --git'
 
 # FZF integration (Fish can source the FZF configuration directly)
 # set -x FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow'
