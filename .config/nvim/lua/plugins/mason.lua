@@ -43,24 +43,23 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
-			local lspconfig = require("lspconfig")
 
 			for _, server in ipairs(servers) do
-				lspconfig[server].setup({})
+        vim.lsp.enable(server)
 			end
 
-			lspconfig.eslint.setup({
-				settings = {
-					packageManager = "yarn",
-				},
-				---@diagnostic disable-next-line: unused-local
-				on_attach = function(client, bufnr)
-					vim.api.nvim_create_autocmd("BufWritePre", {
-						buffer = bufnr,
-						command = "EslintFixAll",
-					})
-				end,
-			})
+			-- lspconfig.eslint.setup({
+			-- 	settings = {
+			-- 		packageManager = "yarn",
+			-- 	},
+			-- 	---@diagnostic disable-next-line: unused-local
+			-- 	on_attach = function(client, bufnr)
+			-- 		vim.api.nvim_create_autocmd("BufWritePre", {
+			-- 			buffer = bufnr,
+			-- 			command = "EslintFixAll",
+			-- 		})
+			-- 	end,
+			-- })
 
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})

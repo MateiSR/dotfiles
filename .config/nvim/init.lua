@@ -19,4 +19,5 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins")
 
 -- CopilotChat fix (Nvim < 0.11.0)
-vim.opt.completeopt:append({ "noinsert", "popup" })
+vim.opt.completeopt:append({"noinsert", "popup"})
+
