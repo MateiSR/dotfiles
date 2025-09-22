@@ -65,7 +65,7 @@ sddm
 rofimoji
 wtype
 pavucontrol
-wob
+swayosd
 eza
 starship
 blueman
