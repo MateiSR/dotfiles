@@ -2,7 +2,7 @@
 
 # Rofi theme configuration
 # Ensure this path is correct for your system. Rofi usually expands '~'.
-THEME_PATH="~/.config/rofi/themes/squared-material-dark-orange.rasi"
+THEME_PATH="~/.config/rofi/config.rasi"
 
 # Function to display errors using Rofi
 show_rofi_error() {

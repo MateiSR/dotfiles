@@ -1,0 +1,70 @@
+[config.wallpaper]
+command = "swww"
+arguments = ["img", "--transition-type", "center"]
+set = true
+
+
+[templates.waybar]
+input_path = './templates/colors.css'
+output_path = '~/.config/waybar/matugen.css'
+post_hook = 'pkill -SIGUSR2 waybar'
+
+[templates.kitty]
+input_path = './templates/kitty-colors.conf'
+output_path = '~/.config/kitty/matugen.conf'
+post_hook = 'pkill -SIGUSR1 kitty'
+
+[templates.starship]
+input_path = './templates/starship-colors.toml'
+output_path = '~/.config/starship.toml'
+
+[templates.hyprland]
+input_path = './templates/hyprland-colors.conf'
+output_path = '~/.config/hypr/matugen.conf'
+post_hook = 'hyprctl reload'
+
+[templates.swaync]
+input_path = './templates/colors.css'
+output_path = '~/.config/swaync/matugen.css'
+post_hook = 'swaync-client -rs'
+
+[templates.wlogout]
+input_path = './templates/colors.css'
+output_path = '~/.config/wlogout/matugen.css'
+
+[templates.rofi]
+input_path = './templates/rofi-colors.rasi'
+output_path = '~/.config/rofi/colors/matugen.rasi'
+
+[templates.qt5ct]
+input_path = './templates/qtct-colors.conf'
+output_path = '~/.config/qt5ct/colors/matugen.conf'
+
+[templates.qt6ct]
+input_path = './templates/qtct-colors.conf'
+output_path = '~/.config/qt6ct/colors/matugen.conf'
+
+[templates.vencord]
+input_path = './templates/midnight-discord.css'
+output_path = '~/.config/Vencord/themes/midnight-discord.css'
+
+[templates.yazi]
+input_path = './templates/yazi-theme.toml'
+output_path = '~/.config/yazi/theme.toml'
+
+[templates.zathura]
+input_path = './templates/zathura-colors'
+output_path = '~/.config/zathura/zathurarc'
+
+[templates.btop]
+input_path = './templates/btop.theme'
+output_path = '~/.config/btop/themes/matugen.theme'
+
+[templates.gtk3]
+input_path = './templates/gtk-colors.css'
+output_path = '~/.config/gtk-3.0/gtk.css'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark'
+
+[templates.gtk4]
+input_path = './templates/gtk-colors.css'
+output_path = '~/.config/gtk-4.0/colors.css'

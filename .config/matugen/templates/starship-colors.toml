@@ -1,0 +1,75 @@
+#
+# Matugen template for starship using a dynamic palette
+#
+
+format = """
+$directory$git_branch$git_status$nodejs$rust$golang$php$time
+$character"""
+
+palette = 'colors'
+
+[palettes.colors]
+# Defining a color palette based on Matugen variables
+color1 = '{{colors.primary_fixed_dim.default.hex}}'
+color2 = '{{colors.on_primary.default.hex}}'
+color3 = '{{colors.on_surface_variant.default.hex}}'
+color4 = '{{colors.surface_container.default.hex}}'
+color5 = '{{colors.on_primary.default.hex}}'
+color8 = '{{colors.primary.default.hex}}'
+color9 = '{{colors.tertiary.default.hex}}'
+error = '{{colors.error.default.hex}}'
+
+# Prompt symbols
+[character]
+success_symbol = "[🞈](bold fg:color9)"
+error_symbol = "[🞈](bold fg:error)"
+vicmd_symbol = "[🞈](bold #f9e2af)"
+
+[directory]
+style = "fg:color3 bg:color4"
+format = "[](fg:color1 bg:color4)[ 󰉋 ](bg:color1 fg:color2)[](fg:color1 bg:color4)[ $path ]($style)[](fg:color4)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+symbol = ""
+style = "fg:color3 bg:color4"
+format = "[](fg:color8 bg:color4)[ $symbol ](bg:color8 fg:color5)[](fg:color8 bg:color4)[ $branch ]($style)[](fg:color4)"
+
+[git_status]
+style = "fg:color3 bg:color4"
+format = '[[($all_status$ahead_behind )](fg:#color3 bg:#color4)]($style)'
+
+[nodejs]
+symbol = ""
+style = "fg:color3 bg:color4"
+format = "[](fg:color8 bg:color4)[ $symbol ](bg:color8 fg:color5)[](fg:color8 bg:color4)[ $version ]($style)[](fg:color4)"
+
+[rust]
+symbol = ""
+style = "fg:color3 bg:color4"
+format = "[](fg:color8 bg:color4)[ $symbol ](bg:color8 fg:color5)[](fg:color8 bg:color4)[ $version ]($style)[](fg:color4)"
+
+[golang]
+symbol = ""
+style = "fg:color3 bg:color4"
+format = "[](fg:color8 bg:color4)[ $symbol ](bg:color8 fg:color5)[](fg:color8 bg:color4)[ $version ]($style)[](fg:color4)"
+
+[php]
+symbol = ""
+style = "fg:color3 bg:color4"
+format = "[](fg:color8 bg:color4)[ $symbol ](bg:color8 fg:color5)[](fg:color8 bg:color4)[ $version ]($style)[](fg:color4)"
+
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "fg:color3 bg:color4"
+format = "[](fg:color8 bg:color4)[  ](bg:color8 fg:color5)[](fg:color8 bg:color4)[ $time ]($style)[](fg:color4)"
+
+

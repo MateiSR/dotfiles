@@ -1,8 +1,1 @@
-
-//@theme "/home/matei/.config/rofi/themes/squared-nord.rasi"
-
-//@theme "/home/matei/.config/rofi/themes/appmenu.rasi"
-
-//@theme "/home/matei/.config/rofi/themes/squared-material-red.rasi"
-
-@theme "/home/matei/.config/rofi/themes/squared-material-dark-orange.rasi"
+@theme "/home/matei/.config/rofi/themes/matugen-config.rasi"
