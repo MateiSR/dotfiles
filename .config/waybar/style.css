@@ -1,101 +1,103 @@
+@import "matugen.css";
+
 * {
-	font-family: "DejaVuSansM Nerd Font";
-	font-size: 16px;
-	min-height: 0;
-	min-width: 0;
+    font-family: "DejaVuSansM Nerd Font";
+    font-size: 16px;
+    min-height: 0;
+    min-width: 0;
 }
 
 window#waybar {
-	background-color: rgba(0, 0, 0, 1);
+    background-color: @background;
 }
 
 #workspaces {
-	margin-left: 5px;
+    margin-left: 5px;
 }
 
 #workspaces button {
-	color: rgba(255, 255, 255, 0.4);
-  margin-right: 6px;
-  margin-left: 6px;
-  padding-right: 6px;
-  padding-left: 6px;
+    color: @on_surface_variant;
+    margin-right: 6px;
+    margin-left: 6px;
+    padding-right: 6px;
+    padding-left: 6px;
 }
 
 #workspaces button:hover {
-	color: #000000;
-	background-color: #000000;
+    color: @on_primary_container;
+    background-color: @primary_container;
 }
 
 #workspaces button.active {
-	color: rgba(255, 255, 255, 0.8);
+    color: @primary;
 }
 
 #custom-launcher {
-	color: #ffffff;
-	margin-left: 1em;
+    color: @primary;
+    margin-left: 1em;
 }
 
 #custom-separator {
-	color: #383838;
-	margin-left: 6px;
-	margin-right: 6px;
+    color: @outline;
+    margin-left: 6px;
+    margin-right: 6px;
 }
 
 #clock {
-	color: #ffffff;
-	margin-right: 8px;
+    color: @on_background;
+    margin-right: 8px;
 }
 
 #custom-power {
-	font-size: 18px;
-	padding-right: 1.5em;
-	color: #e26c7c;
+    font-size: 18px;
+    padding-right: 1.5em;
+    color: @error;
 }
 
 #custom-notifications {
-	font-size: 18px;
-	padding: 0.5em;
-	color: #ffffff;
+    font-size: 18px;
+    padding: 0.5em;
+    color: @on_background;
 }
 #bluetooth {
-	color: #ffffff;
+    color: @on_background;
 }
 
 #network {
-	color: #ffffff;
-	padding: 0.5em;
+    color: @on_background;
+    padding: 0.5em;
 }
 
 #pulseaudio {
-	color: #ffffff;
-	padding: 0.5em;
+    color: @on_background;
+    padding: 0.5em;
 }
 
 #backlight {
-	color: #ffffff;
-	padding: 0.5em;
+    color: @on_background;
+    padding: 0.5em;
 }
 
 #battery {
-	color: #ffffff;
-	padding: 0.5em;
+    color: @on_background;
+    padding: 0.5em;
 }
 
 #tray {
-	margin-right: 8px;
+    margin-right: 8px;
 }
 
 #battery.critical:not(.charging) {
-	color: #ffffff;
-	animation-name: blink;
-	animation-duration: 0.5s;
-	animation-timing-function: linear;
-	animation-iteration-count: infinite;
-	animation-direction: alternate;
+    color: @on_background;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
 @keyframes blink {
-	to {
-		color: #e26c7c;
-	}
+    to {
+        color: @error;
+    }
 }
