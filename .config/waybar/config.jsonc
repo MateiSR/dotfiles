@@ -16,6 +16,8 @@
         "custom/separator",
         "custom/notifications",
         "custom/separator",
+        "battery",
+        "custom/separator",
         "custom/power"
     ],
     "custom/launcher": {
