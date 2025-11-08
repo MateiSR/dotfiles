@@ -44,9 +44,6 @@ vim.keymap.set("n", "H", "^")
 vim.keymap.set("n", "L", "$")
 -- escape from insert mode
 vim.keymap.set("i", "jj", "<Esc>")
--- open copilot chat
-vim.keymap.set("n", "<leader>cc", ":CopilotChatOpen<CR>", {})
-
 -- disable arrow keys
 vim.keymap.set({ "n", "v", "i" }, "<Up>", "<Nop>", { noremap = true })
 vim.keymap.set({ "n", "v", "i" }, "<Down>", "<Nop>", { noremap = true })
