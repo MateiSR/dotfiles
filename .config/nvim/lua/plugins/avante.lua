@@ -65,15 +65,73 @@ return {
 		event = "InsertEnter", -- or load when entering Insert mode
 		config = function()
 			require("copilot").setup({
-				suggestion = { enabled = true, auto_trigger = true },
-				panel = { enabled = true },
+				suggestion = {
+					enabled = true,
+					auto_trigger = true,
+					debounce = 75,
+					keymap = {
+						-- Main accept key - Tab is most common
+						-- accept = "<Tab>",
+						-- Alternative: use <C-j> if Tab conflicts with other plugins
+						accept = "<C-j>",
+
+						-- Accept only the next word
+						accept_word = "<M-w>", -- Alt+w
+
+						-- Accept only the current line
+						accept_line = "<M-l>", -- Alt+l
+
+						-- Navigate between suggestions
+						next = "<M-]>", -- Alt+]
+						prev = "<M-[>", -- Alt+[
+
+						-- Dismiss the current suggestion
+						dismiss = "<C-]>", -- Ctrl+]
+					},
+				},
+				panel = {
+					enabled = true,
+					auto_refresh = false,
+					keymap = {
+						jump_prev = "[[",
+						jump_next = "]]",
+						accept = "<CR>",
+						refresh = "gr",
+						open = "<M-CR>", -- Alt+Enter to open panel
+					},
+					layout = {
+						position = "bottom", -- | top | left | right
+						ratio = 0.4,
+					},
+				},
 				filetypes = {
 					markdown = true,
 					help = true,
 					gitcommit = true,
-					["*"] = true,
+					gitrebase = true,
+					hgcommit = true,
+					svn = true,
+					cvs = true,
+					-- Disable Copilot in Avante-specific buffers to avoid conflicts
+					Avante = false,
+					AvanteInput = false,
+					["*"] = true, -- Enable for all other filetypes
 				},
+				copilot_node_command = "node", -- Node.js version must be > 18.x
+				server_opts_overrides = {},
 			})
+
+
+			-- Optional: Additional custom keymaps
+			-- Accept suggestion with Ctrl+J (alternative to Tab)
+			vim.keymap.set("i", "<C-j>", function()
+				require("copilot.suggestion").accept()
+			end, { desc = "Accept Copilot suggestion" })
+
+			-- Toggle Copilot suggestions on/off
+			vim.keymap.set("n", "<leader>ct", function()
+				require("copilot.suggestion").toggle_auto_trigger()
+			end, { desc = "Toggle Copilot auto suggestions" })
 		end,
 	},
 }
