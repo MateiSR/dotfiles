@@ -43,7 +43,7 @@ alias dps='docker ps'
 alias dpa='docker ps -a'
 alias dl='docker ps -l -q'
 alias dx='docker exec -it'
-alias dka="docker kill $(docker ps -q)"
+alias dka="docker kill (docker ps -q)"
 
 # Directory navigation aliases
 alias ..='cd ..'
@@ -131,3 +131,4 @@ set PATH $PATH /home/matei/.local/bin
 
 # Nvim man page
 set -gx MANPAGER 'nvim +Man!'
+fish_add_path $HOME/.local/bin
