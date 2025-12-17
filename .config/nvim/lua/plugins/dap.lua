@@ -1,7 +1,6 @@
 return {
 	"mfussenegger/nvim-dap",
 	dependencies = {
-		"saghen/blink.compat",
 		"rcarriga/cmp-dap",
 		"nvim-neotest/nvim-nio",
 		"rcarriga/nvim-dap-ui",
@@ -21,25 +20,6 @@ return {
 			command = "/usr/bin/lldb-dap",
 			name = "lldb",
 		}
-
-		require("blink.cmp").setup({
-			sources = {
-				default = { "lsp", "path", "snippets", "buffer" },
-				per_filetype = {
-					["dap-repl"] = { "dap" },
-					["dapui_watches"] = { "dap" },
-					["dapui_hover"] = { "dap" },
-				},
-				providers = {
-					dap = {
-						name = "DAP",
-						module = "blink.compat.source",
-						score_offset = 100,
-						opts = {},
-					},
-				},
-			},
-		})
 
 		local basic_gdb_configuration = {
 			--name = "debug",

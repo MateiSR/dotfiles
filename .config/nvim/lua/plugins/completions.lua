@@ -4,6 +4,7 @@ return {
 		dependencies = {
 			"Kaiser-Yang/blink-cmp-avante",
 			"rafamadriz/friendly-snippets",
+			"saghen/blink.compat",
 		},
 		version = "1.*",
 		opts = {
@@ -39,6 +40,9 @@ return {
 				per_filetype = {
 					["Avante"] = { "avante" },
 					["AvanteInput"] = { "avante" },
+					["dap-repl"] = { "dap" },
+					["dapui_watches"] = { "dap" },
+					["dapui_hover"] = { "dap" },
 				},
 				providers = {
 					snippets = {
@@ -49,6 +53,11 @@ return {
 					avante = {
 						name = "Avante",
 						module = "blink-cmp-avante",
+					},
+					dap = {
+						name = "DAP",
+						module = "blink.compat.source",
+						score_offset = 100,
 					},
 				},
 			},
