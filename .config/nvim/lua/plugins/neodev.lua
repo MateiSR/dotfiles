@@ -1,6 +1,10 @@
 return {
-	"folke/neodev.nvim",
+	"folke/lazydev.nvim",
+	ft = "lua",
 	opts = {
-		library = { plugins = { "nvim-dap-ui" }, types = true },
+		library = {
+			{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+			{ path = "lazy.nvim", words = { "LazyVim" } },
+		},
 	},
 }
