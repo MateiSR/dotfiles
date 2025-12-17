@@ -1,45 +1,57 @@
 return {
-	-- https://raw.githubusercontent.com/cpow/neovim-for-newbs/main/lua/plugins/completions.lua
 	{
-		"hrsh7th/cmp-nvim-lsp",
-	},
-	{
-		"L3MON4D3/LuaSnip",
+		"saghen/blink.cmp",
 		dependencies = {
-			"saadparwaiz1/cmp_luasnip",
+			"Kaiser-Yang/blink-cmp-avante",
 			"rafamadriz/friendly-snippets",
 		},
-	},
-	{
-		"hrsh7th/nvim-cmp",
-		config = function()
-			local cmp = require("cmp")
-			require("luasnip.loaders.from_vscode").lazy_load()
-
-			cmp.setup({
-				snippet = {
-					expand = function(args)
-						require("luasnip").lsp_expand(args.body)
-					end,
+		version = "1.*",
+		opts = {
+			keymap = { preset = "default" },
+			appearance = { nerd_font_variant = "mono" },
+			snippets = {
+				expand = function(snippet)
+					vim.snippet.expand(snippet)
+				end,
+				active = function(filter)
+					return vim.snippet.active(filter)
+				end,
+				jump = function(direction)
+					vim.snippet.jump(direction)
+				end,
+			},
+			completion = {
+				accept = {
+					auto_brackets = { enabled = true },
 				},
-				window = {
-					completion = cmp.config.window.bordered(),
-					documentation = cmp.config.window.bordered(),
+				menu = {
+					border = "rounded",
+					draw = { treesitter = { "lsp" } },
 				},
-				mapping = cmp.mapping.preset.insert({
-					["<C-b>"] = cmp.mapping.scroll_docs(-4),
-					["<C-f>"] = cmp.mapping.scroll_docs(4),
-					["<C-Space>"] = cmp.mapping.complete(),
-					["<C-e>"] = cmp.mapping.abort(),
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
-				}),
-				sources = cmp.config.sources({
-					{ name = "nvim_lsp" },
-					{ name = "luasnip" }, -- For luasnip users.
-				}, {
-					{ name = "buffer" },
-				}),
-			})
-		end,
+				documentation = {
+					auto_show = true,
+					auto_show_delay_ms = 200,
+					window = { border = "rounded" },
+				},
+			},
+			sources = {
+				default = { "lsp", "path", "snippets", "buffer" },
+				per_filetype = {
+					["Avante"] = { "avante" },
+					["AvanteInput"] = { "avante" },
+				},
+				providers = {
+					snippets = {
+						opts = {
+							friendly_snippets = true,
+						},
+					},
+					avante = {
+						name = "Avante",
+						module = "blink-cmp-avante",
+					},
+				},
+			},
+		},
 	},
 }

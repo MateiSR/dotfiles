@@ -43,9 +43,13 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			for _, server in ipairs(servers) do
-        vim.lsp.enable(server)
+				vim.lsp.config(server, {
+					capabilities = capabilities,
+				})
+				vim.lsp.enable(server)
 			end
 
 			-- lspconfig.eslint.setup({

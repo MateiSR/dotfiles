@@ -7,7 +7,7 @@ return {
 		-- Setup lualine with the custom theme
 		lualine.setup({
 			options = {
-				theme = "kanagawa",
+				theme = "onedark",
 				section_separators = { left = "", right = "" },
 				component_separators = { left = "", right = "" },
 			},

@@ -1,7 +1,7 @@
 return {
 	"mfussenegger/nvim-dap",
 	dependencies = {
-		"hrsh7th/nvim-cmp",
+		"saghen/blink.compat",
 		"rcarriga/cmp-dap",
 		"nvim-neotest/nvim-nio",
 		"rcarriga/nvim-dap-ui",
@@ -22,14 +22,22 @@ return {
 			name = "lldb",
 		}
 
-		require("cmp").setup({
-			enabled = function()
-				return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
-			end,
-		})
-		require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+		require("blink.cmp").setup({
 			sources = {
-				{ name = "dap" },
+				default = { "lsp", "path", "snippets", "buffer" },
+				per_filetype = {
+					["dap-repl"] = { "dap" },
+					["dapui_watches"] = { "dap" },
+					["dapui_hover"] = { "dap" },
+				},
+				providers = {
+					dap = {
+						name = "DAP",
+						module = "blink.compat.source",
+						score_offset = 100,
+						opts = {},
+					},
+				},
 			},
 		})
 
