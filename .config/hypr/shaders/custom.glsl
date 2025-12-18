@@ -7,7 +7,7 @@ void main() {
     vec3 color = pixColor.rgb;
 
     // 1. Brightness (95% = 0.95 multiplier)
-    color *= 0.95;
+    // color *= 0.95;
 
     // 2. Contrast (103% = centered expansion around 0.5)
     color = (color - 0.5) * 1.03 + 0.5;
@@ -17,7 +17,7 @@ void main() {
 
     // 4. Digital Vibrance (+50% Saturation)
     float luma = dot(color, vec3(0.2126, 0.7152, 0.0722));
-    color = mix(vec3(luma), color, 1.50); // 1.0 is default, 1.5 is +50%
+    color = mix(vec3(luma), color, 1.40); // 1.0 is default, 1.5 is +50%
 
     gl_FragColor = vec4(color, pixColor.a);
 }
