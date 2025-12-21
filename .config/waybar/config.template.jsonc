@@ -1,0 +1,114 @@
+{
+    "layer": "bottom",
+    "height": 40,
+    "margin": "12, 12, 0, 12",
+    "position": "top",
+    "modules-left": ["custom/launcher", "hyprland/workspaces"],
+    "modules-center": ["clock"],
+    "modules-right": "MODULES_RIGHT",
+    "custom/launcher": {
+        "format": " ",
+        "tooltip": false,
+        "on-click": "rofi -show drun",
+        "on-click-right": "killall rofi"
+    },
+    "custom/separator": {
+        "format": "｜",
+        "interval": "once",
+        "tooltip": false
+    },
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "active": "",
+            "default": ""
+        },
+        "persistent-workspaces": {
+            "*": 5
+        }
+    },
+    "clock": {
+        "format": "{:%H:%M}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+    "bluetooth": {
+        "format-on": "",
+        "format-off": "󰂲",
+        "format-disabled": "󰂲",
+        "format-connected": "󰂱",
+        "on-click": "blueman-manager",
+        "tooltip-format-connected": "{device_alias}"
+    },
+    "network": {
+        "format-wifi": "{icon}",
+        "format-disconnected": "󰤮",
+        "format-icons": ["󰤟", "󰤢", "󰤥", "󰤨"],
+        "format-ethernet": "󰅟 ",
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "format-linked": "{ifname}",
+        "tooltip-format-wifi": "{essid}",
+        "on-click": "nm-connection-editor"
+    },
+    "pulseaudio": {
+        "tooltip": false,
+        "format": "{volume}% {icon}",
+        "format-muted": "",
+        "on-click-right": "pactl set-sink-mute 0 toggle",
+        "on-click": "pavucontrol",
+        "format-icons": {
+            "headphone": "",
+            "default": ""
+        }
+    },
+    "backlight": {
+        "tooltip": false,
+        "format": "{}% 󰃠",
+        "interval": 1,
+        "on-scroll-up": "brightnessctl set 5%+",
+        "on-scroll-down": "if [ $(echo \"$(brightnessctl get) * 100 / $(brightnessctl max)\" | bc) -gt 8 ]; then    brightnessctl set 5%-; fi"
+    },
+    "battery": {
+        "states": {
+            "good": 80,
+            "warning": 30,
+            "critical": 20
+        },
+        "tooltip": false,
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "tray": {
+        "icon-size": 18,
+        "spacing": 10
+    },
+    "custom/power": {
+        "tooltip": false,
+        "format": "",
+        "on-click": "wlogout"
+    },
+    "custom/notifications": {
+        "tooltip": false,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "",
+            "none": "",
+            "dnd-notification": "",
+            "dnd-none": "",
+            "inhibited-notification": "",
+            "inhibited-none": "",
+            "dnd-inhibited-notification": "",
+            "dnd-inhibited-none": ""
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    }
+}
+
