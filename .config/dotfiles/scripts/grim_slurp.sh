@@ -3,9 +3,14 @@
 # Create a temporary file to store the screenshot
 temp_file=$(mktemp)
 
-# Capture screenshot using grim and slurp, save to temp file
+# Freeze screen, capture screenshot using grim and slurp, then unfreeze
+wayfreeze & PID=$!
+sleep 0.1
 grim -g "$(slurp)" "$temp_file"
-if [ $? -ne 0 ]; then
+grim_status=$?
+kill $PID 2>/dev/null
+
+if [ $grim_status -ne 0 ]; then
     echo "Error capturing screenshot."
     rm -f "$temp_file"
     exit 1

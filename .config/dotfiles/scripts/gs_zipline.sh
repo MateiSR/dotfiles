@@ -14,7 +14,7 @@ if [ -f "$FILE" ]; then
     URL=$(curl \
       -H "Content-Type: multipart/form-data" \
       -H "authorization: $KEY" \
-      -F "file=@$FILE" "https://$DOMAIN/api/upload" | jq -r '.files[0]')
+      -F "file=@$FILE" "https://$DOMAIN/api/upload" | jq -r '.files[0]' | jq -r '.url')
     # printf instead of echo as echo appends a newline
     wl-copy $(printf "%s" "$URL")
     echo "URL copied to clipboard: $URL"

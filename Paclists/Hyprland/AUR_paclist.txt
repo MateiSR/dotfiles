@@ -3,3 +3,4 @@ wlogout
 waypaper
 matugen-bin
 hyprshade
+wayfreeze-git
