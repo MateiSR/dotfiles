@@ -1,6 +1,5 @@
 zen-browser-bin
 wlogout
 waypaper
-matugen-bin
 hyprshade
 wayfreeze-git

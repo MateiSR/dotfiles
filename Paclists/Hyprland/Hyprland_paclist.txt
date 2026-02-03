@@ -74,3 +74,4 @@ sox
 ripgrep
 swww
 adw-gtk-theme
+matugen
