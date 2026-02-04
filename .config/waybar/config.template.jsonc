@@ -1,10 +1,11 @@
 {
     "layer": "bottom",
-    "height": 40,
-    "margin": "12, 12, 0, 12",
+    // "height": 40,
+    // "margin": "6, 6, 0, 6",
     "position": "top",
+    "reload_style_on_change": true,
     "modules-left": ["custom/launcher", "hyprland/workspaces"],
-    "modules-center": ["clock"],
+    "modules-center": ["clock#time", "clock#date"],
     "modules-right": "MODULES_RIGHT",
     "custom/launcher": {
         "format": " ",
@@ -27,10 +28,15 @@
             "*": 5
         }
     },
-    "clock": {
-        "format": "{:%H:%M}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+    "clock#time": {
+        "format": "󱑂 {:%H:%M}",
+        "tooltip-format": "12-hour Format: {:%I:%M %p}",
+        // "format-alt": "{:%Y-%m-%d}"
+    },
+    "clock#date": {
+        "format": " {:%d/%m}",
+        "tooltip-format": "<big>{:%A, %d/%m}</big>\n<tt><small>{calendar}</small></tt>",
+        // "format-alt": "{:%Y-%m-%d}"
     },
     "bluetooth": {
         "format-on": "",
@@ -40,16 +46,18 @@
         "on-click": "blueman-manager",
         "tooltip-format-connected": "{device_alias}"
     },
-    "network": {
-        "format-wifi": "{icon}",
-        "format-disconnected": "󰤮",
-        "format-icons": ["󰤟", "󰤢", "󰤥", "󰤨"],
-        "format-ethernet": "󰅟 ",
-        "tooltip-format": "{ifname} via {gwaddr}",
-        "format-linked": "{ifname}",
-        "tooltip-format-wifi": "{essid}",
-        "on-click": "nm-connection-editor"
-    },
+  "network": {
+    "interface": "*0",
+    "interval": 5,
+    "format": " {bandwidthTotalBytes}",
+    "format-alt": " {bandwidthUpBytes}  {bandwidthDownBytes}",
+    "format-disconnected": "",
+    "tooltip-format": "  {ifname} \n {bandwidthUpBytes}  {bandwidthDownBytes}",
+    "tooltip-format-wifi": "󰖩 {essid} ({signalStrength}%) \n {bandwidthUpBytes}  {bandwidthDownBytes}",
+    "tooltip-format-disconnected": "Disconnected",
+    "on-click-right": "nm-connection-editor",
+    "max-length": 24
+  },
     "pulseaudio": {
         "tooltip": false,
         "format": "{volume}% {icon}",
@@ -82,7 +90,8 @@
         "format-icons": ["", "", "", "", ""]
     },
     "tray": {
-        "icon-size": 18,
+        "icon-size": 13,
+        "rotate": 0,
         "spacing": 10
     },
     "custom/power": {

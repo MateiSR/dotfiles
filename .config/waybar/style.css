@@ -1,18 +1,51 @@
 @import "matugen.css";
 
 * {
-    font-family: "DejaVuSansM Nerd Font";
-    font-size: 16px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-weight: 700;
+    font-size: 14px;
     min-height: 0;
     min-width: 0;
 }
 
 window#waybar {
-    background-color: @background;
+  background: transparent;
 }
 
-#workspaces {
-    margin-left: 5px;
+window#waybar > box {
+  margin: 7px 6px 0 6px;
+  padding: 1px 0;
+  background-color: @background;
+  border-radius: 12px;
+  border: 2px solid @outline;
+  opacity: 0.97;
+}
+
+tooltip {
+  background: @background;
+  border: solid;
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: @outline;
+}
+
+#clock,
+#custom-power,
+#custom-notifications,
+#bluetooth,
+#network,
+#pulseaudio,
+#backlight,
+#workspaces,
+#custom-launcher,
+#battery {
+    min-height: 0;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    opacity: 1;
+    padding: 0px 2px;
+    margin: 0px 3px;
 }
 
 #workspaces button {
@@ -37,25 +70,18 @@ window#waybar {
     margin-left: 1em;
 }
 
-#custom-separator {
-    color: @outline;
-    margin-left: 6px;
-    margin-right: 6px;
-}
-
 #clock {
     color: @on_background;
-    margin-right: 8px;
+    margin-right: 12px;
 }
 
 #custom-power {
-    font-size: 18px;
     padding-right: 1.5em;
     color: @error;
 }
 
 #custom-notifications {
-    font-size: 18px;
+    margin-left: 1em;
     padding: 0.5em;
     color: @on_background;
 }
@@ -84,7 +110,20 @@ window#waybar {
 }
 
 #tray {
-    margin-right: 8px;
+  padding: 0 6px;
+}
+
+#tray menu {
+  border-radius: 10px;
+  background: @background;
+}
+
+#tray menu menuitem {
+  border-radius: 8px;
+}
+
+#tray menu menuitem:hover {
+  background-color: @selected;
 }
 
 #battery.critical:not(.charging) {

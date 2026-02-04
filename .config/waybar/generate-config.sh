@@ -30,17 +30,17 @@ build_modules_right() {
     modules+=("network")
 
     # Conditional modules
-    if has_bluetooth; then
-        modules+=("bluetooth")
-    fi
+    # if has_bluetooth; then
+    #     modules+=("bluetooth")
+    # fi
 
+    modules+=("tray")
     modules+=("pulseaudio")
 
     if has_backlight; then
         modules+=("backlight")
     fi
 
-    modules+=("tray")
     modules+=("custom/notifications")
 
     if has_battery; then
@@ -57,7 +57,8 @@ build_modules_right() {
             result+="\"$module\""
             first=false
         else
-            result+=", \"custom/separator\", \"$module\""
+            # result+=", \"custom/separator\", \"$module\""
+            result+=", \"$module\""
         fi
     done
     result+="]"
