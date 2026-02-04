@@ -26,6 +26,10 @@
         }
     },
     "notification-visibility": {
+        "spotify": {
+            "state": "ignored",
+            "app-name": "Spotify"
+        },
         "normal": {
             "state": "visible"
         }

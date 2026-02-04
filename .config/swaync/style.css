@@ -1,194 +1,384 @@
 @import url("matugen.css");
 
-/* --- Global Styles --- */
 * {
-    font-family: DejaVuSansM Nerd Font;
-    font-weight: bolder;
-}
-
-.blank-window {
-    background: transparent;
-}
-
-/* --- Notification Styling --- */
-.notification-row {
-    margin: 10px;
-    outline: none;
-}
-
-.notification {
-    background: transparent;
-    border-radius: 12px;
-    box-shadow: 0 0 10px alpha(@shadow, 0.5);
-}
-
-.notification-content {
-    background: @surface_container;
-    padding: 12px;
-    border-radius: 12px 12px 0 0;
-    border: 1px solid @outline_variant;
-    border-bottom: none;
-}
-
-.notification-row:hover .notification-content {
-    background: @surface_container_high;
-}
-
-/* --- Text --- */
-.summary {
-    font-size: 16px;
+    font-family: JetBrainsMono Nerd Font;
     font-weight: 700;
-    color: @on_surface;
 }
 
-.time {
-    font-size: 12px;
-    color: @on_surface_variant;
-}
-
-.body {
-    font-size: 15px;
-    font-weight: 400;
-    color: @on_surface_variant;
-}
-
-.body-image {
-    margin-top: 8px;
-    border-radius: 8px;
-}
-
-/* --- Buttons --- */
 .close-button {
     background: @surface_container;
     color: @on_surface_variant;
-    border-radius: 50%;
-    margin: 4px;
+    text-shadow: none;
+    padding: 0;
+    border-radius: 100%;
+    margin: 8px 8px 0 0;
+    box-shadow: none;
+    border: none;
     min-width: 24px;
     min-height: 24px;
 }
 
 .close-button:hover {
+    box-shadow: none;
     background: @error_container;
     color: @on_error_container;
+    transition: background 0.15s ease-in-out;
+    border: none;
+}
+
+.notification-row {
+    background: none;
+    outline: none;
+}
+
+.notification-row:focus {
+    background: alpha(@surface_container_high, 0.5);
+}
+
+.notification-row .notification-background {
+    padding: 5px 7px;
+}
+
+.notification-row .notification {
+    border-radius: 13px;
+    border: 1px solid @outline_variant;
+    transition: background 0.15s ease-in-out;
+    background: alpha(@surface_container, 0.95);
+}
+
+.notification-default-action {
+    padding: 4px;
+    margin: 0;
+    box-shadow: none;
+    background: transparent;
+    border: none;
+    color: @on_surface;
+    transition: background 0.15s ease-in-out;
+    border-radius: 12px;
+}
+
+.notification-default-action:hover {
+    -gtk-icon-filter: none;
+    background: @surface_container_high;
+}
+
+.notification-default-action:not(:only-child) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.notification-content {
+    background: transparent;
+    border-radius: 12px;
+    padding: 0;
+}
+
+.notification-content .image {
+    -gtk-icon-filter: none;
+    border-radius: 100px;
+    margin: 4px;
+}
+
+.notification-content .app-icon {
+    -gtk-icon-filter: none;
+    -gtk-icon-shadow: 0 1px 4px black;
+    margin: 6px;
+}
+
+.text-box {
+    padding: 4px 6px;
+}
+
+.text-box label {
+    filter: none;
+}
+
+.text-box .summary,
+.text-box .time,
+.text-box .body {
+    font-size: 16px;
+    font-weight: bold;
+    background: transparent;
+    color: @on_surface;
+    text-shadow: none;
+}
+
+.text-box .time {
+    margin-right: 30px;
+}
+
+.text-box .body {
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.notification-content progressbar,
+.notification-content .body-image,
+.notification-content .inline-reply {
+    margin-top: 4px;
+}
+
+.body-image {
+    background-color: white;
+    -gtk-icon-filter: none;
+}
+
+.inline-reply-entry {
+    background: @surface_container_low;
+    color: @on_surface;
+    caret-color: @on_surface;
+    border: 1px solid @outline_variant;
+    border-radius: 12px;
+}
+
+.inline-reply-button {
+    margin-left: 4px;
+    background: alpha(@surface_container, 0.95);
+    border: 1px solid @outline_variant;
+    border-radius: 12px;
+    color: @on_surface;
+}
+
+.inline-reply-button:disabled {
+    background: initial;
+    color: @on_surface_variant;
+    border-color: transparent;
+}
+
+.inline-reply-button:hover {
+    background: @surface_container_high;
+}
+
+.notification-alt-actions {
+    background: none;
+    border-radius: 0 0 12px 12px;
+    padding: 4px;
 }
 
 .notification-action {
-    color: @primary;
-    background: @surface_container;
-    border: 1px solid @outline_variant;
-    border-top: 1px solid @outline_variant;
-    padding: 8px;
-    margin: 0;
+    margin: 4px;
+    padding: 0;
 }
 
-.notification-action:hover {
-    color: @on_primary_container;
-    background: @primary_container;
+.notification-action > button {
+    border-radius: 12px;
 }
 
-.notification-action:first-child {
-    border-radius: 0 0 0 12px;
+.notification-group {
+    transition: opacity 200ms ease-in-out;
 }
 
-.notification-action:last-child {
-    border-radius: 0 0 12px 0;
-    border-left: none;
+.notification-group:focus {
+    background: alpha(@surface_container_high, 0.5);
 }
 
-.notification-action:only-child {
-    border-radius: 0 0 12px 12px;
+.notification-group-close-button .close-button {
+    margin: 12px 20px;
 }
 
-/* --- Control Center --- */
+.notification-group-buttons,
+.notification-group-headers {
+    margin: 0 16px;
+    color: @on_surface;
+}
+
+.notification-group-icon {
+    color: @on_surface;
+}
+
+.notification-group-header {
+    color: @on_surface;
+}
+
+.notification-group.collapsed.not-expanded {
+    opacity: 0.4;
+}
+
+.notification-group.collapsed .notification {
+    background-color: @surface_container;
+}
+
+.notification-group.collapsed
+    .notification-row:not(:last-child)
+    .notification-action,
+.notification-group.collapsed
+    .notification-row:not(:last-child)
+    .notification-default-action {
+    opacity: 0;
+}
+
+.notification-group.collapsed:hover
+    .notification-row:not(:only-child)
+    .notification {
+    background-color: @surface_container_high;
+}
+
 .control-center {
     background: @surface;
-    border-radius: 16px;
-    border: 1px solid @outline_variant;
-    margin: 12px;
+    color: @on_surface;
+    border-radius: 12px;
+    margin-right: 8px;
+    margin-bottom: 8px;
 }
 
 .control-center-list-placeholder {
     opacity: 0.5;
 }
 
-/* --- Base Widget Style --- */
-.widget-title, .widget-dnd, .widget-mpris, .widget-buttons-grid, .widget-volume, .widget-backlight {
-    background: @surface_container;
-    color: @on_surface;
-    margin: 1rem;
-    padding: 1rem;
-    border-radius: 0.7rem;
-}
-
-/* --- Title Widget --- */
-.widget-title {
-    color: @primary;
-    font-size: 1.5rem;
-}
-
-.widget-title > button {
-    font-size: 1rem;
-    color: @on_surface_variant;
+.control-center-list {
     background: transparent;
 }
 
-.widget-title > button:hover {
-    color: @on_secondary_container;
-    background: @secondary_container;
+.control-center .notification {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.7),
+        0 2px 6px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* --- DND Widget --- */
-.widget-dnd {
-    font-size: large;
+.control-center .notification-default-action,
+.control-center .notification-action {
+    transition: opacity 400ms ease-in-out, background 0.15s ease-in-out;
 }
 
-.widget-dnd > switch {
-    background: @surface_container_highest;
-    border: 1px solid @outline;
+.control-center .notification-default-action:hover,
+.control-center .notification-action:hover {
+    background-color: @surface_container_high;
 }
 
-.widget-dnd > switch:checked {
-    background: @primary;
+.blank-window,
+.floating-notifications {
+    background: transparent;
 }
 
-.widget-dnd > switch slider {
-    background: @on_surface;
-    border-radius: 5px;
+.floating-notifications .notification {
+    box-shadow: none;
 }
 
-.widget-dnd > switch:checked slider {
-    background: @on_primary;
+/*** Widgets ***/
+.widget-title > label,
+.widget-dnd label,
+.widget-label > label,
+.widget-inhibitors > label {
+    margin: 8px;
+    font-size: 1.1rem;
 }
 
-/* --- MPRIS (Media) Widget --- */
+.widget-title > label,
+.widget-inhibitors > label {
+    font-size: 1.5rem;
+}
+
+.widget-title > button,
+.widget-inhibitors > button {
+    margin: 8px;
+    border-radius: 12px;
+}
+
+.widget-dnd switch {
+    border-radius: 12px;
+    margin: 8px;
+}
+
+.widget-dnd switch:checked {
+    background-color: @primary;
+}
+
+.widget-dnd switch slider {
+    border-radius: 12px;
+}
+
+.widget-label {
+    margin: 8px;
+}
+
+.widget-mpris {
+    margin: 8px;
+}
+
+.widget-mpris-player {
+    margin: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
+}
+
+.widget-mpris-player .mpris-background {
+    filter: blur(10px);
+}
+
+.widget-mpris-player .mpris-overlay {
+    padding: 16px;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.widget-mpris-player .mpris-overlay button:hover {
+    background: @surface_container_high;
+}
+
+.widget-mpris-album-art {
+    border-radius: 12px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
+}
+
 .widget-mpris-title {
-    font-weight: 700;
+    font-weight: bold;
     font-size: 1.25rem;
-    color: @on_surface;
 }
 
 .widget-mpris-subtitle {
     font-size: 1.1rem;
-    color: @on_surface_variant;
 }
 
-/* --- Buttons Grid Widget --- */
+.mpris-overlay > box > button:hover {
+    background-color: @surface_container_high;
+}
+
 .widget-buttons-grid {
-    font-size: x-large;
+    padding: 8px;
+    margin: 8px;
+    border-radius: 12px;
 }
 
-.widget-buttons-grid > flowbox > flowboxchild > button {
-    background: @surface_container_high;
-    color: @on_surface_variant;
-    border-radius: 8px;
+.widget-buttons-grid flowboxchild > button {
+    border-radius: 12px;
 }
 
-.widget-buttons-grid > flowbox > flowboxchild > button:hover {
-    background: @secondary_container;
-    color: @on_secondary_container;
+.menu-button-bar > .start {
+    margin-left: 8px;
 }
 
-/* --- Volume & Backlight Widgets --- */
-.widget-volume, .widget-backlight {
-    font-size: x-large;
+.menu-button-bar > .end {
+    margin-right: 8px;
+}
+
+.widget-menubar-container button {
+    border-radius: 12px;
+    margin: 0 4px;
+}
+
+.widget-menubar > revealer {
+    margin-top: 8px;
+}
+
+.widget-menubar > revealer button {
+    border-radius: 12px;
+    margin: 8px;
+    margin-top: 0;
+}
+
+.widget-volume,
+.widget-slider,
+.widget-backlight {
+    padding: 8px;
+    margin: 8px;
+    border-radius: 12px;
+}
+
+.per-app-volume {
+    background-color: @surface_container_highest;
+    padding: 4px 8px 8px 8px;
+    margin: 0px 8px 8px 8px;
+    border-radius: 12px;
+}
+
+.widget-slider label {
+    font-size: inherit;
 }
