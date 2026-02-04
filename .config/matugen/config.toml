@@ -63,8 +63,13 @@ output_path = '~/.config/btop/themes/matugen.theme'
 [templates.gtk3]
 input_path = './templates/gtk-colors.css'
 output_path = '~/.config/gtk-3.0/gtk.css'
-post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark'
 
 [templates.gtk4]
 input_path = './templates/gtk-colors.css'
 output_path = '~/.config/gtk-4.0/colors.css'
+
+[templates.vicinae]
+input_path = './templates/vicinae.toml'
+output_path = '~/.local/share/vicinae/themes/matugen.toml'
+post_hook = 'vicinae theme set matugen'
