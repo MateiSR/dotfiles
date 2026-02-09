@@ -81,3 +81,7 @@ vim.api.nvim_create_autocmd("FileType", {
     )
   end,
 })
+
+-- indent
+vim.keymap.set('v', '>', '>gv')
+vim.keymap.set('v', '<', '<gv')
