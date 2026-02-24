@@ -1,0 +1,13 @@
+// Project tasks configuration. See https://zed.dev/docs/tasks for documentation.
+//
+// Example:
+
+[
+  {
+    "label": "lazygit",
+    "command": "lazygit",
+    "reveal": "always",
+    "use_new_terminal": true,
+    "hide": "always",
+  },
+]
