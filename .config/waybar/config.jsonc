@@ -10,8 +10,8 @@
     "custom/launcher": {
         "format": " ",
         "tooltip": false,
-        "on-click": "rofi -show drun",
-        "on-click-right": "killall rofi"
+        "on-click": "vicinae toggle",
+        "on-click-right": "vicinae close"
     },
     "custom/separator": {
         "format": "｜",
