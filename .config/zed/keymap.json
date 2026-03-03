@@ -16,6 +16,7 @@
     "context": "Editor && vim_mode == insert",
     "bindings": {
       "j j": "vim::NormalBefore",
+      "ctrl-s": ["workspace::SendKeystrokes", "escape : w enter"],
     },
   },
   {
@@ -50,6 +51,7 @@
     "bindings": {
       "space f": "editor::Format",
       "shift-u": "editor::Redo",
+      "ctrl-s": ["workspace::SendKeystrokes", ": w enter"],
     },
   },
   {
@@ -118,6 +120,7 @@
     "context": "Workspace",
     "bindings": {
       "ctrl-n": "project_panel::ToggleFocus",
+      "ctrl-s": "workspace::Save",
     },
   },
   {
