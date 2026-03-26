@@ -10,7 +10,7 @@ void main() {
     // color *= 0.95;
 
     // 2. Contrast (103% = centered expansion around 0.5)
-    color = (color - 0.5) * 1.03 + 0.5;
+    color = (color - 0.5) * 1.06 + 0.5;
 
     // 3. Gamma (1.0 = pow(color, 1.0/1.0))
     color = pow(max(color, 0.0), vec3(1.0 / 1.0));
