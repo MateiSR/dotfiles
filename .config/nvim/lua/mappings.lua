@@ -1,16 +1,12 @@
 vim.keymap.set("n", "<C-s>", ":up<CR>", { noremap = true, silent = true })
--- bind quickfix
-vim.keymap.set("n", "<leader>q", ":copen<CR>", {})
--- bind qf close
-vim.keymap.set("n", "<leader>Q", ":cclose<CR>", {})
 -- split window
 vim.keymap.set("n", "<leader>sh", ":split<CR>", {})
 vim.keymap.set("n", "<leader>sv", ":vsplit<CR>", {})
 -- move between windows
--- vim.keymap.set("n", "<C-h>", "<C-w>h", {})
--- vim.keymap.set("n", "<C-j>", "<C-w>j", {})
--- vim.keymap.set("n", "<C-k>", "<C-w>k", {})
--- vim.keymap.set("n", "<C-l>", "<C-w>l", {})
+vim.keymap.set("n", "<C-h>", "<C-w>h", {})
+vim.keymap.set("n", "<C-j>", "<C-w>j", {})
+vim.keymap.set("n", "<C-k>", "<C-w>k", {})
+vim.keymap.set("n", "<C-l>", "<C-w>l", {})
 -- close current split
 vim.keymap.set("n", "<leader>sq", "<C-w>q", {})
 -- open terminal
@@ -69,19 +65,19 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true })
 
 -- Set help command for man pager
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "man",
-  callback = function()
-    -- Set F to show table of contents
-    vim.api.nvim_buf_set_keymap(
-      0,
-      "n",
-      "F",
-      "<cmd>lua require('man').show_toc()<CR>",
-      { noremap = true, silent = true }
-    )
-  end,
+	pattern = "man",
+	callback = function()
+		-- Set F to show table of contents
+		vim.api.nvim_buf_set_keymap(
+			0,
+			"n",
+			"F",
+			"<cmd>lua require('man').show_toc()<CR>",
+			{ noremap = true, silent = true }
+		)
+	end,
 })
 
 -- indent
-vim.keymap.set('v', '>', '>gv')
-vim.keymap.set('v', '<', '<gv')
+vim.keymap.set("v", ">", ">gv")
+vim.keymap.set("v", "<", "<gv")
