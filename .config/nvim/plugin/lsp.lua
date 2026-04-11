@@ -20,7 +20,15 @@ require("mason-lspconfig").setup({ ensure_installed = servers })
 
 local capabilities = require("blink.cmp").get_lsp_capabilities()
 for _, server in ipairs(servers) do
-	vim.lsp.config(server, { capabilities = capabilities })
+	local config = { capabilities = capabilities }
+	if server == "pyright" then
+		config.settings = {
+			python = {
+				pythonPath = vim.fn.exepath("python"),
+			},
+		}
+	end
+	vim.lsp.config(server, config)
 end
 vim.lsp.enable(servers)
 
