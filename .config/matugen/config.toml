@@ -52,10 +52,6 @@ output_path = '~/.config/Vencord/themes/midnight-discord.css'
 input_path = './templates/yazi-theme.toml'
 output_path = '~/.config/yazi/theme.toml'
 
-[templates.zathura]
-input_path = './templates/zathura-colors'
-output_path = '~/.config/zathura/zathurarc'
-
 [templates.btop]
 input_path = './templates/btop.theme'
 output_path = '~/.config/btop/themes/matugen.theme'
@@ -63,7 +59,7 @@ output_path = '~/.config/btop/themes/matugen.theme'
 [templates.gtk3]
 input_path = './templates/gtk-colors.css'
 output_path = '~/.config/gtk-3.0/gtk.css'
-post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"'
 
 [templates.gtk4]
 input_path = './templates/gtk-colors.css'
