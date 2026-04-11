@@ -20,6 +20,8 @@ require("nvim-treesitter").install({
 	"vim",
 	"vimdoc",
 	"yaml",
+	"latex",
+	"regex",
 })
 
 vim.api.nvim_create_autocmd("FileType", {

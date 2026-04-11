@@ -13,6 +13,7 @@ local servers = {
 	"biome",
 	"html",
 	"bashls",
+	"texlab",
 }
 
 require("mason").setup()

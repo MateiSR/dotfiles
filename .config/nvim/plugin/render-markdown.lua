@@ -4,4 +4,6 @@ vim.pack.add({
 	"https://github.com/echasnovski/mini.nvim",
 })
 
-require("render-markdown").setup()
+require("render-markdown").setup({
+	latex = { enabled = false },
+})
