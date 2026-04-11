@@ -15,6 +15,23 @@ green="\033[38;5;108m"        # muted sage green
 yellow="\033[38;5;179m"       # muted gold
 red="\033[38;5;167m"          # muted warm red
 
+# Format a countdown given seconds remaining.
+# - <= 0     : "now"
+# - < 1h     : "Xm"
+# - < 24h    : "XhYm"
+# - >= 24h   : "XdYh"
+fmt_countdown() {
+    local secs="${1:-0}"
+    if [ "$secs" -le 0 ]; then printf "now"; return; fi
+    local days=$(( secs / 86400 ))
+    local hours=$(( (secs % 86400) / 3600 ))
+    local mins=$(( (secs % 3600) / 60 ))
+    if   [ "$days"  -gt 0 ]; then printf "%dd%dh" "$days" "$hours"
+    elif [ "$hours" -gt 0 ]; then printf "%dh%dm" "$hours" "$mins"
+    else                          printf "%dm" "$mins"
+    fi
+}
+
 # Build a small inline bar: [████░░░░] with colored fill
 # Bar width: 8 filled+empty chars
 make_bar() {
@@ -45,6 +62,9 @@ used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 # Rate limits
 five_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
 seven_pct=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+five_reset=$(echo "$input" | jq -r '(.rate_limits.five_hour.resets_at // empty) | floor')
+seven_reset=$(echo "$input" | jq -r '(.rate_limits.seven_day.resets_at // empty) | floor')
+now_ts=$(date +%s)
 
 # Model display name
 model=$(echo "$input" | jq -r '.model.display_name // empty')
@@ -77,18 +97,44 @@ if [ -n "$used_pct" ]; then
     parts+=("$(printf "%b" "${gray}ctx ${reset}${ctx_color}${bold}${used_int}%${reset}")")
 fi
 
-# 5-hour rate limit bar with percentage
+# 5-hour rate limit bar with percentage + reset countdown & wall-clock
 if [ -n "$five_pct" ]; then
     five_int=$(printf '%.0f' "$five_pct")
     bar=$(make_bar "$five_int")
-    parts+=("$(printf "%b" "${gray}5h ${reset}${bar} ${warm}${five_int}%${reset}")")
+    five_reset_txt=""
+    if [ -n "$five_reset" ]; then
+        cdown=$(fmt_countdown $(( five_reset - now_ts )))
+        clock=$(date -d "@$five_reset" +%H:%M 2>/dev/null)
+        if [ -n "$clock" ]; then
+            five_reset_txt=" ${dim}${cdown}→${clock}${reset}"
+        else
+            five_reset_txt=" ${dim}${cdown}${reset}"
+        fi
+    fi
+    parts+=("$(printf "%b" "${gray}5h ${reset}${bar} ${warm}${five_int}%${reset}${five_reset_txt}")")
 fi
 
-# 7-day rate limit bar with percentage
+# 7-day rate limit bar with percentage + reset countdown
 if [ -n "$seven_pct" ]; then
     seven_int=$(printf '%.0f' "$seven_pct")
     bar=$(make_bar "$seven_int")
-    parts+=("$(printf "%b" "${gray}7d ${reset}${bar} ${warm}${seven_int}%${reset}")")
+    seven_reset_txt=""
+    if [ -n "$seven_reset" ]; then
+        remaining=$(( seven_reset - now_ts ))
+        cdown=$(fmt_countdown "$remaining")
+        # If the 7d window resets within a day, wall-clock is meaningful too
+        if [ "$remaining" -gt 0 ] && [ "$remaining" -lt 86400 ]; then
+            clock=$(date -d "@$seven_reset" +%H:%M 2>/dev/null)
+            if [ -n "$clock" ]; then
+                seven_reset_txt=" ${dim}${cdown}→${clock}${reset}"
+            else
+                seven_reset_txt=" ${dim}${cdown}${reset}"
+            fi
+        else
+            seven_reset_txt=" ${dim}${cdown}${reset}"
+        fi
+    fi
+    parts+=("$(printf "%b" "${gray}7d ${reset}${bar} ${warm}${seven_int}%${reset}${seven_reset_txt}")")
 fi
 
 # Model name
