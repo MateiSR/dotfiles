@@ -3,5 +3,10 @@
   "statusLine": {
     "type": "command",
     "command": "bash /home/matei/.claude/statusline-command.sh"
+  },
+  "effortLevel": "high",
+  "editorMode": "vim",
+  "permissions": {
+    "defaultMode": "auto"
   }
 }
