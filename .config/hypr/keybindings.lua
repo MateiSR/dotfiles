@@ -1,12 +1,16 @@
 local vars = require("vars")
 local mod = vars.main_mod
 
+-- Handles for binds that change_layout.sh disables on first layout toggle.
+_G.static_jk = {}
+_G.layout_binds = nil
+
 hl.bind(mod .. " + Q", hl.dsp.exec_cmd(vars.terminal))
 hl.bind(mod .. " + C", hl.dsp.window.close())
 hl.bind(mod .. " + M", hl.dsp.exit())
 hl.bind(mod .. " + E", hl.dsp.exec_cmd(vars.file_manager))
 hl.bind(mod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mod .. " + J", hl.dsp.layout("togglesplit"))
+table.insert(_G.static_jk, hl.bind(mod .. " + J", hl.dsp.layout("togglesplit")))
 
 hl.bind(mod .. " + R", hl.dsp.exec_cmd("vicinae toggle"))
 hl.bind("CTRL + ALT + DELETE", hl.dsp.exec_cmd("wlogout"))
@@ -17,8 +21,8 @@ hl.bind(mod .. " + W", hl.dsp.exec_cmd("waypaper"))
 hl.bind(mod .. " + Z", hl.dsp.exec_cmd(vars.browser))
 
 hl.bind(mod .. " + H", hl.dsp.focus({ direction = "l" }))
-hl.bind(mod .. " + J", hl.dsp.focus({ direction = "d" }))
-hl.bind(mod .. " + K", hl.dsp.focus({ direction = "u" }))
+table.insert(_G.static_jk, hl.bind(mod .. " + J", hl.dsp.focus({ direction = "d" })))
+table.insert(_G.static_jk, hl.bind(mod .. " + K", hl.dsp.focus({ direction = "u" })))
 hl.bind(mod .. " + L", hl.dsp.focus({ direction = "r" }))
 
 hl.bind(mod .. " + SHIFT + H", hl.dsp.window.resize({ x = -100, y = 0, relative = true }))

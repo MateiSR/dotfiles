@@ -19,6 +19,9 @@ hl.config({
     xwayland = {
         force_zero_scaling = true,
     },
+    decoration = {
+        screen_shader = os.getenv("HOME") .. "/.config/hypr/shaders/custom.glsl",
+    },
 })
 
 hl.on("hyprland.start", function()
