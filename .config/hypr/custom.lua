@@ -8,7 +8,7 @@ local vars = require("vars")
 --     mirror = vars.monitor1,
 -- })
 
-hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
+hl.bind("ALT + TAB", hl.dsp.exec_cmd(vars.toggle_monitor .. " " .. vars.monitor1 .. " " .. vars.monitor2))
 
 hl.device({
     name = "dualsense-wireless-controller-touchpad",
