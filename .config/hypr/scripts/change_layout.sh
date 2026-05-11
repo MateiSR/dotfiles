@@ -4,7 +4,7 @@ LAYOUT=$(hyprctl -j getoption general:layout | jq '.str' | sed 's/"//g')
 
 case $LAYOUT in
 "master")
-	hyprctl keyword general:layout dwindle
+	hyprctl eval 'hl.config({ general = { layout = "dwindle" } })' >/dev/null
 	hyprctl keyword unbind SUPER,J
 	hyprctl keyword unbind SUPER,K
 	hyprctl keyword bind SUPER,J,cyclenext
@@ -13,7 +13,7 @@ case $LAYOUT in
   notify-send "Dwindle Layout" && sleep 0.5 && swaync-client --close-latest
 	;;
 "dwindle")
-	hyprctl keyword general:layout master
+	hyprctl eval 'hl.config({ general = { layout = "master" } })' >/dev/null
 	hyprctl keyword unbind SUPER,J
 	hyprctl keyword unbind SUPER,K
 	hyprctl keyword unbind SUPER,O
