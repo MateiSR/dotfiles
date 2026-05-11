@@ -12,10 +12,14 @@ monitor1=$1
 monitor2=$2
 
 
-# Toggle focus between the monitors
+# Toggle focus between the monitors.
+# Hyprland 0.55+ Lua config requires Lua dispatch syntax over IPC;
+# the legacy `focusmonitor <name>` form no longer parses.
 if [ "$current_monitor" != "$monitor1" ]; then
-    hyprctl dispatch focusmonitor "$monitor1"
+    target=$monitor1
 else
-    hyprctl dispatch focusmonitor "$monitor2"
+    target=$monitor2
 fi
+
+hyprctl dispatch "hl.dsp.focus({ monitor = \"${target}\" })"
 
