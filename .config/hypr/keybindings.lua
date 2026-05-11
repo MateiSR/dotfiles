@@ -1,16 +1,15 @@
 local vars = require("vars")
 local mod = vars.main_mod
 
--- Handles for binds that change_layout.sh disables on first layout toggle.
-_G.static_jk = {}
-_G.layout_binds = nil
+-- Tracked alongside Hyprland's general.layout so J/K/O can dispatch
+-- layout-appropriate actions without rebinding on toggle.
+_G.current_layout = "master"
 
 hl.bind(mod .. " + Q", hl.dsp.exec_cmd(vars.terminal))
 hl.bind(mod .. " + C", hl.dsp.window.close())
 hl.bind(mod .. " + M", hl.dsp.exit())
 hl.bind(mod .. " + E", hl.dsp.exec_cmd(vars.file_manager))
 hl.bind(mod .. " + P", hl.dsp.window.pseudo())
-table.insert(_G.static_jk, hl.bind(mod .. " + J", hl.dsp.layout("togglesplit")))
 
 hl.bind(mod .. " + R", hl.dsp.exec_cmd("vicinae toggle"))
 hl.bind("CTRL + ALT + DELETE", hl.dsp.exec_cmd("wlogout"))
@@ -21,9 +20,22 @@ hl.bind(mod .. " + W", hl.dsp.exec_cmd("waypaper"))
 hl.bind(mod .. " + Z", hl.dsp.exec_cmd(vars.browser))
 
 hl.bind(mod .. " + H", hl.dsp.focus({ direction = "l" }))
-table.insert(_G.static_jk, hl.bind(mod .. " + J", hl.dsp.focus({ direction = "d" })))
-table.insert(_G.static_jk, hl.bind(mod .. " + K", hl.dsp.focus({ direction = "u" })))
+hl.bind(mod .. " + J", function()
+    hl.dispatch(_G.current_layout == "master"
+        and hl.dsp.layout("cyclenext")
+        or hl.dsp.window.cycle_next())
+end)
+hl.bind(mod .. " + K", function()
+    hl.dispatch(_G.current_layout == "master"
+        and hl.dsp.layout("cycleprev")
+        or hl.dsp.window.cycle_next({ prev = true }))
+end)
 hl.bind(mod .. " + L", hl.dsp.focus({ direction = "r" }))
+hl.bind(mod .. " + O", function()
+    if _G.current_layout == "dwindle" then
+        hl.dispatch(hl.dsp.layout("togglesplit"))
+    end
+end)
 
 hl.bind(mod .. " + SHIFT + H", hl.dsp.window.resize({ x = -100, y = 0, relative = true }))
 hl.bind(mod .. " + SHIFT + J", hl.dsp.window.resize({ x = 0, y = 100, relative = true }))
@@ -45,7 +57,14 @@ hl.bind(mod .. " + V", function()
     hl.dispatch(hl.dsp.window.center())
 end)
 
-hl.bind(mod .. " + Space", hl.dsp.exec_cmd(vars.change_layout))
+hl.bind(mod .. " + Space", function()
+    _G.current_layout = _G.current_layout == "master" and "dwindle" or "master"
+    hl.config({ general = { layout = _G.current_layout } })
+    local label = _G.current_layout:sub(1, 1):upper() .. _G.current_layout:sub(2)
+    hl.dispatch(hl.dsp.exec_cmd(
+        "notify-send '" .. label .. " Layout' && sleep 0.5 && swaync-client --close-latest"
+    ))
+end)
 
 local split = hl.plugin.split_monitor_workspaces
 if split then
