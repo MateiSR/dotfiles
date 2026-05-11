@@ -18,9 +18,9 @@ post_hook = 'pkill -SIGUSR1 kitty'
 input_path = './templates/starship-colors.toml'
 output_path = '~/.config/starship.toml'
 
-[templates.hyprland]
-input_path = './templates/hyprland-colors.conf'
-output_path = '~/.config/hypr/matugen.conf'
+[templates.hyprland_lua]
+input_path = './templates/hyprland-colors.lua'
+output_path = '~/.config/hypr/matugen.lua'
 post_hook = 'hyprctl reload'
 
 [templates.swaync]
