@@ -17,6 +17,18 @@ hl.layer_rule({
     no_anim = true,
 })
 
+hl.layer_rule({
+    name = "layerrule-wayfreeze",
+    match = { namespace = "^(wayfreeze)$" },
+    no_anim = true,
+})
+
+hl.layer_rule({
+    name = "layerrule-slurp",
+    match = { namespace = "^(slurp)$" },
+    no_anim = true,
+})
+
 hl.window_rule({
     name = "cs2-tearing",
     match = { class = "^(cs2)$" },
