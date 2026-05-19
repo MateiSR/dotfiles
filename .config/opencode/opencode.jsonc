@@ -1,0 +1,163 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // Default model. Kimi K2.6 is the thinking-by-default agentic implementer
+  // on the Go plan. Strong tool-use discipline; closest to Opus 4.6 on
+  // real multi-step coding work.
+  "model": "opencode-go/kimi-k2.6",
+
+  // Lightweight ops (title generation, etc.). Never burn K2.6 budget on these.
+  "small_model": "opencode-go/deepseek-v4-flash",
+
+  "default_agent": "build",
+
+  "plugin": [
+    "superpowers@git+https://github.com/obra/superpowers.git"
+  ],
+
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true,
+      "headers": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+      }
+    }
+  },
+
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "reserved": 16000
+  },
+
+  "agent": {
+    // Primary implementer. Kimi K2.6 = best agentic coder on Go.
+    "build": {
+      "mode": "primary",
+      "model": "opencode-go/kimi-k2.6",
+      "temperature": 0.1,
+      "prompt": "{file:./prompts/build.txt}",
+      "permission": {
+        "edit": "allow",
+        "bash": {
+          "*": "ask",
+          "pwd": "allow",
+          "ls *": "allow",
+          "find *": "allow",
+          "rg *": "allow",
+          "grep *": "allow",
+          "cat *": "allow",
+          "sed -n *": "allow",
+          "git status*": "allow",
+          "git diff*": "allow",
+          "git log*": "allow",
+          "git branch*": "allow",
+          "git push*": "ask",
+          "rm *": "ask",
+          "sudo *": "ask",
+          "docker *": "allow"
+        },
+        "task": {
+          "*": "ask",
+          "review": "allow",
+          "debug": "allow",
+          "explore": "allow",
+          "verify": "allow"
+        }
+      }
+    },
+
+    // Reasoning specialist. GLM-5.1 is the only Go model built for
+    // long-horizon autonomous reasoning. Low-call agent fits its ~880 req/5h
+    // ceiling. Slightly higher temperature lets it explore alternatives.
+    "plan": {
+      "mode": "primary",
+      "model": "opencode-go/glm-5.1",
+      "temperature": 0.2,
+      "prompt": "{file:./prompts/analysis.txt}",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "task": {
+          "*": "ask",
+          "explore": "allow"
+        }
+      }
+    },
+
+    // Code-quality / maintainability lens. K2.6's thinking mode catches
+    // design smells V4 Pro tends to miss.
+    "review": {
+      "description": "Read-only code review focused on correctness, regressions, security, and maintainability.",
+      "mode": "subagent",
+      "model": "opencode-go/kimi-k2.6",
+      "temperature": 0.1,
+      "prompt": "{file:./prompts/review.txt}",
+      "permission": {
+        "edit": "deny",
+        "bash": {
+          "*": "ask",
+          "git diff*": "allow",
+          "git status*": "allow",
+          "git log*": "allow",
+          "rg *": "allow",
+          "grep *": "allow",
+          "cat *": "allow",
+          "sed -n *": "allow"
+        }
+      }
+    },
+
+    // Narrow diagnostic worker. DeepSeek V4 Pro leads LiveCodeBench (93.5%);
+    // best at competitive-style problems and dense terminal logs.
+    "debug": {
+      "description": "Focused investigation of failing tests, builds, runtime errors, dependency issues, and terminal logs.",
+      "mode": "subagent",
+      "model": "opencode-go/deepseek-v4-pro",
+      "temperature": 0.1,
+      "prompt": "{file:./prompts/debug.txt}",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask"
+      }
+    },
+
+    // Cheap volume search. Keeps K2.6 / V4 Pro budget free for actual work.
+    "explore": {
+      "description": "Cheap read-only codebase search and file inspection. Use this before primary agents touch grep/glob/read.",
+      "mode": "subagent",
+      "model": "opencode-go/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:./prompts/explore.txt}",
+      "permission": {
+        "edit": "deny",
+        "bash": {
+          "*": "deny",
+          "pwd": "allow",
+          "ls *": "allow",
+          "find *": "allow",
+          "rg *": "allow",
+          "grep *": "allow",
+          "cat *": "allow",
+          "sed -n *": "allow"
+        }
+      }
+    },
+
+    // Post-edit verification. Runs the narrowest test/typecheck/lint command
+    // and returns a verdict + failing fragment. Tightens the build feedback loop.
+    "verify": {
+      "description": "Run narrow verification commands (unit test, typecheck, lint, build, repro) and report a pass/fail verdict with the failing fragment.",
+      "mode": "subagent",
+      "model": "opencode-go/deepseek-v4-pro",
+      "temperature": 0.0,
+      "prompt": "{file:./prompts/verify.txt}",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask"
+      }
+    }
+  }
+}
