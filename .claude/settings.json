@@ -1,12 +1,33 @@
 {
-  "model": "opus",
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "model": "claude-fable-5[1m]",
   "statusLine": {
     "type": "command",
     "command": "bash /home/matei/.claude/statusline-command.sh"
   },
-  "effortLevel": "high",
+  "enabledPlugins": {
+    "codex@openai-codex": true,
+    "superpowers@claude-plugins-official": true
+  },
+  "effortLevel": "xhigh",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/matei/.claude/hooks/guard.sh",
+            "timeout": 10,
+            "statusMessage": "Checking command safety"
+          }
+        ]
+      }
+    ]
+  },
+  "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
-  "permissions": {
-    "defaultMode": "auto"
-  }
+  "agentPushNotifEnabled": true
 }
