@@ -12,7 +12,6 @@ set -x EDITOR /usr/bin/nvim
 set -x GPG_TTY (tty)
 
 # Set wine prefix
-set -x WINEPREFIX /essd/wine
 
 # Aliases
 alias c='bat'
