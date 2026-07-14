@@ -294,6 +294,7 @@ if ! $DRY_RUN; then
 		command -v "$command" >/dev/null || die "missing command: $command"
 	done
 	[[ -d "$HOME/.local/share/icons/Qogir" ]] || die "Qogir was not installed"
+	[[ -d "$HOME/.local/share/icons/Tela-orange" ]] || die "Tela-orange was not installed"
 	[[ -d "$HOME/.local/share/icons/Tela-orange-dark" ]] || die "Tela-orange-dark was not installed"
 	[[ -d "$HOME/.local/share/themes/Orchis-Dark-Compact" ]] || die "Orchis-Dark-Compact was not installed"
 	[[ -L "$HOME/.config/gtk-4.0/orchis.css" ]] || die "missing GTK 4 Orchis link"

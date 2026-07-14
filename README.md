@@ -16,7 +16,7 @@ drivers alone.
 The installer updates the system with the default paclists, bootstraps `paru`,
 installs the AUR paclist, applies the dotfiles, and installs or updates:
 
-- Qogir cursor, Tela Orange icons, and `Orchis-Dark-Compact`
+- Qogir cursor, `Tela-orange`/`Tela-orange-dark` icons, and `Orchis-Dark-Compact`
 - Matugen color overrides for GTK 3, GTK 4, and libadwaita apps
 - `csgo-vulkan-fix` through HyprPM
 - Oh My Fish and tmux plugins
