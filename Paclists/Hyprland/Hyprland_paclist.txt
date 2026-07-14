@@ -49,7 +49,7 @@ ffnvcodec-headers
 network-manager-applet
 ocean-sound-theme
 waybar
-polkit-gnome
+hyprpolkitagent
 alacritty
 wlsunset
 gnome-keyring

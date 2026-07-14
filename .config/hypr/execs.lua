@@ -8,11 +8,10 @@ end
 hl.on("hyprland.start", function()
 	hl.exec_cmd("swaync")
 	hl.exec_cmd("awww-daemon &")
-	hl.exec_cmd(
-		"/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 || /usr/libexec/polkit-gnome-authentication-agent-1"
-	)
-	hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
-	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+	-- hyprpolkitagent replaces the legacy polkit-gnome agent and ships a user service.
+	hl.exec_cmd("systemctl --user start hyprpolkitagent.service")
+	-- GNOME Keyring is started/unlocked by SDDM's PAM integration and its user units.
+	-- Hyprland already imports its session environment; Arch's dbus-broker shares systemd's environment.
 
 	hl.exec_cmd("nm-applet &")
 	hl.exec_cmd("blueman-applet &")
