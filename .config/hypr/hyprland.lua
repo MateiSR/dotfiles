@@ -10,7 +10,7 @@ package.loaded["matugen"] = nil
 if not pcall(require, "matugen") then
 	-- fresh machine: matugen hasn't generated matugen.lua yet
 	package.loaded["matugen"] = setmetatable({
-		image = os.getenv("HOME") .. "/.config/hypr/shared/images/er-1.jpeg",
+		image = os.getenv("HOME") .. "/.config/dotfiles/wallpapers/er-1.jpeg",
 	}, {
 		__index = function()
 			return "#808080"

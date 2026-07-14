@@ -40,4 +40,4 @@ change these using `nwg-look`
 tmux: install TPM and `~/.tmux/plugins/tpm/bin/install_plugins`
 
 
-sddm theme: currently using https://github.com/Keyitdev/sddm-astronaut-theme with a modified wallpaper (~/.config/hypr/shared/images)
+sddm theme: currently using https://github.com/Keyitdev/sddm-astronaut-theme with a modified wallpaper (~/.config/dotfiles/wallpapers)

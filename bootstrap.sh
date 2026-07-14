@@ -15,7 +15,7 @@ cp -n .config/waypaper/config.ini.example "$HOME/.config/waypaper/config.ini" ||
 
 # Generated configs.
 "$HOME/.config/waybar/generate-config.sh"
-matugen image "$HOME/.config/hypr/shared/images/er-1.jpeg" --source-color-index 0 || true
+matugen image "$HOME/.config/dotfiles/wallpapers/er-1.jpeg" --source-color-index 0 || true
 
 echo
 echo "Done. Now edit for this machine:"
