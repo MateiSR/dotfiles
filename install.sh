@@ -185,7 +185,7 @@ clone_temp https://github.com/vinceliuice/Orchis-theme.git orchis orchis_dir
 clone_temp https://github.com/vinceliuice/Tela-icon-theme.git tela tela_dir
 run_in "$qogir_dir" ./install.sh -d "$HOME/.local/share/icons" -t default -c standard
 run_in "$orchis_dir" ./install.sh -d "$HOME/.local/share/themes" -c dark -s compact
-run_in "$tela_dir" ./install.sh -d "$HOME/.local/share/icons" orange
+run_in "$tela_dir" ./install.sh -d "$HOME/.local/share/icons"
 
 step "Dotfiles and Matugen"
 run "$ROOT/bootstrap.sh"
@@ -294,8 +294,8 @@ if ! $DRY_RUN; then
 		command -v "$command" >/dev/null || die "missing command: $command"
 	done
 	[[ -d "$HOME/.local/share/icons/Qogir" ]] || die "Qogir was not installed"
-	[[ -d "$HOME/.local/share/icons/Tela-orange" ]] || die "Tela-orange was not installed"
-	[[ -d "$HOME/.local/share/icons/Tela-orange-dark" ]] || die "Tela-orange-dark was not installed"
+	[[ -d "$HOME/.local/share/icons/Tela" ]] || die "Tela was not installed"
+	[[ -d "$HOME/.local/share/icons/Tela-dark" ]] || die "Tela-dark was not installed"
 	[[ -d "$HOME/.local/share/themes/Orchis-Dark-Compact" ]] || die "Orchis-Dark-Compact was not installed"
 	[[ -L "$HOME/.config/gtk-4.0/orchis.css" ]] || die "missing GTK 4 Orchis link"
 	[[ -L "$HOME/.config/gtk-4.0/assets" ]] || die "missing GTK 4 assets link"
