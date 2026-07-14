@@ -4,6 +4,7 @@
 .config/gtk-4.0/colors.css
 .config/hypr/matugen.lua
 .config/hypr/matugen.conf
+.config/ironbar/matugen.css
 .config/kitty/matugen.conf
 .config/kitty/current-theme.conf
 .config/nvim/matugen.lua

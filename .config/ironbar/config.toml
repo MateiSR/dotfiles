@@ -1,0 +1,155 @@
+name = "main"
+position = "top"
+height = 44
+margin = { top = 10, left = 10, right = 10 }
+popup_gap = 14
+popup_autohide = true
+icon_theme = "Tela-dark"
+
+[[start]]
+type = "custom"
+name = "launcher"
+class = "launcher"
+tooltip = "Applications"
+
+[[start.bar]]
+type = "button"
+label = ""
+on_click = "!vicinae toggle"
+
+[[start]]
+type = "clock"
+name = "time"
+format = " %H:%M"
+format_popup = "%H:%M"
+
+[[start]]
+type = "clock"
+name = "date"
+format = " %a %d %b"
+format_popup = "%A, %d %B %Y"
+
+[[center]]
+type = "workspaces"
+all_monitors = false
+favorites = ["1", "2", "3", "4", "5"]
+sort = "index"
+
+[[end]]
+type = "tray"
+icon_size = 14
+
+[[end]]
+type = "network_manager"
+icon_size = 16
+types_whitelist = ["ethernet", "wifi"]
+
+[[end]]
+type = "bluetooth"
+icon_size = 16
+
+[end.format]
+not_found = ""
+disabled = ""
+enabled = ""
+connected = ""
+connected_battery = ""
+
+[[end]]
+type = "volume"
+format = "{icon} {percentage}%"
+mute_format = "{icon} {percentage}%"
+show_sources = false
+
+[[end]]
+type = "custom"
+name = "brightness"
+class = "brightness"
+show_if = "test -n \"$(find /sys/class/backlight -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)\""
+
+[[end.bar]]
+type = "button"
+label = "󰃠 {{1000:brightnessctl -m | cut -d, -f4}}"
+on_click = "popup:toggle"
+
+[[end.popup]]
+type = "box"
+orientation = "vertical"
+
+[[end.popup.widgets]]
+type = "label"
+name = "brightness-title"
+label = "󰃠  Brightness"
+
+[[end.popup.widgets]]
+type = "slider"
+name = "brightness-slider"
+min = 5
+max = 100
+step = 5
+length = 240
+value = "1000:brightnessctl -m | cut -d, -f4 | tr -d '%'"
+on_change = "!brightnessctl set ${0%.*}%"
+
+[[end]]
+type = "battery"
+format = "{percentage}%"
+show_if = "find /sys/class/power_supply -maxdepth 1 -name 'BAT*' -print -quit | grep -q ."
+
+[[end]]
+type = "notifications"
+show_count = false
+tooltip = "Notifications · right-click toggles DND"
+on_click_right = "swaync-client --toggle-dnd --skip-wait"
+
+[end.icons]
+closed_none = ""
+closed_some = ""
+closed_dnd = ""
+open_none = ""
+open_some = ""
+open_dnd = ""
+
+[[end]]
+type = "custom"
+name = "power"
+class = "power"
+
+[[end.bar]]
+type = "button"
+label = ""
+on_click = "popup:toggle"
+
+[[end.popup]]
+type = "box"
+orientation = "vertical"
+
+[[end.popup.widgets]]
+type = "button"
+class = "power-action"
+label = "  Lock"
+on_click = "!hyprlock"
+
+[[end.popup.widgets]]
+type = "button"
+class = "power-action"
+label = "  Log out"
+on_click = "!hyprctl dispatch exit"
+
+[[end.popup.widgets]]
+type = "button"
+class = "power-action"
+label = "  Suspend"
+on_click = "!systemctl suspend"
+
+[[end.popup.widgets]]
+type = "button"
+class = "power-action"
+label = "  Reboot"
+on_click = "!systemctl reboot"
+
+[[end.popup.widgets]]
+type = "button"
+class = "power-action destructive"
+label = "  Shutdown"
+on_click = "!systemctl poweroff"

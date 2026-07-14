@@ -66,20 +66,20 @@ Fonts are defined in `.config/matugen/keywords.json`.
 The Hyprland session uses a small, composable shell rather than a full desktop
 shell:
 
-- Ironbar provides the top bar. Its UI configuration is intentionally left to
-  the user rather than supplied by this repository.
+- Ironbar provides the three-island top bar, native system popups, and the
+  launcher and power controls.
 - SwayNC is the only notification daemon and owns the notification history,
   do-not-disturb state, and control center. Ironbar's bell is its controller,
   not a second notification implementation.
 - SwayOSD displays volume, microphone, brightness, and lock-key feedback from
   the hardware bindings.
-- Matugen generates the shared CSS palette for SwayNC and SwayOSD. SwayNC
-  reloads after a palette change; SwayOSD reads the new palette on its next
-  direct start.
+- Matugen generates the shared CSS palette for Ironbar, SwayNC, and SwayOSD.
+  Ironbar and SwayNC reload after palette changes; SwayOSD reads the new
+  palette on its next direct start.
 
 All three processes are launched directly from `.config/hypr/execs.lua`; no
 custom user services are installed. `Super+X` toggles the bar. The supplied
-notification and OSD layouts live in `.config/swaync` and `.config/swayosd`.
+layouts live in `.config/ironbar`, `.config/swaync`, and `.config/swayosd`.
 
 ## SDDM
 
