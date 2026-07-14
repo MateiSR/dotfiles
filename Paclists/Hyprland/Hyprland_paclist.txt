@@ -51,14 +51,13 @@ xdg-user-dirs-gtk
 ffnvcodec-headers
 network-manager-applet
 ocean-sound-theme
-waybar
+ironbar
 hyprpolkitagent
 alacritty
 gnome-keyring
 hyprwayland-scanner
 hypridle
 hyprlock
-dunst
 libnotify
 kitty
 sddm

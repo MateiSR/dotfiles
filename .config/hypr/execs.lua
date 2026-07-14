@@ -11,13 +11,10 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("systemctl --user start hyprpolkitagent.service")
 	hl.exec_cmd("systemctl --user start gnome-keyring-daemon.service")
 
-	hl.exec_cmd("nm-applet &")
-	hl.exec_cmd("blueman-applet &")
-	hl.exec_cmd("waybar")
-
 	hl.exec_cmd("swayosd-server &")
 	hl.exec_cmd("vicinae server &")
 	hl.exec_cmd("matugen image --source-color-index 0 " .. shell_quote(colors.image))
+	hl.exec_cmd("ironbar")
 	hl.exec_cmd("hypridle")
 	hl.exec_cmd("hyprpm reload -n && hyprctl reload")
 

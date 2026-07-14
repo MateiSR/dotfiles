@@ -1,0 +1,65 @@
+@import url("matugen.css");
+
+window#osd {
+    border: 1px solid alpha(@outline_variant, 0.82);
+    border-radius: 18px;
+    background: alpha(@surface_container, 0.97);
+    color: @on_surface;
+    box-shadow: 0 10px 28px alpha(@shadow, 0.36);
+}
+
+window#osd #container {
+    margin: 13px 17px;
+}
+
+window#osd image {
+    color: @primary;
+    -gtk-icon-filter: none;
+}
+
+window#osd label {
+    margin-left: 10px;
+    color: @on_surface;
+    font-family: "Inter", "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+window#osd progressbar:disabled,
+window#osd image:disabled {
+    opacity: 0.5;
+}
+
+window#osd progressbar,
+window#osd segmentedprogress {
+    min-width: 180px;
+    min-height: 7px;
+    margin-left: 12px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+}
+
+window#osd trough,
+window#osd segment {
+    min-height: inherit;
+    border: none;
+    border-radius: inherit;
+    background: @surface_container_highest;
+}
+
+window#osd progress,
+window#osd segment.active {
+    min-height: inherit;
+    border: none;
+    border-radius: inherit;
+    background: @primary;
+}
+
+window#osd segment {
+    margin-left: 5px;
+}
+
+window#osd segment:first-child {
+    margin-left: 0;
+}

@@ -14,8 +14,7 @@
 .config/rofi/colors/matugen.rasi
 .config/starship.toml
 .config/swaync/matugen.css
-.config/waybar/config.jsonc
-.config/waybar/matugen.css
+.config/swayosd/matugen.css
 .config/waypaper/config.ini
 .config/wlogout/matugen.css
 .config/yazi/theme.toml

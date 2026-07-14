@@ -7,11 +7,6 @@ command = 'awww img --transition-type center "{{ image }}"'
 set = true
 
 
-[templates.waybar]
-input_path = './templates/colors.css'
-output_path = '~/.config/waybar/matugen.css'
-post_hook = 'pkill -SIGUSR2 waybar 2>/dev/null || true'
-
 [templates.kitty]
 input_path = './templates/kitty-colors.conf'
 output_path = '~/.config/kitty/matugen.conf'
@@ -39,6 +34,10 @@ output_path = '~/.config/hypr/matugen.conf'
 input_path = './templates/colors.css'
 output_path = '~/.config/swaync/matugen.css'
 post_hook = 'pgrep -x swaync >/dev/null && timeout 3s swaync-client -rs >/dev/null 2>&1 || true'
+
+[templates.swayosd]
+input_path = './templates/colors.css'
+output_path = '~/.config/swayosd/matugen.css'
 
 [templates.wlogout]
 input_path = './templates/colors.css'

@@ -305,7 +305,7 @@ if ! $DRY_RUN; then
 	step "Verification"
 	missing=$(pacman -T "${OFFICIAL_PACKAGES[@]}" paru "${AUR_PACKAGES[@]}" 2>/dev/null || true)
 	[[ -z "$missing" ]] || die "missing packages: ${missing//$'\n'/ }"
-	for command in fish Hyprland hyprpm matugen paru rsync sddm-greeter-qt6 stow vicinae; do
+	for command in fish Hyprland hyprpm ironbar matugen paru rsync sddm-greeter-qt6 stow vicinae; do
 		command -v "$command" >/dev/null || die "missing command: $command"
 	done
 	[[ -d "$HOME/.local/share/icons/Qogir" ]] || die "Qogir was not installed"

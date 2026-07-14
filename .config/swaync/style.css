@@ -1,65 +1,67 @@
 @import url("matugen.css");
 
+:root {
+    --notification-icon-size: 48px;
+    --notification-app-icon-size: 20px;
+}
+
 * {
-    font-family: JetBrainsMono Nerd Font;
-    font-weight: 700;
-}
-
-.close-button {
-    background: @surface_container;
-    color: @on_surface_variant;
+    font-family: "Inter", "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: none;
     text-shadow: none;
-    padding: 0;
-    border-radius: 100%;
-    margin: 8px 8px 0 0;
-    box-shadow: none;
-    border: none;
-    min-width: 24px;
-    min-height: 24px;
 }
 
-.close-button:hover {
-    box-shadow: none;
-    background: @error_container;
-    color: @on_error_container;
-    transition: background 0.15s ease-in-out;
-    border: none;
+.blank-window,
+.floating-notifications {
+    background: transparent;
 }
 
 .notification-row {
-    background: none;
+    background: transparent;
     outline: none;
 }
 
 .notification-row:focus {
-    background: alpha(@surface_container_high, 0.5);
+    background: transparent;
 }
 
 .notification-row .notification-background {
-    padding: 5px 7px;
+    padding: 5px 8px;
 }
 
-.notification-row .notification {
-    border-radius: 13px;
-    border: 1px solid @outline_variant;
-    transition: background 0.15s ease-in-out;
-    background: alpha(@surface_container, 0.95);
+.notification {
+    border: 1px solid alpha(@outline_variant, 0.78);
+    border-radius: 15px;
+    background: alpha(@surface_container, 0.97);
+    color: @on_surface;
+    box-shadow: 0 6px 18px alpha(@shadow, 0.24);
+}
+
+.control-center .notification {
+    background: @surface_container_low;
+    box-shadow: none;
+}
+
+.notification.critical {
+    border-color: alpha(@error, 0.7);
+    background: alpha(@error_container, 0.96);
+    color: @on_error_container;
 }
 
 .notification-default-action {
-    padding: 4px;
     margin: 0;
-    box-shadow: none;
-    background: transparent;
+    padding: 5px;
     border: none;
-    color: @on_surface;
-    transition: background 0.15s ease-in-out;
-    border-radius: 12px;
+    border-radius: 14px;
+    background: transparent;
+    color: inherit;
 }
 
-.notification-default-action:hover {
-    -gtk-icon-filter: none;
-    background: @surface_container_high;
+.notification-default-action:hover,
+.notification-default-action:focus {
+    background: alpha(@on_surface, 0.07);
 }
 
 .notification-default-action:not(:only-child) {
@@ -68,134 +70,152 @@
 }
 
 .notification-content {
+    min-height: 58px;
+    padding: 3px;
+    border-radius: 14px;
     background: transparent;
-    border-radius: 12px;
-    padding: 0;
 }
 
 .notification-content .image {
+    margin: 6px;
+    border-radius: 11px;
     -gtk-icon-filter: none;
-    border-radius: 100px;
-    margin: 4px;
 }
 
 .notification-content .app-icon {
+    margin: 7px;
     -gtk-icon-filter: none;
-    -gtk-icon-shadow: 0 1px 4px black;
-    margin: 6px;
 }
 
 .text-box {
-    padding: 4px 6px;
+    padding: 5px 7px 6px;
 }
 
-.text-box label {
-    filter: none;
-}
-
-.text-box .summary,
-.text-box .time,
-.text-box .body {
-    font-size: 16px;
-    font-weight: bold;
-    background: transparent;
+.text-box .summary {
     color: @on_surface;
-    text-shadow: none;
+    font-size: 14px;
+    font-weight: 700;
 }
 
 .text-box .time {
-    margin-right: 30px;
+    margin-right: 26px;
+    color: @on_surface_variant;
+    font-size: 11px;
+    font-weight: 500;
 }
 
 .text-box .body {
-    font-size: 15px;
-    font-weight: normal;
+    margin-top: 2px;
+    color: @on_surface_variant;
+    font-size: 13px;
+    font-weight: 450;
+}
+
+.critical .text-box .summary,
+.critical .text-box .body,
+.critical .text-box .time {
+    color: @on_error_container;
+}
+
+.close-button {
+    min-width: 24px;
+    min-height: 24px;
+    margin: 7px 7px 0 0;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: @on_surface_variant;
+}
+
+.close-button:hover,
+.close-button:focus {
+    background: @error_container;
+    color: @on_error_container;
 }
 
 .notification-content progressbar,
 .notification-content .body-image,
 .notification-content .inline-reply {
-    margin-top: 4px;
+    margin-top: 6px;
 }
 
 .body-image {
-    background-color: white;
+    border-radius: 10px;
+    background-color: @surface_container_high;
     -gtk-icon-filter: none;
 }
 
 .inline-reply-entry {
+    min-height: 34px;
+    padding: 0 10px;
+    border: 1px solid @outline_variant;
+    border-radius: 11px;
     background: @surface_container_low;
     color: @on_surface;
-    caret-color: @on_surface;
-    border: 1px solid @outline_variant;
-    border-radius: 12px;
+    caret-color: @primary;
+}
+
+.inline-reply-entry:focus {
+    border-color: @primary;
 }
 
 .inline-reply-button {
-    margin-left: 4px;
-    background: alpha(@surface_container, 0.95);
-    border: 1px solid @outline_variant;
-    border-radius: 12px;
-    color: @on_surface;
-}
-
-.inline-reply-button:disabled {
-    background: initial;
-    color: @on_surface_variant;
-    border-color: transparent;
+    min-width: 38px;
+    margin-left: 6px;
+    border: none;
+    border-radius: 11px;
+    background: @primary_container;
+    color: @on_primary_container;
 }
 
 .inline-reply-button:hover {
+    background: @primary;
+    color: @on_primary;
+}
+
+.inline-reply-button:disabled {
     background: @surface_container_high;
+    color: @outline;
 }
 
 .notification-alt-actions {
-    background: none;
-    border-radius: 0 0 12px 12px;
-    padding: 4px;
+    padding: 3px;
+    border-top: 1px solid alpha(@outline_variant, 0.65);
+    border-radius: 0 0 14px 14px;
+    background: transparent;
 }
 
 .notification-action {
-    margin: 4px;
+    margin: 3px;
     padding: 0;
 }
 
 .notification-action > button {
-    border-radius: 12px;
+    min-height: 32px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: @primary;
+    font-weight: 650;
+}
+
+.notification-action > button:hover,
+.notification-action > button:focus {
+    background: @primary_container;
+    color: @on_primary_container;
 }
 
 .notification-group {
-    transition: opacity 200ms ease-in-out;
-}
-
-.notification-group:focus {
-    background: alpha(@surface_container_high, 0.5);
-}
-
-.notification-group-close-button .close-button {
-    margin: 12px 20px;
-}
-
-.notification-group-buttons,
-.notification-group-headers {
-    margin: 0 16px;
-    color: @on_surface;
-}
-
-.notification-group-icon {
-    color: @on_surface;
-}
-
-.notification-group-header {
     color: @on_surface;
 }
 
 .notification-group.collapsed.not-expanded {
-    opacity: 0.4;
+    opacity: 0.78;
 }
 
 .notification-group.collapsed .notification {
-    background-color: @surface_container;
+    background: @surface_container;
 }
 
 .notification-group.collapsed
@@ -207,178 +227,132 @@
     opacity: 0;
 }
 
-.notification-group.collapsed:hover
-    .notification-row:not(:only-child)
-    .notification {
-    background-color: @surface_container_high;
+.notification-group-buttons,
+.notification-group-headers {
+    margin: 2px 15px;
+    color: @on_surface_variant;
+}
+
+.notification-group-header,
+.notification-group-icon {
+    color: @on_surface_variant;
+}
+
+.notification-group-close-button .close-button {
+    margin: 8px 14px;
 }
 
 .control-center {
+    padding: 6px;
+    border: 1px solid alpha(@outline_variant, 0.82);
+    border-radius: 18px;
     background: @surface;
     color: @on_surface;
-    border-radius: 12px;
-    margin-right: 8px;
-    margin-bottom: 8px;
-}
-
-.control-center-list-placeholder {
-    opacity: 0.5;
+    box-shadow: 0 12px 36px alpha(@shadow, 0.4);
 }
 
 .control-center-list {
     background: transparent;
 }
 
-.control-center .notification {
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.7),
-        0 2px 6px 2px rgba(0, 0, 0, 0.3);
+.control-center-list-placeholder {
+    color: @on_surface_variant;
+    opacity: 0.7;
 }
 
-.control-center .notification-default-action,
-.control-center .notification-action {
-    transition: opacity 400ms ease-in-out, background 0.15s ease-in-out;
+.widget-title {
+    margin: 8px 10px 4px;
 }
 
-.control-center .notification-default-action:hover,
-.control-center .notification-action:hover {
-    background-color: @surface_container_high;
+.widget-title > label {
+    color: @on_surface;
+    font-size: 20px;
+    font-weight: 750;
 }
 
-.blank-window,
-.floating-notifications {
-    background: transparent;
+.widget-title > button {
+    min-height: 32px;
+    padding: 0 11px;
+    border: none;
+    border-radius: 10px;
+    background: @surface_container_high;
+    color: @on_surface_variant;
+    font-size: 12px;
+    font-weight: 650;
 }
 
-.floating-notifications .notification {
-    box-shadow: none;
+.widget-title > button:hover,
+.widget-title > button:focus {
+    background: @error_container;
+    color: @on_error_container;
 }
 
-/*** Widgets ***/
-.widget-title > label,
-.widget-dnd label,
-.widget-label > label,
-.widget-inhibitors > label {
-    margin: 8px;
-    font-size: 1.1rem;
-}
-
-.widget-title > label,
-.widget-inhibitors > label {
-    font-size: 1.5rem;
-}
-
-.widget-title > button,
-.widget-inhibitors > button {
-    margin: 8px;
+.widget-dnd {
+    margin: 5px 10px 8px;
+    padding: 8px 10px;
+    border: 1px solid alpha(@outline_variant, 0.62);
     border-radius: 12px;
+    background: @surface_container_low;
+}
+
+.widget-dnd > label {
+    color: @on_surface;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .widget-dnd switch {
-    border-radius: 12px;
-    margin: 8px;
+    min-width: 42px;
+    min-height: 23px;
+    border: none;
+    border-radius: 999px;
+    background: @surface_container_highest;
 }
 
 .widget-dnd switch:checked {
-    background-color: @primary;
+    background: @primary;
 }
 
 .widget-dnd switch slider {
-    border-radius: 12px;
+    min-width: 19px;
+    min-height: 19px;
+    margin: 2px;
+    border-radius: 999px;
+    background: @outline;
 }
 
-.widget-label {
-    margin: 8px;
+.widget-dnd switch:checked slider {
+    background: @on_primary;
 }
 
-.widget-mpris {
-    margin: 8px;
+scrollbar slider {
+    min-width: 5px;
+    min-height: 36px;
+    border-radius: 999px;
+    background: alpha(@outline, 0.48);
 }
 
-.widget-mpris-player {
-    margin: 16px 20px;
-    border-radius: 12px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
+scrollbar slider:hover {
+    background: alpha(@primary, 0.72);
 }
 
-.widget-mpris-player .mpris-background {
-    filter: blur(10px);
+progressbar trough,
+scale trough {
+    min-height: 5px;
+    border-radius: 999px;
+    background: @surface_container_highest;
 }
 
-.widget-mpris-player .mpris-overlay {
-    padding: 16px;
-    background-color: rgba(0, 0, 0, 0.75);
+progressbar progress,
+scale highlight {
+    min-height: 5px;
+    border-radius: 999px;
+    background: @primary;
 }
 
-.widget-mpris-player .mpris-overlay button:hover {
-    background: @surface_container_high;
-}
-
-.widget-mpris-album-art {
-    border-radius: 12px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
-}
-
-.widget-mpris-title {
-    font-weight: bold;
-    font-size: 1.25rem;
-}
-
-.widget-mpris-subtitle {
-    font-size: 1.1rem;
-}
-
-.mpris-overlay > box > button:hover {
-    background-color: @surface_container_high;
-}
-
-.widget-buttons-grid {
-    padding: 8px;
-    margin: 8px;
-    border-radius: 12px;
-}
-
-.widget-buttons-grid flowboxchild > button {
-    border-radius: 12px;
-}
-
-.menu-button-bar > .start {
-    margin-left: 8px;
-}
-
-.menu-button-bar > .end {
-    margin-right: 8px;
-}
-
-.widget-menubar-container button {
-    border-radius: 12px;
-    margin: 0 4px;
-}
-
-.widget-menubar > revealer {
-    margin-top: 8px;
-}
-
-.widget-menubar > revealer button {
-    border-radius: 12px;
-    margin: 8px;
-    margin-top: 0;
-}
-
-.widget-volume,
-.widget-slider,
-.widget-backlight {
-    padding: 8px;
-    margin: 8px;
-    border-radius: 12px;
-}
-
-.per-app-volume {
-    background-color: @surface_container_highest;
-    padding: 4px 8px 8px 8px;
-    margin: 0px 8px 8px 8px;
-    border-radius: 12px;
-}
-
-.widget-slider label {
-    font-size: inherit;
+scale slider {
+    min-width: 16px;
+    min-height: 16px;
+    border-radius: 999px;
+    background: @primary;
 }

@@ -13,6 +13,7 @@ hl.bind(mod .. " + E", hl.dsp.exec_cmd(vars.file_manager))
 hl.bind(mod .. " + P", hl.dsp.window.pseudo())
 
 hl.bind(mod .. " + R", hl.dsp.exec_cmd("vicinae toggle"))
+hl.bind(mod .. " + X", hl.dsp.exec_cmd("ironbar bar main toggle-visible"))
 hl.bind("CTRL + ALT + DELETE", hl.dsp.exec_cmd("wlogout"))
 hl.bind(mod .. " + SEMICOLON", hl.dsp.exec_cmd("vicinae vicinae://extensions/vicinae/vicinae/search-emojis"))
 
@@ -108,7 +109,6 @@ hl.bind("SHIFT + Print", hl.dsp.exec_cmd(vars.screenshot_script .. " --upload"))
 hl.bind(mod .. " + GRAVE", hl.dsp.window.fullscreen(2))
 
 hl.bind("ALT + F4", hl.dsp.window.close())
-hl.bind(mod .. " + X", hl.dsp.exec_cmd("killall -SIGUSR1 waybar"))
 
 hl.bind("SUPER + A", hl.dsp.workspace.toggle_special("magic"))
 hl.bind("SUPER + SHIFT + A", hl.dsp.window.move({ workspace = "special:magic" }))

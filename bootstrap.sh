@@ -13,8 +13,7 @@ cp -n .config/dotfiles/git.conf.example "$HOME/.config/dotfiles/git.conf" || tru
 cp -n .config/dotfiles/scripts/gs_zipline_conf_example.sh "$HOME/.config/dotfiles/scripts/gs_zipline_conf.sh" || true
 cp -n .config/waypaper/config.ini.example "$HOME/.config/waypaper/config.ini" || true
 
-# Generated configs.
-"$HOME/.config/waybar/generate-config.sh"
+# Generated color schemes.
 matugen image "$HOME/.config/dotfiles/wallpapers/er-1.jpeg" --source-color-index 0 || true
 
 echo
