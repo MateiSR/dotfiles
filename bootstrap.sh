@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 
 command -v stow >/dev/null || { echo "install stow first: pacman -S stow" >&2; exit 1; }
 
-stow --no-folding -v -t "$HOME" .
+stow --no-folding --compat -R -v -t "$HOME" .
 
 # Machine-local files, created from examples if missing (gitignored, never committed).
 cp -n .config/dotfiles/machine.lua.example "$HOME/.config/dotfiles/machine.lua" || true
