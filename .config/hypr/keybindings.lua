@@ -68,28 +68,17 @@ hl.bind(mod .. " + Space", function()
 	hl.dispatch(hl.dsp.exec_cmd("notify-send '" .. label .. " Layout' && sleep 0.5 && swaync-client --close-latest"))
 end)
 
-local split = hl.plugin.split_monitor_workspaces
-if machine.plugins and split then
-	hl.bind(mod .. " + CTRL + H", function()
-		split.change_monitor_silent("prev")
-	end)
-	hl.bind(mod .. " + CTRL + L", function()
-		split.change_monitor_silent("next")
-	end)
+local split = _G.split_monitor_workspaces
+hl.bind(mod .. " + CTRL + H", hl.dsp.focus({ monitor = "l" }))
+hl.bind(mod .. " + CTRL + L", hl.dsp.focus({ monitor = "r" }))
 
+if machine.plugins and split then
 	for i = 1, 5 do
-		local workspace = i
-		hl.bind(mod .. " + " .. workspace, function()
-			split.workspace(workspace)
-		end)
-		hl.bind(mod .. " + SHIFT + " .. workspace, function()
-			split.move_to_workspace_silent(workspace)
-		end)
+		local workspace = tostring(i)
+		hl.bind(mod .. " + " .. workspace, split.workspace(workspace))
+		hl.bind(mod .. " + SHIFT + " .. workspace, split.move_to_workspace_silent(workspace))
 	end
 else
-	hl.bind(mod .. " + CTRL + H", hl.dsp.focus({ monitor = "l" }))
-	hl.bind(mod .. " + CTRL + L", hl.dsp.focus({ monitor = "r" }))
-
 	for i = 1, 5 do
 		local workspace = tostring(i)
 		hl.bind(mod .. " + " .. workspace, hl.dsp.focus({ workspace = workspace }))
@@ -97,8 +86,13 @@ else
 	end
 end
 
-hl.bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(mod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
+if machine.plugins and split then
+	hl.bind(mod .. " + mouse_down", split.cycle_workspaces("next"))
+	hl.bind(mod .. " + mouse_up", split.cycle_workspaces("prev"))
+else
+	hl.bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+	hl.bind(mod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
+end
 
 hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })

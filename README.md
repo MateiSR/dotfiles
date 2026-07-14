@@ -1,43 +1,65 @@
 # dotfiles
+
 mateisr.com
 
-## Setup
-
-Configs are symlinked from this repo into `$HOME` with GNU stow (`--no-folding`,
-so directories stay real and generated/secret files never enter the repo):
+## Install
 
 ```sh
 git clone https://github.com/MateiSR/dotfiles ~/dotfiles
-cd ~/dotfiles && ./bootstrap.sh
+cd ~/dotfiles
+./install.sh --gpu nvidia
 ```
 
-Then edit the machine-local files (gitignored; created from `.example` templates):
-- `~/.config/dotfiles/machine.lua` — monitors, GPU vendor, plugins, input devices, per-machine autostart
-- `~/.config/dotfiles/git.conf` — git identity (`[user]` block, included from `.gitconfig`)
-- `~/.config/dotfiles/scripts/gs_zipline_conf.sh` — Zipline screenshot upload key
+Use `amd` or `intel` instead when appropriate. Omit `--gpu` to leave graphics
+drivers alone.
 
-After adding a *new* file to the repo, re-run `stow --no-folding -R -t ~ .` to link it.
-Fonts are defined once in `.config/matugen/keywords.json` (`{{custom.*}}` in templates).
+The installer updates the system with the default paclists, bootstraps `paru`,
+installs the AUR paclist, applies the dotfiles, and installs or updates:
 
-vencord theme: https://discordstyles.github.io/DarkMatter/DarkMatter.theme.css
+- Qogir cursor, Tela Orange icons, and `Orchis-Dark-Compact`
+- Matugen color overrides for GTK 3, GTK 4, and libadwaita apps
+- `csgo-vulkan-fix` through HyprPM
+- Oh My Fish and tmux plugins
+- `split-monitor-workspaces` on the release branch matching Hyprland
 
+It is safe to rerun after an update:
 
+```sh
+git pull --ff-only
+./install.sh --gpu nvidia
+```
 
-cursors: https://github.com/vinceliuice/Qogir-icon-theme
+Optional flags:
 
+```text
+--with-xorg
+--with-archiso
+--without-omf
+--dry-run
+```
 
-gtk: https://github.com/vinceliuice/Orchis-theme 
-./install.sh -t orange -l --tweaks black, compact --color dark
+The default official paclists are Apps, Coding, Fonts, Hyprland, Multimedia,
+Network, and Print. The ArchISO and full Xorg lists are opt-in. Package commands
+use `--needed` and keep pacman/paru confirmation prompts.
 
+## Machine configuration
 
-icons: https://github.com/vinceliuice/Tela-icon-theme
-./install.sh -c orange
+Edit the machine-local files created from the `.example` templates:
 
+- `~/.config/dotfiles/machine.lua` — monitors, GPU, workspace integration,
+  input devices, and per-machine autostart
+- `~/.config/dotfiles/git.conf` — git identity
+- `~/.config/dotfiles/scripts/gs_zipline_conf.sh` — Zipline upload key
 
-change these using `nwg-look`
+`bootstrap.sh` can be run alone when only the Stow links and generated configs
+need refreshing. New tracked files can be linked with:
 
+```sh
+stow --no-folding --compat -R -t "$HOME" .
+```
 
-tmux: install TPM and `~/.tmux/plugins/tpm/bin/install_plugins`
+Fonts are defined in `.config/matugen/keywords.json`.
 
-
-sddm theme: currently using https://github.com/Keyitdev/sddm-astronaut-theme with a modified wallpaper (~/.config/dotfiles/wallpapers)
+The current SDDM theme is
+[sddm-astronaut-theme](https://github.com/Keyitdev/sddm-astronaut-theme) with a
+modified wallpaper from `.config/dotfiles/wallpapers`.

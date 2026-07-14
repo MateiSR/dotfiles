@@ -8,7 +8,6 @@ hyprland
 egl-wayland
 hyprpicker
 grim
-wlroots
 wlsunset
 slurp
 wl-clipboard
@@ -17,6 +16,10 @@ qt6ct
 shared-mime-info
 gtk3
 gtk4
+gtk-update-icon-cache
+gnome-themes-extra
+libadwaita
+sassc
 lib32-libpipewire
 lib32-pipewire
 gst-plugin-pipewire
@@ -51,15 +54,13 @@ ocean-sound-theme
 waybar
 hyprpolkitagent
 alacritty
-wlsunset
 gnome-keyring
 hyprwayland-scanner
 hypridle
 hyprlock
-pamixer
 dunst
+libnotify
 kitty
-swaybg
 sddm
 rofimoji
 wtype
@@ -71,6 +72,7 @@ blueman
 brightnessctl
 sox
 ripgrep
+xorg-xrandr
 awww
 adw-gtk-theme
 matugen

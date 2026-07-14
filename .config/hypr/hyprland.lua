@@ -1,5 +1,7 @@
 package.path = package.path .. ";" .. os.getenv("HOME") .. "/.config/dotfiles/?.lua"
 
+hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
+
 package.loaded["machine"] = nil
 local ok, machine = pcall(require, "machine")
 if not ok or type(machine) ~= "table" then

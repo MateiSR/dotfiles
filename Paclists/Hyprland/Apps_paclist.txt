@@ -1,5 +1,9 @@
 haveged
 shared-mime-info
+bc
+fzf
+jq
+lazygit
 mpv
 yt-dlp
 filezilla
@@ -9,12 +13,17 @@ libreoffice-fresh
 fastfetch
 qbittorrent
 upower
+nautilus
 neovim
 tmux
 kitty
 bat
 zoxide
 fish
+playerctl
+qalculate-gtk
+xh
+zellij
 tesseract-data-eng
 tesseract
 zathura

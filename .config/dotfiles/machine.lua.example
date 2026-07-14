@@ -9,15 +9,15 @@ return {
 		{ output = "HDMI-A-2", mode = "preferred", position = "auto", scale = "1" },
 	},
 
-	-- Primary output (xrandr --primary, split-monitor-workspaces).
+	-- Primary output (xrandr --primary, split-monitor-workspaces priority).
 	primary = "DP-5",
-	-- Set to enable the ALT+TAB monitor toggle and per-monitor workspace caps.
+	-- Set to enable the ALT+TAB monitor toggle and workspace priority.
 	secondary = "HDMI-A-2",
 
 	-- "nvidia" enables the NVIDIA env block (LIBVA/GBM/GLX/NVD).
 	gpu = "nvidia",
 
-	-- split-monitor-workspaces integration (needs hyprpm plugins installed).
+	-- split-monitor-workspaces integration (installed as a Lua package by install.sh).
 	plugins = true,
 
 	-- Input devices to disable, by Hyprland device name.
@@ -32,7 +32,6 @@ return {
 	-- Extra per-machine autostart commands (run after the shared ones).
 	autostart = {
 		"wlsunset -S 09:00 -s 21:30",
-		"hyprpm reload -n",
 		"jamesdsp -t &",
 		"wpctl set-volume 87 1",
 	},

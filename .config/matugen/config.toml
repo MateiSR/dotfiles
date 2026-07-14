@@ -59,7 +59,7 @@ output_path = '~/.config/btop/themes/matugen.theme'
 [templates.gtk3]
 input_path = './templates/gtk-colors.css'
 output_path = '~/.config/gtk-3.0/gtk.css'
-post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme Orchis-Dark-Compact; gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"'
 
 [templates.gtk4]
 input_path = './templates/gtk-colors.css'

@@ -19,6 +19,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("vicinae server &")
 	hl.exec_cmd("matugen image --source-color-index 0 " .. shell_quote(colors.image))
 	hl.exec_cmd("hypridle")
+	hl.exec_cmd("hyprpm reload -n && hyprctl reload")
 
 	for _, cmd in ipairs(machine.autostart or {}) do
 		hl.exec_cmd(cmd)

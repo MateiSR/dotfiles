@@ -1,6 +1,6 @@
 avahi
 curl
-dnsutils
+bind
 firewalld
 net-tools
 netctl

@@ -10,7 +10,7 @@ gst-plugins-good
 gst-plugins-bad
 gst-plugins-ugly
 gstreamer
-gstreamer-vaapi
+gst-plugin-va
 libpulse
 pipewire
 pipewire-alsa
