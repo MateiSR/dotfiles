@@ -48,10 +48,16 @@ hl.bind(mod .. " + V", function()
         return
     end
 
+    -- width/height are pre-rotation; swap for portrait (odd transform)
+    local w, h = monitor.width, monitor.height
+    if monitor.transform % 2 == 1 then
+        w, h = h, w
+    end
+
     hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
     hl.dispatch(hl.dsp.window.resize({
-        x = math.floor(monitor.width * 0.7),
-        y = math.floor(monitor.height * 0.7),
+        x = math.floor(w * 0.7),
+        y = math.floor(h * 0.7),
         relative = false,
     }))
     hl.dispatch(hl.dsp.window.center())
@@ -133,3 +139,9 @@ hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"))
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"))
 
 hl.bind("Caps_Lock", hl.dsp.exec_cmd("swayosd-client --caps-lock"), { release = true })
+
+hl.define_submap("passthru", function()
+  hl.bind("SUPER + Escape", hl.dsp.submap("reset"))
+end)
+
+hl.bind("SUPER + F12", hl.dsp.submap("passthru"))

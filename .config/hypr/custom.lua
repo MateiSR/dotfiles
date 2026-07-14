@@ -15,6 +15,11 @@ hl.device({
     enabled = false,
 })
 
+hl.device({
+    name = "sony-interactive-entertainment-dualsense-wireless-controller-touchpad",
+    enabled = false,
+})
+
 hl.config({
     xwayland = {
         force_zero_scaling = true,
