@@ -62,6 +62,12 @@ dunst
 libnotify
 kitty
 sddm
+qt6-5compat
+qt6-declarative
+qt6-multimedia-ffmpeg
+qt6-svg
+qt6-virtualkeyboard
+rsync
 rofimoji
 wtype
 pavucontrol

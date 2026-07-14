@@ -3,20 +3,19 @@
 import_json_files = ["./keywords.json"]
 
 [config.wallpaper]
-command = "awww"
-arguments = ["img", "--transition-type", "center"]
+command = 'awww img --transition-type center "{{ image }}"'
 set = true
 
 
 [templates.waybar]
 input_path = './templates/colors.css'
 output_path = '~/.config/waybar/matugen.css'
-post_hook = 'pkill -SIGUSR2 waybar'
+post_hook = 'pkill -SIGUSR2 waybar 2>/dev/null || true'
 
 [templates.kitty]
 input_path = './templates/kitty-colors.conf'
 output_path = '~/.config/kitty/matugen.conf'
-post_hook = 'pkill -SIGUSR1 kitty'
+post_hook = 'pkill -SIGUSR1 kitty 2>/dev/null || true'
 
 [templates.starship]
 input_path = './templates/starship-colors.toml'
@@ -25,7 +24,7 @@ output_path = '~/.config/starship.toml'
 [templates.hyprland_lua]
 input_path = './templates/hyprland-colors.lua'
 output_path = '~/.config/hypr/matugen.lua'
-post_hook = 'hyprctl reload'
+post_hook = 'hyprctl reload >/dev/null 2>&1 || true'
 
 [templates.hyprland_conf]
 input_path = './templates/hyprland-colors.conf'
@@ -34,7 +33,7 @@ output_path = '~/.config/hypr/matugen.conf'
 [templates.swaync]
 input_path = './templates/colors.css'
 output_path = '~/.config/swaync/matugen.css'
-post_hook = 'swaync-client -rs'
+post_hook = 'pgrep -x swaync >/dev/null && timeout 3s swaync-client -rs >/dev/null 2>&1 || true'
 
 [templates.wlogout]
 input_path = './templates/colors.css'
@@ -59,16 +58,21 @@ output_path = '~/.config/btop/themes/matugen.theme'
 [templates.gtk3]
 input_path = './templates/gtk-colors.css'
 output_path = '~/.config/gtk-3.0/gtk.css'
-post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme Orchis-Dark-Compact; gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme Orchis-Dark-Compact; gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" || true'
 
 [templates.gtk4]
 input_path = './templates/gtk-colors.css'
 output_path = '~/.config/gtk-4.0/colors.css'
 
+[templates.sddm]
+input_path = './templates/sddm-astronaut.conf'
+output_path = '~/.cache/matugen/sddm-astronaut.conf'
+post_hook = 'MATUGEN_SDDM_SYNC=1 ~/.config/dotfiles/scripts/update-sddm-theme.sh'
+
 [templates.vicinae]
 input_path = './templates/vicinae.toml'
 output_path = '~/.local/share/vicinae/themes/matugen.toml'
-post_hook = 'vicinae theme set matugen'
+post_hook = 'vicinae theme set matugen >/dev/null 2>&1 || true'
 
 [templates.zed]
 input_path = './templates/zed-colors.json'

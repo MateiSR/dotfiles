@@ -21,6 +21,7 @@ installs the AUR paclist, applies the dotfiles, and installs or updates:
 - `csgo-vulkan-fix` through HyprPM
 - Oh My Fish and tmux plugins
 - `split-monitor-workspaces` on the release branch matching Hyprland
+- SDDM Astronaut from upstream Git with Matugen wallpaper/colors
 
 It is safe to rerun after an update:
 
@@ -60,6 +61,21 @@ stow --no-folding --compat -R -t "$HOME" .
 
 Fonts are defined in `.config/matugen/keywords.json`.
 
-The current SDDM theme is
-[sddm-astronaut-theme](https://github.com/Keyitdev/sddm-astronaut-theme) with a
-modified wallpaper from `.config/dotfiles/wallpapers`.
+## SDDM
+
+The installer updates
+[sddm-astronaut-theme](https://github.com/Keyitdev/sddm-astronaut-theme) from
+upstream Git and configures its wallpaper and colors from Matugen. Theme code is
+root-owned; generated files live in `/var/lib/matugen-sddm` and can be refreshed
+without `sudo`.
+
+Every `matugen image ...` run updates SDDM automatically. To reapply the last
+generated theme or select a new wallpaper directly:
+
+```sh
+~/.config/dotfiles/scripts/update-sddm-theme.sh
+~/.config/dotfiles/scripts/update-sddm-theme.sh /path/to/wallpaper
+```
+
+The installer does not enable a display manager. Enable SDDM for the next boot
+when needed with `sudo systemctl enable sddm`.
