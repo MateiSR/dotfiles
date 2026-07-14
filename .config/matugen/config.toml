@@ -3,6 +3,11 @@ command = "awww"
 arguments = ["img", "--transition-type", "center"]
 set = true
 
+# Canonical fonts, referenced as {{custom.*}} in templates.
+[config.custom_keywords]
+font_mono = "JetBrainsMono Nerd Font"
+font_ui = "Inter"
+
 
 [templates.waybar]
 input_path = './templates/colors.css'
@@ -22,6 +27,10 @@ output_path = '~/.config/starship.toml'
 input_path = './templates/hyprland-colors.lua'
 output_path = '~/.config/hypr/matugen.lua'
 post_hook = 'hyprctl reload'
+
+[templates.hyprland_conf]
+input_path = './templates/hyprland-colors.conf'
+output_path = '~/.config/hypr/matugen.conf'
 
 [templates.swaync]
 input_path = './templates/colors.css'

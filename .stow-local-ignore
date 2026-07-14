@@ -1,0 +1,8 @@
+\.git
+\.gitignore
+.+~
+^/README.*
+^/Paclists
+^/\.claude
+^/\.stow-local-ignore
+^/bootstrap\.sh

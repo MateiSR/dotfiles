@@ -23,5 +23,5 @@ mpvpaper_sound = False
 mpvpaper_options = 
 use_xdg_state = False
 color = #ffffff
-stylesheet = /home/matei/.config/waypaper/style.css
+stylesheet = ~/.config/waypaper/style.css
 

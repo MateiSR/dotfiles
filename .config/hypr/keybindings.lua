@@ -1,4 +1,5 @@
 local vars = require("vars")
+local machine = require("machine")
 local mod = vars.main_mod
 
 -- Tracked alongside Hyprland's general.layout so J/K/O can dispatch
@@ -21,20 +22,18 @@ hl.bind(mod .. " + Z", hl.dsp.exec_cmd(vars.browser))
 
 hl.bind(mod .. " + H", hl.dsp.focus({ direction = "l" }))
 hl.bind(mod .. " + J", function()
-    hl.dispatch(_G.current_layout == "master"
-        and hl.dsp.layout("cyclenext")
-        or hl.dsp.window.cycle_next())
+	hl.dispatch(_G.current_layout == "master" and hl.dsp.layout("cyclenext") or hl.dsp.window.cycle_next())
 end)
 hl.bind(mod .. " + K", function()
-    hl.dispatch(_G.current_layout == "master"
-        and hl.dsp.layout("cycleprev")
-        or hl.dsp.window.cycle_next({ prev = true }))
+	hl.dispatch(
+		_G.current_layout == "master" and hl.dsp.layout("cycleprev") or hl.dsp.window.cycle_next({ prev = true })
+	)
 end)
 hl.bind(mod .. " + L", hl.dsp.focus({ direction = "r" }))
 hl.bind(mod .. " + O", function()
-    if _G.current_layout == "dwindle" then
-        hl.dispatch(hl.dsp.layout("togglesplit"))
-    end
+	if _G.current_layout == "dwindle" then
+		hl.dispatch(hl.dsp.layout("togglesplit"))
+	end
 end)
 
 hl.bind(mod .. " + SHIFT + H", hl.dsp.window.resize({ x = -100, y = 0, relative = true }))
@@ -43,61 +42,60 @@ hl.bind(mod .. " + SHIFT + K", hl.dsp.window.resize({ x = 0, y = -100, relative 
 hl.bind(mod .. " + SHIFT + L", hl.dsp.window.resize({ x = 100, y = 0, relative = true }))
 
 hl.bind(mod .. " + V", function()
-    local monitor = hl.get_active_monitor()
-    if not monitor then
-        return
-    end
+	local monitor = hl.get_active_monitor()
+	if not monitor then
+		return
+	end
 
-    -- width/height are pre-rotation; swap for portrait (odd transform)
-    local w, h = monitor.width, monitor.height
-    if monitor.transform % 2 == 1 then
-        w, h = h, w
-    end
+	-- width/height are pre-rotation; swap for portrait (odd transform)
+	local w, h = monitor.width, monitor.height
+	if monitor.transform % 2 == 1 then
+		w, h = h, w
+	end
 
-    hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
-    hl.dispatch(hl.dsp.window.resize({
-        x = math.floor(w * 0.7),
-        y = math.floor(h * 0.7),
-        relative = false,
-    }))
-    hl.dispatch(hl.dsp.window.center())
+	hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
+	hl.dispatch(hl.dsp.window.resize({
+		x = math.floor(w * 0.7),
+		y = math.floor(h * 0.7),
+		relative = false,
+	}))
+	hl.dispatch(hl.dsp.window.center())
 end)
 
 hl.bind(mod .. " + Space", function()
-    _G.current_layout = _G.current_layout == "master" and "dwindle" or "master"
-    hl.config({ general = { layout = _G.current_layout } })
-    local label = _G.current_layout:sub(1, 1):upper() .. _G.current_layout:sub(2)
-    hl.dispatch(hl.dsp.exec_cmd(
-        "notify-send '" .. label .. " Layout' && sleep 0.5 && swaync-client --close-latest"
-    ))
+	_G.current_layout = _G.current_layout == "master" and "dwindle" or "master"
+	hl.config({ general = { layout = _G.current_layout } })
+	local label = _G.current_layout:sub(1, 1):upper() .. _G.current_layout:sub(2)
+	hl.dispatch(hl.dsp.exec_cmd("notify-send '" .. label .. " Layout' && sleep 0.5 && swaync-client --close-latest"))
 end)
 
 local split = hl.plugin.split_monitor_workspaces
-if split then
-    hl.bind(mod .. " + CTRL + H", function()
-        split.change_monitor_silent("prev")
-    end)
-    hl.bind(mod .. " + CTRL + L", function()
-        split.change_monitor_silent("next")
-    end)
+if machine.plugins and split then
+	hl.bind(mod .. " + CTRL + H", function()
+		split.change_monitor_silent("prev")
+	end)
+	hl.bind(mod .. " + CTRL + L", function()
+		split.change_monitor_silent("next")
+	end)
 
-    for i = 1, 5 do
-        local workspace = i
-        hl.bind(mod .. " + " .. workspace, function()
-            split.workspace(workspace)
-        end)
-        hl.bind(mod .. " + SHIFT + " .. workspace, function()
-            split.move_to_workspace_silent(workspace)
-        end)
-    end
+	for i = 1, 5 do
+		local workspace = i
+		hl.bind(mod .. " + " .. workspace, function()
+			split.workspace(workspace)
+		end)
+		hl.bind(mod .. " + SHIFT + " .. workspace, function()
+			split.move_to_workspace_silent(workspace)
+		end)
+	end
 else
-    hl.bind(mod .. " + CTRL + H", hl.dsp.focus({ monitor = "l" }))
-    hl.bind(mod .. " + CTRL + L", hl.dsp.focus({ monitor = "r" }))
+	hl.bind(mod .. " + CTRL + H", hl.dsp.focus({ monitor = "l" }))
+	hl.bind(mod .. " + CTRL + L", hl.dsp.focus({ monitor = "r" }))
 
-    for i = 1, 5 do
-        hl.bind(mod .. " + " .. i, hl.dsp.focus({ workspace = "m~" .. i }))
-        hl.bind(mod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = "m~" .. i }))
-    end
+	for i = 1, 5 do
+		local workspace = tostring(i)
+		hl.bind(mod .. " + " .. workspace, hl.dsp.focus({ workspace = workspace }))
+		hl.bind(mod .. " + SHIFT + " .. workspace, hl.dsp.window.move({ workspace = workspace }))
+	end
 end
 
 hl.bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
@@ -141,7 +139,7 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"))
 hl.bind("Caps_Lock", hl.dsp.exec_cmd("swayosd-client --caps-lock"), { release = true })
 
 hl.define_submap("passthru", function()
-  hl.bind("SUPER + Escape", hl.dsp.submap("reset"))
+	hl.bind("SUPER + Escape", hl.dsp.submap("reset"))
 end)
 
 hl.bind("SUPER + F12", hl.dsp.submap("passthru"))

@@ -1,10 +1,14 @@
-local vars = require("vars")
+local machine = require("machine")
 local split = hl.plugin.split_monitor_workspaces
 
-if split then
-    split.max_workspaces({ monitor = vars.monitor1, max = 5 })
-    split.max_workspaces({ monitor = vars.monitor2, max = 5 })
-    split.grab_rogue_windows()
+if machine.plugins and split then
+	if machine.primary then
+		split.max_workspaces({ monitor = machine.primary, max = 5 })
+	end
+	if machine.secondary then
+		split.max_workspaces({ monitor = machine.secondary, max = 5 })
+	end
+	split.grab_rogue_windows()
 end
 
 -- hl.config({

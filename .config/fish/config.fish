@@ -126,7 +126,7 @@ set -g theme_color_scheme dark
 set -g theme_nerd_fonts yes
 
 # Created by `pipx` on 2024-06-05 20:15:03
-set PATH $PATH /home/matei/.local/bin
+set PATH $PATH $HOME/.local/bin
 
 # Nvim man page
 set -gx MANPAGER 'nvim +Man!'

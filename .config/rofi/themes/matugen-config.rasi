@@ -17,8 +17,7 @@ configuration {
     accent-color:            @primary;
     urgent-color:            @tertiary;
 
-    /* General Settings */
-    font:                    "FiraCode Nerd Font Medium 12";
+    /* General Settings (font comes from colors/matugen.rasi) */
     background-color:        transparent;
     text-color:              @fg0;
     margin:                  0;

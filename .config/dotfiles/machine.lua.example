@@ -1,0 +1,39 @@
+-- Machine-local config: cp machine.lua.example machine.lua and edit.
+-- machine.lua is gitignored and must never be committed.
+-- Every field is optional; without this file Hyprland boots with automatic
+-- monitor setup, no NVIDIA env vars, no plugins and no extra autostart.
+return {
+	-- hl.monitor() is called for each entry.
+	monitors = {
+		{ output = "DP-5", mode = "preferred", position = "0x0", scale = "1" },
+		{ output = "HDMI-A-2", mode = "preferred", position = "auto", scale = "1" },
+	},
+
+	-- Primary output (xrandr --primary, split-monitor-workspaces).
+	primary = "DP-5",
+	-- Set to enable the ALT+TAB monitor toggle and per-monitor workspace caps.
+	secondary = "HDMI-A-2",
+
+	-- "nvidia" enables the NVIDIA env block (LIBVA/GBM/GLX/NVD).
+	gpu = "nvidia",
+
+	-- split-monitor-workspaces integration (needs hyprpm plugins installed).
+	plugins = true,
+
+	-- Input devices to disable, by Hyprland device name.
+	disabled_devices = {
+		"dualsense-wireless-controller-touchpad",
+		"sony-interactive-entertainment-dualsense-wireless-controller-touchpad",
+	},
+
+	-- Absolute path to a shader, or nil.
+	screen_shader = os.getenv("HOME") .. "/.config/hypr/shaders/custom.glsl",
+
+	-- Extra per-machine autostart commands (run after the shared ones).
+	autostart = {
+		"wlsunset -S 09:00 -s 21:30",
+		"hyprpm reload -n",
+		"jamesdsp -t &",
+		"wpctl set-volume 87 1",
+	},
+}

@@ -1,7 +1,7 @@
 hl.config({
-    animations = {
-        enabled = true,
-    },
+	animations = {
+		enabled = true,
+	},
 })
 
 hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
@@ -31,23 +31,23 @@ hl.animation({ leaf = "workspaces", enabled = true, speed = 7, bezier = "menu_de
 hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 3, bezier = "md3_decel", style = "slidefadevert 15%" })
 
 hl.config({
-    decoration = {
-        rounding = 12,
+	decoration = {
+		rounding = 12,
 
-        active_opacity = 1.0,
-        inactive_opacity = 1.0,
-        fullscreen_opacity = 1.0,
+		active_opacity = 1.0,
+		inactive_opacity = 1.0,
+		fullscreen_opacity = 1.0,
 
-        dim_inactive = false,
-        dim_strength = 0.1,
+		dim_inactive = false,
+		dim_strength = 0.1,
 
-        blur = {
-            enabled = true,
-            size = 6,
-            passes = 3,
-            noise = 0.0117,
-            ignore_opacity = true,
-            new_optimizations = true,
-        },
-    },
+		blur = {
+			enabled = true,
+			size = 6,
+			passes = 3,
+			noise = 0.0117,
+			ignore_opacity = true,
+			new_optimizations = true,
+		},
+	},
 })

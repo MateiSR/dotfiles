@@ -1,34 +1,37 @@
 local vars = require("vars")
+local machine = require("machine")
 
--- hl.monitor({
---     output = "",
---     mode = "preferred",
---     position = "auto",
---     scale = "1",
---     mirror = vars.monitor1,
--- })
+for _, monitor in ipairs(machine.monitors or {}) do
+	hl.monitor(monitor)
+end
 
-hl.bind("ALT + TAB", hl.dsp.exec_cmd(vars.toggle_monitor .. " " .. vars.monitor1 .. " " .. vars.monitor2))
+for _, name in ipairs(machine.disabled_devices or {}) do
+	hl.device({
+		name = name,
+		enabled = false,
+	})
+end
 
-hl.device({
-    name = "dualsense-wireless-controller-touchpad",
-    enabled = false,
-})
-
-hl.device({
-    name = "sony-interactive-entertainment-dualsense-wireless-controller-touchpad",
-    enabled = false,
-})
+if machine.primary and machine.secondary then
+	hl.bind("ALT + TAB", hl.dsp.exec_cmd(vars.toggle_monitor .. " " .. machine.primary .. " " .. machine.secondary))
+end
 
 hl.config({
-    xwayland = {
-        force_zero_scaling = true,
-    },
-    decoration = {
-        screen_shader = os.getenv("HOME") .. "/.config/hypr/shaders/custom.glsl",
-    },
+	xwayland = {
+		force_zero_scaling = true,
+	},
 })
 
+if machine.screen_shader then
+	hl.config({
+		decoration = {
+			screen_shader = machine.screen_shader,
+		},
+	})
+end
+
 hl.on("hyprland.start", function()
-    hl.exec_cmd("xrandr --output " .. vars.monitor1 .. " --primary")
+	if machine.primary then
+		hl.exec_cmd("xrandr --output " .. machine.primary .. " --primary")
+	end
 end)

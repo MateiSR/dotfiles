@@ -1,55 +1,55 @@
 hl.window_rule({
-    name = "windowrule-1",
-    match = { class = "^(com.sidevesh.Luminance)$" },
-    opacity = "0.8 0.8",
-    float = true,
+	name = "windowrule-1",
+	match = { class = "^(com.sidevesh.Luminance)$" },
+	opacity = "0.8 0.8",
+	float = true,
 })
 
 hl.window_rule({
-    name = "windowrule-2",
-    match = { class = "^(waypaper)$" },
-    float = true,
+	name = "windowrule-2",
+	match = { class = "^(waypaper)$" },
+	float = true,
 })
 
 hl.layer_rule({
-    name = "layerrule-1",
-    match = { namespace = "^(hyprfreeze)$" },
-    no_anim = true,
+	name = "layerrule-1",
+	match = { namespace = "^(hyprfreeze)$" },
+	no_anim = true,
 })
 
 hl.layer_rule({
-    name = "layerrule-wayfreeze",
-    match = { namespace = "^(wayfreeze)$" },
-    no_anim = true,
+	name = "layerrule-wayfreeze",
+	match = { namespace = "^(wayfreeze)$" },
+	no_anim = true,
 })
 
 hl.layer_rule({
-    name = "layerrule-slurp",
-    match = { namespace = "^(slurp)$" },
-    no_anim = true,
+	name = "layerrule-slurp",
+	match = { namespace = "^(slurp)$" },
+	no_anim = true,
 })
 
 hl.window_rule({
-    name = "cs2-tearing",
-    match = { class = "^(cs2)$" },
-    immediate = true,
+	name = "cs2-tearing",
+	match = { class = "^(cs2)$" },
+	immediate = true,
 })
 
 hl.window_rule({
-    name = "cs2-opacity",
-    match = { class = "^(cs2)$" },
-    opacity = "1.0 override 1.0 override",
+	name = "cs2-opacity",
+	match = { class = "^(cs2)$" },
+	opacity = "1.0 override 1.0 override",
 })
 
 hl.window_rule({
-    name = "libreoffice-writer-no-fullscreen",
-    match = { class = "^(libreoffice-writer|soffice|Soffice)$" },
-    fullscreen_state = "0 0",
-    suppress_event = "fullscreen maximize fullscreenoutput",
+	name = "libreoffice-writer-no-fullscreen",
+	match = { class = "^(libreoffice-writer|soffice|Soffice)$" },
+	fullscreen_state = "0 0",
+	suppress_event = "fullscreen maximize fullscreenoutput",
 })
 
 hl.window_rule({
-    name = "steam-games-fullscreen",
-    match = { class = "^(steam_app_.*)$" },
-    fullscreen = true,
+	name = "steam-games-fullscreen",
+	match = { class = "^(steam_app_.*)$" },
+	fullscreen = true,
 })
