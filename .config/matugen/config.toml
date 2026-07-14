@@ -69,3 +69,11 @@ output_path = '~/.config/gtk-4.0/colors.css'
 input_path = './templates/vicinae.toml'
 output_path = '~/.local/share/vicinae/themes/matugen.toml'
 post_hook = 'vicinae theme set matugen'
+
+[templates.zed]
+input_path = './templates/zed-colors.json'
+output_path = '~/.config/zed/themes/matugen.json'
+
+[templates.zellij]
+input_path = './templates/zellij-theme.kdl.tera'
+output_path = '~/.config/zellij/themes/matugen.kdl'

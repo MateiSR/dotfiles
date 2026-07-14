@@ -18,6 +18,8 @@
 .config/waypaper/config.ini
 .config/wlogout/matugen.css
 .config/yazi/theme.toml
+.config/zed/themes/matugen.json
+.config/zellij/themes/matugen.kdl
 .config/dotfiles/machine.lua
 .config/dotfiles/git.conf
 .config/dotfiles/scripts/gs_zipline_conf.sh

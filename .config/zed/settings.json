@@ -26,8 +26,8 @@
   // Theme
   "theme": {
     "mode": "system",
-    "light": "One Light",
-    "dark": "One Dark Pro",
+    "light": "Matugen Light",
+    "dark": "Matugen Dark",
   },
   // Fonts
   "ui_font_family": "JetBrainsMono Nerd Font",

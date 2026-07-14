@@ -222,7 +222,7 @@ load_plugins {
 web_client {
     font "monospace"
 }
-theme "onedark"
+theme "matugen"
 default_mode "locked"
 default_shell "fish"
 show_startup_tips false
