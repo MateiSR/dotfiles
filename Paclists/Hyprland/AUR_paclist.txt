@@ -3,3 +3,4 @@ wlogout
 waypaper
 hyprshade
 wayfreeze-git
+wayle-bin
