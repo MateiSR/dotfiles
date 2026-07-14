@@ -17,7 +17,7 @@ Then edit the machine-local files (gitignored; created from `.example` templates
 - `~/.config/dotfiles/scripts/gs_zipline_conf.sh` — Zipline screenshot upload key
 
 After adding a *new* file to the repo, re-run `stow --no-folding -R -t ~ .` to link it.
-Fonts are defined once in `.config/matugen/config.toml` (`[config.custom_keywords]`).
+Fonts are defined once in `.config/matugen/keywords.json` (`{{custom.*}}` in templates).
 
 vencord theme: https://discordstyles.github.io/DarkMatter/DarkMatter.theme.css
 

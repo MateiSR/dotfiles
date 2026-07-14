@@ -1,12 +1,11 @@
+# keywords.json holds the canonical fonts, referenced as {{custom.*}} in templates.
+[config]
+import_json_files = ["./keywords.json"]
+
 [config.wallpaper]
 command = "awww"
 arguments = ["img", "--transition-type", "center"]
 set = true
-
-# Canonical fonts, referenced as {{custom.*}} in templates.
-[config.custom_keywords]
-font_mono = "JetBrainsMono Nerd Font"
-font_ui = "Inter"
 
 
 [templates.waybar]
