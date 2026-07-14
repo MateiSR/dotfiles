@@ -10,7 +10,7 @@ require("tabout").setup({
 	default_tab = "<C-t>",
 	default_shift_tab = "<C-d>",
 	enable_backwards = true,
-	completion = false, -- set true if you want tabout to wait for completion menu
+	completion = false,
 	tabouts = {
 		{ open = "'", close = "'" },
 		{ open = '"', close = '"' },

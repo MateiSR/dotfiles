@@ -37,11 +37,6 @@ button:hover {
     outline-style: none;
 }
 
-/* ----------------------------------------------------- 
-Buttons
------------------------------------------------------ 
-*/
-
 #lock {
     background-image: image(url("icons/lock.png"));
 }

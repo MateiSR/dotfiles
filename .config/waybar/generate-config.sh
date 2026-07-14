@@ -17,22 +17,12 @@ has_backlight() {
     [ -d /sys/class/backlight/* ] 2>/dev/null
 }
 
-has_bluetooth() {
-    command -v bluetoothctl >/dev/null 2>&1 && \
-    [ -d /sys/class/bluetooth ] 2>/dev/null
-}
-
 # Build modules-right array dynamically
 build_modules_right() {
     local modules=()
 
     # Core modules that are always present
     modules+=("network")
-
-    # Conditional modules
-    # if has_bluetooth; then
-    #     modules+=("bluetooth")
-    # fi
 
     modules+=("tray")
     modules+=("pulseaudio")
@@ -57,7 +47,6 @@ build_modules_right() {
             result+="\"$module\""
             first=false
         else
-            # result+=", \"custom/separator\", \"$module\""
             result+=", \"$module\""
         fi
     done

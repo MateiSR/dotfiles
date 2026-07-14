@@ -13,7 +13,6 @@ vim.keymap.set("n", "<leader>sq", "<C-w>q", {})
 vim.keymap.set("n", "<leader>tt", ":terminal<CR>", {})
 -- close terminal
 vim.keymap.set("t", "<leader>tq", "<C-\\><C-n>:q<CR>", {})
--- vim.keymap.set("n", "<leader>tq", "i<C-d><CR><CR>", {})
 -- open terminal in split
 vim.keymap.set("n", "<leader>ts", ":split<CR>:terminal<CR>", {})
 -- Move selected lines down in visual mode
@@ -49,19 +48,6 @@ vim.keymap.set({ "n", "v", "i" }, "<Right>", "<Nop>", { noremap = true })
 -- ctrl-d, ctrl-u
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true })
-
--- shift-o, shift-a, shift-i
--- keep as default
-
--- di (delete inside "...")
--- (same for ci, yi, vi, etc.)
--- keep as default
-
--- r, shift-r (replace mode)
--- keep as default
-
--- shift-@ q, qq, q
--- keep as default
 
 -- Set help command for man pager
 vim.api.nvim_create_autocmd("FileType", {

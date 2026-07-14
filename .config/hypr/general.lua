@@ -6,10 +6,6 @@ hl.config({
 		accel_profile = "flat",
 	},
 
-	-- render = {
-	-- 	direct_scanout = 1,
-	-- },
-
 	general = {
 		gaps_in = 4,
 		gaps_out = 6,

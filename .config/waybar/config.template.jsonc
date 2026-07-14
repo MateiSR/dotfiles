@@ -1,7 +1,5 @@
 {
     "layer": "bottom",
-    // "height": 40,
-    // "margin": "6, 6, 0, 6",
     "position": "top",
     "reload_style_on_change": true,
     "modules-left": ["custom/launcher", "hyprland/workspaces"],
@@ -12,11 +10,6 @@
         "tooltip": false,
         "on-click": "vicinae toggle",
         "on-click-right": "vicinae close"
-    },
-    "custom/separator": {
-        "format": "｜",
-        "interval": "once",
-        "tooltip": false
     },
     "hyprland/workspaces": {
         "format": "{icon}",
@@ -30,21 +23,11 @@
     },
     "clock#time": {
         "format": "󱑂 {:%H:%M}",
-        "tooltip-format": "12-hour Format: {:%I:%M %p}",
-        // "format-alt": "{:%Y-%m-%d}"
+        "tooltip-format": "12-hour Format: {:%I:%M %p}"
     },
     "clock#date": {
         "format": " {:%d/%m}",
-        "tooltip-format": "<big>{:%A, %d/%m}</big>\n<tt><small>{calendar}</small></tt>",
-        // "format-alt": "{:%Y-%m-%d}"
-    },
-    "bluetooth": {
-        "format-on": "",
-        "format-off": "󰂲",
-        "format-disabled": "󰂲",
-        "format-connected": "󰂱",
-        "on-click": "blueman-manager",
-        "tooltip-format-connected": "{device_alias}"
+        "tooltip-format": "<big>{:%A, %d/%m}</big>\n<tt><small>{calendar}</small></tt>"
     },
   "network": {
     "interface": "*0",
@@ -120,4 +103,3 @@
         "escape": true
     }
 }
-
