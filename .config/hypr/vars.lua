@@ -1,5 +1,4 @@
 return {
-	main_mod = "SUPER",
 	mod = "SUPER",
 
 	screenshot_script = "~/.config/dotfiles/scripts/gs_zipline.sh",

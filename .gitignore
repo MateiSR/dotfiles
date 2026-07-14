@@ -1,6 +1,4 @@
-# Runtime-written files: matugen outputs, app-rewritten state, machine secrets.
-# These live as real untracked files in ~/.config (stow --no-folding); listed
-# here so they can never be re-committed by accident.
+# Generated and machine-local files
 .config/btop/themes/matugen.theme
 .config/gtk-3.0/gtk.css
 .config/gtk-4.0/colors.css
@@ -11,16 +9,15 @@
 .config/nvim/matugen.lua
 .config/qt5ct/colors/matugen.conf
 .config/qt6ct/colors/matugen.conf
-.config/rofi/colors/matugen.rasi
 .config/starship.toml
 .config/swaync/matugen.css
 .config/swayosd/matugen.css
 .config/waypaper/config.ini
 .config/wlogout/matugen.css
-.config/yazi/theme.toml
 .config/zed/themes/matugen.json
 .config/zellij/themes/matugen.kdl
 .config/dotfiles/machine.lua
 .config/dotfiles/git.conf
 .config/dotfiles/scripts/gs_zipline_conf.sh
 .config/fish/functions/fish_prompt.fish
+.config/fish/fish_variables

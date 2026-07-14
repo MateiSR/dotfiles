@@ -1,57 +1,42 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Create a temporary file to store the screenshot
+usage() {
+	printf 'usage: %s [-save <filepath>] [-copy]\n' "$0" >&2
+}
+
+(($#)) || { usage; exit 2; }
+
 temp_file=$(mktemp)
+freeze_pid=""
+cleanup() {
+	[[ -z $freeze_pid ]] || kill "$freeze_pid" 2>/dev/null || true
+	rm -f -- "$temp_file"
+}
+trap cleanup EXIT
 
-# Freeze screen, capture screenshot using grim and slurp, then unfreeze
-wayfreeze & PID=$!
+wayfreeze & freeze_pid=$!
 sleep 0.1
-grim -g "$(slurp)" "$temp_file"
-grim_status=$?
-kill $PID 2>/dev/null
+grim -g "$(slurp)" "$temp_file" || { printf 'error: screenshot cancelled\n' >&2; exit 1; }
+kill "$freeze_pid" 2>/dev/null || true
+freeze_pid=""
 
-if [ $grim_status -ne 0 ]; then
-    echo "Error capturing screenshot."
-    rm -f "$temp_file"
-    exit 1
-fi
-
-# Check number of args
-if [ $# -eq 0 ]; then
-    echo "No arguments provided."
-    echo "Usage: $0 -save <filepath> | -copy"
-    rm -f "$temp_file"
-    exit 1
-fi
-
-# Process arguments
-while [ $# -gt 0 ]; do
-    case "$1" in
-        -save)
-            if [ -z "$2" ]; then
-                echo "Error: -save requires a filepath."
-                rm -f "$temp_file"
-                exit 1
-            fi
-            cp "$temp_file" "$2"
-            echo "Screenshot saved to $2"
-            shift 2
-            ;;
-        -copy)
-            # Copy from temp file to clipboard
-            cat "$temp_file" | wl-copy
-            echo "Screenshot copied to clipboard"
-            shift
-            ;;
-        *)
-            echo "Unknown option: $1"
-            echo "Usage: $0 -save <filepath> | -copy"
-            rm -f "$temp_file"
-            exit 1
-            ;;
-    esac
+while (($#)); do
+	case $1 in
+	-save)
+		(($# >= 2)) || { usage; exit 2; }
+		cp -- "$temp_file" "$2"
+		printf 'Screenshot saved to %s\n' "$2"
+		shift 2
+		;;
+	-copy)
+		wl-copy < "$temp_file"
+		printf 'Screenshot copied to clipboard\n'
+		shift
+		;;
+	*)
+		usage
+		exit 2
+		;;
+	esac
 done
-
-# Clean up the temporary file
-rm -f "$temp_file"
-exit 0

@@ -12,12 +12,6 @@ hl.window_rule({
 })
 
 hl.layer_rule({
-	name = "layerrule-1",
-	match = { namespace = "^(hyprfreeze)$" },
-	no_anim = true,
-})
-
-hl.layer_rule({
 	name = "layerrule-wayfreeze",
 	match = { namespace = "^(wayfreeze)$" },
 	no_anim = true,
@@ -30,14 +24,9 @@ hl.layer_rule({
 })
 
 hl.window_rule({
-	name = "cs2-tearing",
+	name = "cs2",
 	match = { class = "^(cs2)$" },
 	immediate = true,
-})
-
-hl.window_rule({
-	name = "cs2-opacity",
-	match = { class = "^(cs2)$" },
 	opacity = "1.0 override 1.0 override",
 })
 

@@ -3,5 +3,4 @@ gtk-engine-murrine
 vicinae-bin
 wlogout
 waypaper
-hyprshade
 wayfreeze-git

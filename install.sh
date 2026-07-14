@@ -62,36 +62,6 @@ ensure_symlink() {
 	run ln -sfn "$target" "$link"
 }
 
-read_paclist() {
-	local file=$1
-	local array_name=$2
-	local seen_name=$3
-	local line package
-	local -n packages=$array_name
-	local -n seen=$seen_name
-
-	[[ -f "$file" ]] || die "missing paclist: $file"
-	while IFS= read -r line || [[ -n "$line" ]]; do
-		line=${line%%#*}
-		for package in $line; do
-			if [[ -z ${seen[$package]+x} ]]; then
-				packages+=("$package")
-				seen[$package]=1
-			fi
-		done
-	done < "$file"
-}
-
-clone_temp() {
-	local url=$1
-	local name=$2
-	local result_name=$3
-	local path="$TMP_ROOT/$name"
-	local -n result=$result_name
-	result=$path
-	run git clone --depth 1 "$url" "$path"
-}
-
 update_checkout() {
 	local repo=$1
 	local dir=$2
@@ -188,39 +158,29 @@ else
 	TMP_ROOT="${TMPDIR:-/tmp}/dotfiles-install.dry-run"
 fi
 
-declare -a OFFICIAL_PACKAGES=()
-declare -a AUR_PACKAGES=()
-declare -A OFFICIAL_SEEN=()
-declare -A AUR_SEEN=()
-
 official_lists=(
-	Apps_paclist.txt
-	Coding_paclist.txt
-	Fonts_paclist.txt
-	Hyprland_paclist.txt
-	MMedia_paclist.txt
-	Net_paclist.txt
-	Print_paclist.txt
+	"$PACLIST_DIR/Apps_paclist.txt"
+	"$PACLIST_DIR/Coding_paclist.txt"
+	"$PACLIST_DIR/Fonts_paclist.txt"
+	"$PACLIST_DIR/Hyprland_paclist.txt"
+	"$PACLIST_DIR/MMedia_paclist.txt"
+	"$PACLIST_DIR/Net_paclist.txt"
+	"$PACLIST_DIR/Print_paclist.txt"
 )
 
-for list in "${official_lists[@]}"; do
-	read_paclist "$PACLIST_DIR/$list" OFFICIAL_PACKAGES OFFICIAL_SEEN
-done
-
-for package in base-devel git stow; do
-	if [[ -z ${OFFICIAL_SEEN[$package]+x} ]]; then
-		OFFICIAL_PACKAGES+=("$package")
-		OFFICIAL_SEEN[$package]=1
-	fi
-done
-
 if [[ -n "$GPU" ]]; then
-	read_paclist "$PACLIST_DIR/Drivers_common_paclist.txt" OFFICIAL_PACKAGES OFFICIAL_SEEN
-	read_paclist "$PACLIST_DIR/Drivers_${GPU}_paclist.txt" OFFICIAL_PACKAGES OFFICIAL_SEEN
+	official_lists+=("$PACLIST_DIR/Drivers_common_paclist.txt" "$PACLIST_DIR/Drivers_${GPU}_paclist.txt")
 fi
-$WITH_XORG && read_paclist "$PACLIST_DIR/Xorg_paclist.txt" OFFICIAL_PACKAGES OFFICIAL_SEEN
-$WITH_ARCHISO && read_paclist "$PACLIST_DIR/ArchISO_paclist.txt" OFFICIAL_PACKAGES OFFICIAL_SEEN
-read_paclist "$PACLIST_DIR/AUR_paclist.txt" AUR_PACKAGES AUR_SEEN
+$WITH_XORG && official_lists+=("$PACLIST_DIR/Xorg_paclist.txt")
+$WITH_ARCHISO && official_lists+=("$PACLIST_DIR/ArchISO_paclist.txt")
+
+for list in "${official_lists[@]}" "$PACLIST_DIR/AUR_paclist.txt"; do
+	[[ -f "$list" ]] || die "missing paclist: $list"
+done
+
+mapfile -t OFFICIAL_PACKAGES < <(sort -u "${official_lists[@]}")
+OFFICIAL_PACKAGES+=(base-devel git stow)
+mapfile -t AUR_PACKAGES < <(sort -u "$PACLIST_DIR/AUR_paclist.txt")
 
 step "Official packages"
 run sudo pacman -Syu --needed "${OFFICIAL_PACKAGES[@]}"
@@ -234,9 +194,12 @@ run paru -S --needed paru "${AUR_PACKAGES[@]}"
 
 step "Qogir cursor, Orchis GTK, and Tela icons"
 run install -d "$HOME/.local/share/icons" "$HOME/.local/share/themes"
-clone_temp https://github.com/vinceliuice/Qogir-icon-theme.git qogir qogir_dir
-clone_temp https://github.com/vinceliuice/Orchis-theme.git orchis orchis_dir
-clone_temp https://github.com/vinceliuice/Tela-icon-theme.git tela tela_dir
+qogir_dir="$TMP_ROOT/qogir"
+orchis_dir="$TMP_ROOT/orchis"
+tela_dir="$TMP_ROOT/tela"
+run git clone --depth 1 https://github.com/vinceliuice/Qogir-icon-theme.git "$qogir_dir"
+run git clone --depth 1 https://github.com/vinceliuice/Orchis-theme.git "$orchis_dir"
+run git clone --depth 1 https://github.com/vinceliuice/Tela-icon-theme.git "$tela_dir"
 run_in "$qogir_dir" ./install.sh -d "$HOME/.local/share/icons" -t default -c standard
 run_in "$orchis_dir" ./install.sh -d "$HOME/.local/share/themes" -c dark -s compact
 run_in "$tela_dir" ./install.sh -d "$HOME/.local/share/icons"

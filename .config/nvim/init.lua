@@ -1,5 +1,4 @@
 require("options")
-require("hooks")
 require("diagnostics")
 require("mappings")
 

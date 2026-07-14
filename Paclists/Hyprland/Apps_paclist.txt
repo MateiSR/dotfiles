@@ -31,4 +31,3 @@ zathura-pdf-mupdf
 zathura-ps
 zathura-cb
 btop
-flameshot

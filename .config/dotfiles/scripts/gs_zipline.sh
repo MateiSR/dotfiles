@@ -1,30 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 source "$HOME/.config/dotfiles/scripts/gs_zipline_conf.sh"
 
-# Take screenshot, save to file and copy to clipboard
-$SCREENSHOT_SCRIPT -save "$FILE" -copy
+case ${1:-} in
+	""|--upload) ;;
+	*) printf 'usage: %s [--upload]\n' "$0" >&2; exit 2 ;;
+esac
 
-if [ ! -f "$FILE" ]; then
-    echo "Aborted." >&2
-    exit 1
+install -d "$(dirname "$FILE")"
+"$SCREENSHOT_SCRIPT" -save "$FILE" -copy
+[[ -f $FILE ]] || { printf 'error: screenshot was not saved\n' >&2; exit 1; }
+
+[[ ${1:-} == --upload ]] || exit 0
+[[ -n $KEY && -n $DOMAIN ]] || { printf 'error: Zipline KEY and DOMAIN are required\n' >&2; exit 1; }
+
+if ! URL=$(curl --fail --silent --show-error \
+	-H "authorization: $KEY" \
+	-F "file=@$FILE" "https://$DOMAIN/api/upload" \
+	| jq -er '.files[0].url | select(type == "string" and length > 0)'); then
+	printf 'error: upload failed\n' >&2
+	exit 1
 fi
-
-echo "Screenshot saved to $FILE and copied to clipboard"
-
-# Upload if --upload flag is passed
-if [ "$1" = "--upload" ]; then
-    URL=$(curl -s \
-      -H "Content-Type: multipart/form-data" \
-      -H "authorization: $KEY" \
-      -F "file=@$FILE" "https://$DOMAIN/api/upload" | jq -r '.files[0].url')
-
-    if [ -n "$URL" ] && [ "$URL" != "null" ]; then
-        printf "%s" "$URL" | wl-copy
-        echo "URL copied to clipboard: $URL"
-    else
-        echo "Upload failed" >&2
-        exit 1
-    fi
-fi
-
+printf '%s' "$URL" | wl-copy
+printf 'URL copied to clipboard: %s\n' "$URL"

@@ -1,27 +1,5 @@
 [Settings]
-language = en
 folder = ~/.config/dotfiles/wallpapers
-monitors = All
 wallpaper = ~/.config/dotfiles/wallpapers/red-sun-temple.jpeg
 post_command = matugen image "$wallpaper" --source-color-index 0 && pkill -SIGUSR1 waypaper
-show_path_in_tooltip = True
 backend = none
-fill = fill
-sort = name
-subfolders = False
-all_subfolders = False
-show_hidden = False
-show_gifs_only = False
-zen_mode = False
-number_of_columns = 3
-swww_transition_type = any
-swww_transition_step = 90
-swww_transition_angle = 0
-swww_transition_duration = 2
-swww_transition_fps = 60
-mpvpaper_sound = False
-mpvpaper_options = 
-use_xdg_state = False
-color = #ffffff
-stylesheet = ~/.config/waypaper/style.css
-
