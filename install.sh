@@ -52,6 +52,16 @@ run_in() {
 	$DRY_RUN || (cd "$dir" && "$@")
 }
 
+ensure_symlink() {
+	local target=$1
+	local link=$2
+	run install -d "$(dirname "$link")"
+	if [[ -e "$link" && ! -L "$link" ]]; then
+		die "refusing to replace non-symlink: $link"
+	fi
+	run ln -sfn "$target" "$link"
+}
+
 cleanup() {
 	if [[ -n "$TMP_ROOT" && -d "$TMP_ROOT" ]]; then
 		rm -rf -- "$TMP_ROOT"
@@ -189,16 +199,6 @@ run_in "$tela_dir" ./install.sh -d "$HOME/.local/share/icons"
 
 step "Dotfiles and Matugen"
 run "$ROOT/bootstrap.sh"
-
-ensure_symlink() {
-	local target=$1
-	local link=$2
-	run install -d "$(dirname "$link")"
-	if [[ -e "$link" && ! -L "$link" ]]; then
-		die "refusing to replace non-symlink: $link"
-	fi
-	run ln -sfn "$target" "$link"
-}
 
 orchis_theme="$HOME/.local/share/themes/Orchis-Dark-Compact/gtk-4.0"
 ensure_symlink "$orchis_theme/gtk.css" "$HOME/.config/gtk-4.0/orchis.css"
