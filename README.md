@@ -34,7 +34,7 @@ icons: https://github.com/vinceliuice/Tela-icon-theme
 ./install.sh -c orange
 
 
-change these using `nwg-look` & set rofi theme using `rofi-theme-selector`
+change these using `nwg-look`
 
 
 tmux: install TPM and `~/.tmux/plugins/tpm/bin/install_plugins`

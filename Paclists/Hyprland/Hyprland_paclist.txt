@@ -36,7 +36,6 @@ oxygen-sounds
 libcec
 pulseaudio-qt
 nwg-look
-rofi-wayland
 swaybg
 swaync
 libxdg-basedir

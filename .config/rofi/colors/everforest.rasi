@@ -1,9 +1,0 @@
-* {
-    background:     #2b3339;        /* Hard dark background */
-    background-alt: #323d43;        /* Slightly lighter background */
-    foreground:     #d3c6aa;        /* Foreground text */
-    selected:       #83c092aa;        /* Selection background (greenish) */
-    active:         #a7c080;        /* Active items (yellow-green) */
-    urgent:         #e67e80;        /* Urgent (reddish color) */
-}
-

@@ -118,9 +118,6 @@ end
 zoxide init fish | source
 alias cd="z"
 
-# Source yazi yy script
-source ~/.config/yazi/yy.sh
-
 # Set theme
 set -g theme_color_scheme dark 
 set -g theme_nerd_fonts yes

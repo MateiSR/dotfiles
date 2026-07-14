@@ -12,7 +12,6 @@ upower
 neovim
 tmux
 kitty
-yazi
 bat
 zoxide
 fish

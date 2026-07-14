@@ -1,9 +1,0 @@
-* {
-    background:     rgba(31, 31, 40, 0.9);
-    background-alt: #282B31FF;
-    foreground:     #FFFFFFFF;
-    selected:       rgba(93, 116, 183, 0.9);
-    active:         #98C379FF;
-    urgent:         #E06C75FF;
-}
-

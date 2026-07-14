@@ -14,7 +14,6 @@ hl.bind(mod .. " + P", hl.dsp.window.pseudo())
 
 hl.bind(mod .. " + R", hl.dsp.exec_cmd("vicinae toggle"))
 hl.bind("CTRL + ALT + DELETE", hl.dsp.exec_cmd("wlogout"))
-hl.bind(mod .. " + B", hl.dsp.exec_cmd(vars.rofi_brightness_launcher))
 hl.bind(mod .. " + SEMICOLON", hl.dsp.exec_cmd("vicinae vicinae://extensions/vicinae/vicinae/search-emojis"))
 
 hl.bind(mod .. " + W", hl.dsp.exec_cmd("waypaper"))
@@ -113,8 +112,6 @@ hl.bind("Print", hl.dsp.exec_cmd(vars.screenshot_script))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd(vars.screenshot_script .. " --upload"))
 
 hl.bind(mod .. " + GRAVE", hl.dsp.window.fullscreen(2))
-hl.bind(mod .. " + Prior", hl.dsp.exec_cmd("~/.config/hypr/scripts/hyprgamelock.sh"))
-hl.bind(mod .. " + END", hl.dsp.exec_cmd("~/.config/hypr/scripts/gamemode.sh"))
 
 hl.bind("ALT + F4", hl.dsp.window.close())
 hl.bind(mod .. " + X", hl.dsp.exec_cmd("killall -SIGUSR1 waybar"))
