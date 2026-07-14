@@ -8,10 +8,8 @@ end
 hl.on("hyprland.start", function()
 	hl.exec_cmd("swaync")
 	hl.exec_cmd("awww-daemon &")
-	-- hyprpolkitagent replaces the legacy polkit-gnome agent and ships a user service.
 	hl.exec_cmd("systemctl --user start hyprpolkitagent.service")
-	-- GNOME Keyring is started/unlocked by SDDM's PAM integration and its user units.
-	-- Hyprland already imports its session environment; Arch's dbus-broker shares systemd's environment.
+	hl.exec_cmd("systemctl --user start gnome-keyring-daemon.service")
 
 	hl.exec_cmd("nm-applet &")
 	hl.exec_cmd("blueman-applet &")
