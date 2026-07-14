@@ -8,6 +8,10 @@
       "rev": "8c84af0f09e5d9058362ac58401a8e7b047d826e",
       "src": "https://github.com/yetone/avante.nvim"
     },
+    "base16-nvim": {
+      "rev": "012273e4bbf3e143224a272ad2efd10b69a000ba",
+      "src": "https://github.com/RRethy/base16-nvim"
+    },
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",

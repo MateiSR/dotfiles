@@ -8,6 +8,7 @@
 .config/hypr/matugen.conf
 .config/kitty/matugen.conf
 .config/kitty/current-theme.conf
+.config/nvim/matugen.lua
 .config/qt5ct/colors/matugen.conf
 .config/qt6ct/colors/matugen.conf
 .config/rofi/colors/matugen.rasi

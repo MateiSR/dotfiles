@@ -17,6 +17,11 @@ input_path = './templates/kitty-colors.conf'
 output_path = '~/.config/kitty/matugen.conf'
 post_hook = 'pkill -SIGUSR1 kitty 2>/dev/null || true'
 
+[templates.neovim]
+input_path = './templates/neovim.lua'
+output_path = '~/.config/nvim/matugen.lua'
+post_hook = 'pkill -SIGUSR1 -x nvim 2>/dev/null || true'
+
 [templates.starship]
 input_path = './templates/starship-colors.toml'
 output_path = '~/.config/starship.toml'
