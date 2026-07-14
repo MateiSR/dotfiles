@@ -52,16 +52,6 @@ run_in() {
 	$DRY_RUN || (cd "$dir" && "$@")
 }
 
-ensure_symlink() {
-	local target=$1
-	local link=$2
-	run install -d "$(dirname "$link")"
-	if [[ -e "$link" && ! -L "$link" ]]; then
-		die "refusing to replace non-symlink: $link"
-	fi
-	run ln -sfn "$target" "$link"
-}
-
 update_checkout() {
 	local repo=$1
 	local dir=$2
@@ -200,16 +190,12 @@ tela_dir="$TMP_ROOT/tela"
 run git clone --depth 1 https://github.com/vinceliuice/Qogir-icon-theme.git "$qogir_dir"
 run git clone --depth 1 https://github.com/vinceliuice/Orchis-theme.git "$orchis_dir"
 run git clone --depth 1 https://github.com/vinceliuice/Tela-icon-theme.git "$tela_dir"
-run_in "$qogir_dir" ./install.sh -d "$HOME/.local/share/icons" -t default -c standard
+run rsync -a --delete "$qogir_dir/src/cursors/dist-Dark/" "$HOME/.local/share/icons/Qogir-white-cursors/"
 run_in "$orchis_dir" ./install.sh -d "$HOME/.local/share/themes" -c dark -s compact
 run_in "$tela_dir" ./install.sh -d "$HOME/.local/share/icons"
 
 step "Dotfiles and Matugen"
 run "$ROOT/bootstrap.sh"
-
-orchis_theme="$HOME/.local/share/themes/Orchis-Dark-Compact/gtk-4.0"
-ensure_symlink "$orchis_theme/gtk.css" "$HOME/.config/gtk-4.0/orchis.css"
-ensure_symlink "$orchis_theme/assets" "$HOME/.config/gtk-4.0/assets"
 
 step "Hyprland plugin"
 hyprpm_output=$(hyprpm list 2>/dev/null || true)
@@ -271,12 +257,10 @@ if ! $DRY_RUN; then
 	for command in fish Hyprland hyprpm ironbar matugen paru rsync sddm-greeter-qt6 stow vicinae; do
 		command -v "$command" >/dev/null || die "missing command: $command"
 	done
-	[[ -d "$HOME/.local/share/icons/Qogir" ]] || die "Qogir was not installed"
+	[[ -d "$HOME/.local/share/icons/Qogir-white-cursors" ]] || die "Qogir-white Cursors were not installed"
 	[[ -d "$HOME/.local/share/icons/Tela" ]] || die "Tela was not installed"
 	[[ -d "$HOME/.local/share/icons/Tela-dark" ]] || die "Tela-dark was not installed"
 	[[ -d "$HOME/.local/share/themes/Orchis-Dark-Compact" ]] || die "Orchis-Dark-Compact was not installed"
-	[[ -L "$HOME/.config/gtk-4.0/orchis.css" ]] || die "missing GTK 4 Orchis link"
-	[[ -L "$HOME/.config/gtk-4.0/assets" ]] || die "missing GTK 4 assets link"
 	[[ $(git -C "$sddm_source_dir" branch --show-current) == master ]] || die "wrong SDDM Astronaut branch"
 	[[ -L "$sddm_theme_dir/Themes/matugen.conf" ]] || die "missing SDDM Matugen config link"
 	[[ -L "$sddm_theme_dir/Backgrounds/matugen-wallpaper" ]] || die "missing SDDM wallpaper link"
