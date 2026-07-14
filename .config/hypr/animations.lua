@@ -32,7 +32,7 @@ hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 3, bezier = "m
 
 hl.config({
 	decoration = {
-		rounding = 12,
+		rounding = 8,
 
 		active_opacity = 1.0,
 		inactive_opacity = 1.0,
