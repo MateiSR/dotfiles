@@ -61,7 +61,7 @@ hl.bind(mod .. " + Space", function()
 	current_layout = current_layout == "master" and "dwindle" or "master"
 	hl.config({ general = { layout = current_layout } })
 	local label = current_layout:sub(1, 1):upper() .. current_layout:sub(2)
-	hl.dispatch(hl.dsp.exec_cmd("notify-send '" .. label .. " Layout' && sleep 0.5 && swaync-client --close-latest"))
+	hl.dispatch(hl.dsp.exec_cmd("swayosd-client --custom-message '" .. label .. " Layout'"))
 end)
 
 local split = machine.plugins and _G.split_monitor_workspaces
