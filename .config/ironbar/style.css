@@ -17,18 +17,43 @@
     background: transparent;
 }
 
+/* ---------- islands ---------- */
+
 #bar #start,
 #bar #center,
 #bar #end {
     min-height: 40px;
-    padding: 0 8px;
-    border: 2px solid @outline;
+    border: 2px solid @outline_variant;
     border-radius: 14px;
-    background: alpha(@background, 0.97);
+    background: @background;
     color: @on_background;
 }
 
-#bar #start > * + *,
+/*
+ * Target:
+ * start padding: 12px
+ * center padding: 10px approximately
+ * end padding: 8px
+ */
+#bar #start {
+    padding: 0 12px;
+}
+
+#bar #center {
+    padding: 0 9px;
+}
+
+#bar #end {
+    padding: 0 8px;
+}
+
+/*
+ * The current 2px spacing makes the left island too compressed.
+ */
+#bar #start > * + * {
+    margin-left: 10px;
+}
+
 #bar #end > * + * {
     margin-left: 2px;
 }
@@ -45,11 +70,19 @@ button:focus {
     background: @surface_container;
 }
 
-#launcher button {
+/* ---------- launcher and power: target is 26x26, not full-height ---------- */
+
+#launcher button,
+#power button {
     min-width: 26px;
     min-height: 26px;
+    margin-top: 7px;
+    margin-bottom: 7px;
     padding: 0;
     border-radius: 8px;
+}
+
+#launcher button {
     background: @primary_container;
     color: @on_primary_container;
 }
@@ -58,6 +91,18 @@ button:focus {
     background: @primary;
     color: @on_primary;
 }
+
+#power button {
+    background: @error;
+    color: @on_error;
+}
+
+#power button:hover {
+    background: @error_container;
+    color: @on_error_container;
+}
+
+/* ---------- clock ---------- */
 
 .clock {
     padding: 5px 10px;
@@ -69,20 +114,42 @@ button:focus {
     background: @surface_container;
 }
 
+/*
+ * Slightly reduce the time widget's right padding because time and date are
+ * separate Ironbar widgets, unlike the single grouped element in the HTML mock.
+ */
+#time {
+    padding: 5px 6px 5px 10px;
+}
+
+/*
+ * The current date background stretches through almost the entire island.
+ * Target date chip is roughly 24px high inside a 40px interior.
+ */
 #date {
+    margin-top: 8px;
+    margin-bottom: 8px;
     padding: 2px 10px;
-    border: 1px solid @outline_variant;
+    border: 1px solid @surface_container_highest;
     border-radius: 999px;
     background: @surface_container_low;
     color: @on_surface_variant;
     font-size: 12px;
 }
 
+/* ---------- workspaces ---------- */
+
 .workspaces .item {
+    margin-top: 8px;
+    margin-bottom: 8px;
     padding: 3px 9px;
     border-radius: 9px;
     background: transparent;
     color: @on_surface_variant;
+}
+
+.workspaces .item + .item {
+    margin-left: 4px;
 }
 
 .workspaces .item:hover {
@@ -100,12 +167,14 @@ button:focus {
     margin: 0 5px;
 }
 
+/* ---------- right-side groups ---------- */
+
 .network-manager,
 .volume,
 .notifications {
     margin-left: 4px;
     padding-left: 8px;
-    border-left: 1px solid @outline_variant;
+    border-left: 1px solid @surface_container_highest;
 }
 
 .network-manager,
@@ -125,20 +194,6 @@ button:focus {
 .battery:hover,
 .notifications:hover {
     background: @surface_container;
-}
-
-#power button {
-    min-width: 26px;
-    min-height: 26px;
-    padding: 0;
-    border-radius: 8px;
-    background: @error;
-    color: @on_error;
-}
-
-#power button:hover {
-    background: @error_container;
-    color: @on_error_container;
 }
 
 popover,
