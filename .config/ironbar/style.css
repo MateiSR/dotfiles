@@ -17,6 +17,20 @@
     background: transparent;
 }
 
+tooltip.background {
+    padding: 6px 8px;
+    border: 1px solid @outline_variant;
+    border-radius: 8px;
+    background: @surface;
+    color: @on_surface;
+    box-shadow: 0 4px 12px alpha(@shadow, 0.35);
+}
+
+tooltip label {
+    color: @on_surface;
+    font-size: 12px;
+}
+
 /* ---------- islands ---------- */
 
 #bar #start,
@@ -65,8 +79,13 @@ button {
     color: @on_background;
 }
 
-button:hover,
-button:focus {
+button:focus,
+button:active,
+button:checked {
+    background: transparent;
+}
+
+button:hover {
     background: @surface_container;
 }
 
@@ -273,13 +292,10 @@ scale slider {
 }
 
 .popup-power .power-action {
-    min-width: 210px;
-    padding: 8px 10px;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0;
     border-radius: 8px;
-}
-
-.popup-power .power-action label {
-    font-size: 13px;
 }
 
 .popup-power .destructive {

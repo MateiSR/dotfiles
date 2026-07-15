@@ -43,6 +43,7 @@ icon_size = 14
 type = "network_manager"
 icon_size = 16
 types_whitelist = ["ethernet", "wifi"]
+on_click_left = "hyprctl dispatch \"hl.dsp.exec_cmd('nm-connection-editor')\""
 
 [[end]]
 type = "bluetooth"
@@ -127,29 +128,29 @@ orientation = "vertical"
 [[end.popup.widgets]]
 type = "button"
 class = "power-action"
-label = "  Lock"
+label = ""
 on_click = "!hyprlock"
 
 [[end.popup.widgets]]
 type = "button"
 class = "power-action"
-label = "  Log out"
+label = ""
 on_click = "!hyprctl dispatch exit"
 
 [[end.popup.widgets]]
 type = "button"
 class = "power-action"
-label = "  Suspend"
+label = ""
 on_click = "!systemctl suspend"
 
 [[end.popup.widgets]]
 type = "button"
 class = "power-action"
-label = "  Reboot"
+label = ""
 on_click = "!systemctl reboot"
 
 [[end.popup.widgets]]
 type = "button"
 class = "power-action destructive"
-label = "  Shutdown"
+label = ""
 on_click = "!systemctl poweroff"
