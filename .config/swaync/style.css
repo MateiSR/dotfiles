@@ -195,7 +195,9 @@ blankwindow,
     color: @on_primary_container;
 }
 
-.notification-group {
+.notification-group,
+.notification-group:focus {
+    background: transparent;
     color: @on_surface;
 }
 
