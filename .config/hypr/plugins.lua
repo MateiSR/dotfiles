@@ -48,7 +48,7 @@ if machine.plugins and os.getenv("DOTFILES_VERIFY_CONFIG") ~= "1" then
 end
 
 if hl.plugin.csgo_vulkan_fix then
-	hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "cs2", w = 1440, h = 1080 })
+	hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "cs2", w = 1920, h = 1080 })
 	hl.config({
 		plugin = {
 			csgo_vulkan_fix = {
