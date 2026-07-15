@@ -1,5 +1,5 @@
 format = """
-$directory$git_branch$git_status$nodejs$rust$golang$php$time
+$directory$git_branch$git_status$nodejs$rust$golang$php
 $character"""
 
 palette = 'colors'
@@ -59,10 +59,4 @@ format = "[](fg:color8 bg:color4)[ $symbol ](bg:color8 fg:color5)[](fg:col
 symbol = ""
 style = "fg:color3 bg:color4"
 format = "[](fg:color8 bg:color4)[ $symbol ](bg:color8 fg:color5)[](fg:color8 bg:color4)[ $version ]($style)[](fg:color4)"
-
-[time]
-disabled = false
-time_format = "%R" # Hour:Minute Format
-style = "fg:color3 bg:color4"
-format = "[](fg:color8 bg:color4)[  ](bg:color8 fg:color5)[](fg:color8 bg:color4)[ $time ]($style)[](fg:color4)"
 
