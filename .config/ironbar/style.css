@@ -222,6 +222,12 @@ popover contents {
     background: transparent;
 }
 
+popover.menu contents {
+    padding: 4px;
+    background: alpha(@surface, 0.98);
+    color: @on_surface;
+}
+
 .popup {
     padding: 14px;
     border: 1px solid @outline;
