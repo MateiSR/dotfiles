@@ -32,8 +32,14 @@ format_popup = "%A, %d %B %Y"
 [[center]]
 type = "workspaces"
 all_monitors = false
-favorites = ["1", "2", "3", "4", "5"]
 sort = "index"
+
+[center.name_map]
+6 = "1"
+7 = "2"
+8 = "3"
+9 = "4"
+10 = "5"
 
 [[end]]
 type = "tray"

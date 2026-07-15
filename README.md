@@ -30,6 +30,16 @@ git pull --ff-only
 ./install.sh --gpu nvidia
 ```
 
+For an existing pre-v3 checkout, create a restore point and migrate with:
+
+```sh
+./migrate-v3.sh check
+./migrate-v3.sh migrate
+```
+
+Use `./migrate-v3.sh list` and `./migrate-v3.sh restore latest` to inspect or
+restore archived configuration.
+
 Optional flags:
 
 ```text
@@ -52,11 +62,12 @@ Edit the machine-local files created from the `.example` templates:
 - `~/.config/dotfiles/git.conf` — git identity
 - `~/.config/dotfiles/scripts/gs_zipline_conf.sh` — Zipline upload key
 
-`bootstrap.sh` can be run alone when only the Stow links and generated configs
-need refreshing. New tracked files can be linked with:
+`bootstrap.sh` can be run alone after repository updates. It uses Git history to
+remove links for deleted tracked files, links the current files, and refreshes
+generated configs:
 
 ```sh
-stow --no-folding --compat -R -t "$HOME" .
+./bootstrap.sh
 ```
 
 Fonts are defined in `.config/matugen/keywords.json`.

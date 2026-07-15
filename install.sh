@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+umask 022
 
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 PACLIST_DIR="$ROOT/Paclists/Hyprland"
@@ -84,8 +85,8 @@ update_checkout() {
 }
 
 hyprland_branch() {
-	local package version major minor
-	if ! read -r package version < <(pacman -Q hyprland 2>/dev/null); then
+	local version major minor
+	if ! read -r _ version < <(pacman -Q hyprland 2>/dev/null); then
 		$DRY_RUN && printf '%s\n' 'release/<installed-major.minor>.x' && return
 		die "hyprland is not installed"
 	fi
@@ -231,6 +232,7 @@ update_checkout https://github.com/Keyitdev/sddm-astronaut-theme.git "$sddm_sour
 run sudo install -d -o "$(id -u)" -g "$(id -g)" -m 0755 "$sddm_state_dir"
 run sudo install -d -o root -g root -m 0755 "$sddm_theme_dir"
 run sudo rsync -a --delete --exclude=.git/ --chown=root:root "$sddm_source_dir/" "$sddm_theme_dir/"
+run sudo chmod -R a+rX "$sddm_theme_dir"
 run sudo sed -i 's|^ConfigFile=.*|ConfigFile=Themes/matugen.conf|' "$sddm_theme_dir/metadata.desktop"
 run sudo ln -sfn "$sddm_state_dir/theme.conf" "$sddm_theme_dir/Themes/matugen.conf"
 run sudo ln -sfn "$sddm_state_dir/wallpaper" "$sddm_theme_dir/Backgrounds/matugen-wallpaper"
@@ -273,7 +275,7 @@ if ! $DRY_RUN; then
 	if $WITH_OMF; then
 		fish -c 'type -q omf' || die "Oh My Fish was not installed"
 	fi
-	Hyprland --verify-config -c "$HOME/.config/hypr/hyprland.lua"
+	DOTFILES_VERIFY_CONFIG=1 Hyprland --verify-config -c "$HOME/.config/hypr/hyprland.lua"
 	if $HYPRLAND_LIVE; then
 		config_errors=$(hyprctl configerrors)
 		[[ -z "$config_errors" ]] || die "Hyprland config errors: $config_errors"
