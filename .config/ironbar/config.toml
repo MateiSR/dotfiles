@@ -72,11 +72,11 @@ show_sources = false
 type = "custom"
 name = "brightness"
 class = "brightness"
-show_if = "test -n \"$(find /sys/class/backlight -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)\""
+show_if = "~/.config/ironbar/brightness.sh get"
 
 [[end.bar]]
 type = "button"
-label = "󰃠 {{1000:brightnessctl -m | cut -d, -f4}}"
+label = "󰃠 {{1000:~/.config/ironbar/brightness.sh get}}%"
 on_click = "popup:toggle"
 
 [[end.popup]]
@@ -89,14 +89,20 @@ name = "brightness-title"
 label = "󰃠  Brightness"
 
 [[end.popup.widgets]]
+type = "label"
+name = "brightness-devices"
+label = "{{1000:~/.config/ironbar/brightness.sh label}}"
+
+[[end.popup.widgets]]
 type = "slider"
 name = "brightness-slider"
 min = 5
 max = 100
 step = 5
 length = 240
-value = "1000:brightnessctl -m | cut -d, -f4 | tr -d '%'"
-on_change = "!brightnessctl set ${0%.*}%"
+show_label = false
+value = "1000:~/.config/ironbar/brightness.sh get"
+on_change = "!~/.config/ironbar/brightness.sh set ${0%.*}"
 
 [[end]]
 type = "battery"

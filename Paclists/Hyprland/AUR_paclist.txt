@@ -1,3 +1,4 @@
+ddcci-driver-linux-clemax-dkms-git
 zen-browser-bin
 gtk-engine-murrine
 vicinae-bin

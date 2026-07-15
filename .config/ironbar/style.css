@@ -248,6 +248,11 @@ popover.menu contents {
     font-weight: 700;
 }
 
+#brightness-devices {
+    color: @on_surface_variant;
+    font-size: 11px;
+}
+
 .popup-clock .calendar {
     color: @on_surface;
 }

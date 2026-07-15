@@ -78,7 +78,8 @@ The Hyprland session uses a small, composable shell rather than a full desktop
 shell:
 
 - Ironbar provides the three-island top bar, native system popups, and the
-  launcher and power controls.
+  launcher and power controls. External DDC/CI brightness uses
+  `ddcci-driver-linux-clemax-dkms-git`.
 - SwayNC is the only notification daemon and owns the notification history,
   do-not-disturb state, and control center. Ironbar's bell is its controller,
   not a second notification implementation.
