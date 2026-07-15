@@ -65,8 +65,24 @@ hl.bind(mod .. " + Space", function()
 end)
 
 local split = machine.plugins and _G.split_monitor_workspaces
-hl.bind(mod .. " + CTRL + H", hl.dsp.focus({ monitor = "l" }))
-hl.bind(mod .. " + CTRL + L", hl.dsp.focus({ monitor = "r" }))
+-- Hyprland raises a runtime error when nothing lies that way, so gate on it
+local function move_to_monitor(dir)
+	return function()
+		local active = hl.get_active_monitor()
+		if not active then
+			return
+		end
+		for _, monitor in ipairs(hl.get_monitors()) do
+			if dir == "l" and monitor.x < active.x or dir == "r" and monitor.x > active.x then
+				hl.dispatch(hl.dsp.window.move({ monitor = dir }))
+				return
+			end
+		end
+	end
+end
+
+hl.bind(mod .. " + CTRL + H", move_to_monitor("l"))
+hl.bind(mod .. " + CTRL + L", move_to_monitor("r"))
 
 for i = 1, 5 do
 	local workspace = tostring(i)
