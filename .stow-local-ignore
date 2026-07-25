@@ -14,6 +14,7 @@
 ^/yarn\.lock$
 ^/system
 ^/tests
+^/extras
 ^/\.config/dotfiles/machine\.lua$
 ^/\.config/dotfiles/git\.conf$
 ^/\.config/dotfiles/scripts/gs_zipline_conf\.sh$

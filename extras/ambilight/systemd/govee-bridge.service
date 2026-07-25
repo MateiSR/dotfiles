@@ -1,0 +1,20 @@
+[Unit]
+Description=HyperHDR UDP Raw to Govee LAN bridge
+# Bound to HyperHDR: it stops when HyperHDR stops, so the lights never sit lit
+# with nothing feeding them.
+BindsTo=hyperhdr.service
+# BindsTo alone only propagates stop; PartOf also propagates restart, so a
+# HyperHDR crash-restart brings the bridge back instead of leaving it dead.
+PartOf=hyperhdr.service
+After=hyperhdr.service
+
+[Service]
+ExecStart=%h/Scripts/goove_hyperhdr_bridge.py
+Environment=PYTHONUNBUFFERED=1
+Restart=on-failure
+RestartSec=5
+# The script turns the lights off on SIGTERM; give it room before SIGKILL.
+TimeoutStopSec=10
+
+[Install]
+WantedBy=hyperhdr.service
