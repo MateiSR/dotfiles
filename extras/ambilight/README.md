@@ -93,6 +93,24 @@ matters. LedFx uses 40 for the same devices.
 
 ## Gotchas
 
+**The strip silently leaves Razer mode.** After a few hours it freezes on a dim
+solid colour and stops tracking the screen. Everything upstream looks perfect —
+HyperHDR still grabs at 30 FPS with no drops, the bridge still reports
+`send errors 0`, the device still pings — because Razer LED data is
+fire-and-forget UDP and a device that has left the mode accepts and discards it
+without an error. The strip just keeps whatever scene it fell back to. The
+trigger is device-side (Wi-Fi reconnect, Govee app or cloud activity, firmware
+session expiry) and there is no way to observe it: the device answers `devStatus`
+and multicast discovery on UDP 4002, which firewalld drops. The bridge re-sends
+the activate command every `REARM_SECONDS` (30) to cover it. To recover an older
+copy without restarting anything:
+
+```sh
+python3 -c 'import socket, json
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.sendto(json.dumps({"msg":{"cmd":"razer","data":{"pt":"uwABsQEK"}}}).encode(), ("192.168.1.36", 4003))'
+```
+
 **A boot effect with `duration_ms: 0` locks the whole thing up.** Zero means
 infinite, not off. Foreground effects hold priority 0, the highest, so the effect
 never releases and permanently outranks the grabber — including the web UI you
