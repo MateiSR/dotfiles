@@ -8,6 +8,7 @@ import signal
 import socket
 import sys
 import time
+import urllib.request
 from functools import reduce
 from operator import xor
 
@@ -18,6 +19,8 @@ BRIGHTNESS = 100     # dim in HyperHDR, not here: the two multiply
 MIN_INTERVAL = 1 / int(os.environ.get("GOVEE_FPS", "40"))
 KEEPALIVE = 5.0      # Razer mode expires ~60s after the last LED packet
 REARM = 30.0         # and the device drops out on its own, silently, after hours
+STALE = 60.0         # identical frames this long means HyperHDR's capture died
+HYPERHDR = "http://127.0.0.1:8090/json-rpc"
 
 # BB 00 <variant> B0 <mode> <count> <rgb...> <xor>
 # variant: FA DreamView, 0E Chroma, 20 Govee. Wrong colours: try another.
@@ -39,6 +42,22 @@ def packet(rgb):
     p.extend(rgb)
     p.append(reduce(xor, p))
     return base64.b64encode(p).decode()
+
+
+def bounce():
+    # Renegotiate the capture: the portal repeats one frame forever after a few
+    # hours (xdg-desktop-portal-hyprland#131) and HyperHDR counts the repeats.
+    print("capture stale, bouncing grabber", flush=True)
+    for state in (False, True):
+        body = {"command": "componentstate",
+                "componentstate": {"component": "SYSTEMGRABBER", "state": state}}
+        try:
+            urllib.request.urlopen(urllib.request.Request(
+                HYPERHDR, json.dumps(body).encode(),
+                {"Content-Type": "application/json"}), timeout=5).read()
+        except OSError as e:
+            return print(f"bounce failed: {e}", flush=True)
+        time.sleep(1.0)
 
 
 def arm(sock):
@@ -73,7 +92,7 @@ def main():
     print(f"HyperHDR {LISTEN[0]}:{LISTEN[1]} -> Govee {GOVEE[0]}:{GOVEE[1]}, {PIXELS} pixels")
 
     last = None
-    sent = armed = time.monotonic()
+    sent = armed = fresh = time.monotonic()
     try:
         while True:
             try:
@@ -88,6 +107,12 @@ def main():
                 send(tx, "razer", {"pt": ACTIVATE})  # only this: turn/brightness dip the strip ~2s
                 armed = now
             # Throttle changing frames; resend unchanged ones only as keepalive.
+            if rgb != last:
+                fresh = now
+            elif now - fresh >= STALE:
+                bounce()
+                fresh = time.monotonic()
+
             if now - sent < (KEEPALIVE if rgb == last else MIN_INTERVAL):
                 continue
             send(tx, "razer", {"pt": packet(rgb)})

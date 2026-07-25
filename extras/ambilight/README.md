@@ -58,7 +58,7 @@ systemctl --user edit govee-bridge.service   # Environment=GOVEE_IP=192.168.1.36
 In the HyperHDR web UI at `http://localhost:8090` (enable Advanced, top right):
 
 - LED hardware: **UDP Raw**, host `127.0.0.1`, port `5569`, RGB order, LED count
-  matching `PIXEL_COUNT` in the script (10).
+  matching `PIXELS` in the script (10).
 - Capturing: the PipeWire/Portal software grabber. Confirm the log shows
   `Using DmaBuf frame type. The hardware acceleration is ENABLED.` — without it,
   HyperHDR falls back to CPU framebuffer readback, which is expensive.
@@ -75,35 +75,43 @@ systemctl --user is-active hyperhdr.service govee-bridge.service
 journalctl --user -u govee-bridge.service -f
 ```
 
-Run the bridge on a terminal instead of under systemd to watch live throughput —
-it prints a progress line every 2 seconds on a TTY, and once every 5 minutes
-otherwise, so journald does not fill up:
+The bridge only logs startup and grabber bounces. Its own throughput was never
+the useful number — it reads healthy through every failure mode below. Read
+HyperHDR's log instead; `[LED0: FPS = 30.30, send = 1818, dropped = 0]` is
+healthy, a `send` near 59 is a dead capture:
+
+```sh
+journalctl --user -u hyperhdr.service -f | grep PERFORMANCE
+```
+
+To see the raw stream, stop the bridge and take the port yourself:
 
 ```sh
 systemctl --user stop govee-bridge.service
-~/Scripts/goove_hyperhdr_bridge.py
+python3 -c 'import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.bind(("127.0.0.1", 5569))
+for _ in range(20): print(s.recvfrom(2048)[0].hex())'
+systemctl --user start govee-bridge.service
 ```
 
-Expect something like `in 105.0 FPS  out  30.2 FPS  send errors 0`. Inbound runs
-far higher than outbound because HyperHDR's smoothing re-emits identical frames
-several times per refresh; the bridge drops byte-identical repeats and caps the
-rest at `MAX_FPS` (40, override with `GOVEE_FPS`). Govee's Razer mode has no
-backpressure — it accepts everything and lags rather than erroring — so the cap
-matters. LedFx uses 40 for the same devices.
+HyperHDR emits identical frames several times per refresh, so the bridge drops
+byte-identical repeats and caps the rest at 40 FPS (`GOVEE_FPS`). Govee's Razer
+mode has no backpressure — it accepts everything and lags rather than erroring —
+so the cap matters. LedFx uses 40 for the same devices.
 
 ## Gotchas
 
 **The strip silently leaves Razer mode.** After a few hours it freezes on a dim
-solid colour and stops tracking the screen. Everything upstream looks perfect —
-HyperHDR still grabs at 30 FPS with no drops, the bridge still reports
-`send errors 0`, the device still pings — because Razer LED data is
+solid colour. Everything upstream looks perfect — HyperHDR still grabs at 30 FPS
+with no drops, the device still pings — because Razer LED data is
 fire-and-forget UDP and a device that has left the mode accepts and discards it
 without an error. The strip just keeps whatever scene it fell back to. The
 trigger is device-side (Wi-Fi reconnect, Govee app or cloud activity, firmware
 session expiry) and there is no way to observe it: the device answers `devStatus`
 and multicast discovery on UDP 4002, which firewalld drops. The bridge re-sends
-the activate command every `REARM_SECONDS` (30) to cover it. To recover an older
-copy without restarting anything:
+the activate command every `REARM` (30) seconds to cover it. Only that command —
+`turn` and `brightness` are normal-mode commands and the device leaves the stream
+to apply them, dipping the strip for a second or two. To recover by hand:
 
 ```sh
 python3 -c 'import socket, json
@@ -147,11 +155,29 @@ compound. The device constant is at 100 so HyperHDR owns dimming — it can be
 changed live and its pipeline dithers, whereas dimming in the RGB domain crushes
 colour depth. Do not dim in both.
 
-**PipeWire streams can stall on fullscreen.** A known issue interrupts the stream
-when an application goes fullscreen or a screensaver activates, without
-auto-resuming. Use borderless fullscreen for games, and enable HyperHDR's
-"disable on OS lock or monitor off" so PipeWire does not reject the saved session
-token and force a monitor re-selection.
+**The capture goes stale after a few hours and the strip freezes on one colour.**
+HyperHDR counts the repeated buffers as captured frames, so its grabber FPS looks
+perfect; the LED line gives it away, reading `send = 59, dropped = 1769` where a
+healthy one reads `send = 1818, dropped = 0`. Restarting HyperHDR clears it and
+misleads, because that restarts the bridge too. Toggling the grabber component
+renegotiates the stream in about a second and is enough:
+
+```sh
+for s in false true; do
+  curl -s -X POST http://127.0.0.1:8090/json-rpc -H 'Content-Type: application/json' \
+    -d "{\"command\":\"componentstate\",\"componentstate\":{\"component\":\"SYSTEMGRABBER\",\"state\":$s}}"
+  sleep 1
+done
+```
+
+The bridge does this itself after `STALE` (60) seconds of byte-identical frames.
+A genuinely static screen trips it too, harmlessly: the colours are unchanged
+either way, so the renegotiation is invisible. Upstream is
+[xdg-desktop-portal-hyprland#131](https://github.com/hyprwm/xdg-desktop-portal-hyprland/issues/131).
+The same stream also stalls when an application goes fullscreen or a screensaver
+activates — use borderless fullscreen for games, and enable HyperHDR's "disable
+on OS lock or monitor off" so PipeWire keeps the saved session token instead of
+forcing a monitor re-selection.
 
 ## Music mode
 
