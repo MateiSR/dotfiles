@@ -60,6 +60,15 @@ def bounce():
         time.sleep(1.0)
 
 
+def flush(sock):
+    sock.setblocking(False)  # drop the blank frame HyperHDR sends on grabber stop
+    try:
+        while True:
+            sock.recv(2048)
+    except BlockingIOError:
+        sock.settimeout(0.5)
+
+
 def arm(sock):
     send(sock, "turn", {"value": 1})
     send(sock, "razer", {"pt": ACTIVATE})
@@ -72,6 +81,18 @@ def selftest():
     p = base64.b64decode(packet(bytes(range(3 * PIXELS))))
     assert p[:6] == HEADER + bytes([PIXELS]), p.hex()
     assert reduce(xor, p[:-1]) == p[-1], p.hex()
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(("127.0.0.1", 0))
+    s.settimeout(0.5)
+    for _ in range(5):
+        s.sendto(b"x", s.getsockname())
+    time.sleep(0.05)
+    flush(s)
+    try:
+        assert not s.recv(8), "flush left datagrams queued"
+    except TimeoutError:
+        pass
     print("selftest ok")
 
 
@@ -111,6 +132,7 @@ def main():
                 fresh = now
             elif now - fresh >= STALE:
                 bounce()
+                flush(rx)
                 fresh = time.monotonic()
 
             if now - sent < (KEEPALIVE if rgb == last else MIN_INTERVAL):

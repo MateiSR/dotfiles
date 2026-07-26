@@ -171,8 +171,13 @@ done
 ```
 
 The bridge does this itself after `STALE` (60) seconds of byte-identical frames.
-A genuinely static screen trips it too, harmlessly: the colours are unchanged
-either way, so the renegotiation is invisible. Upstream is
+A genuinely static screen trips it too, and nothing distinguishes the two cases:
+HyperHDR drops repeated frames exactly as the bridge does, so its counters read
+the same whether the portal died or the desktop is idle. The bounce is made
+harmless instead of rare — HyperHDR blanks the LEDs when the grabber stops and
+sends nothing for the second it takes to come back, so the bridge discards that
+blank frame and the backlog behind it and the strip holds its last colour.
+Upstream is
 [xdg-desktop-portal-hyprland#131](https://github.com/hyprwm/xdg-desktop-portal-hyprland/issues/131).
 The same stream also stalls when an application goes fullscreen or a screensaver
 activates — use borderless fullscreen for games, and enable HyperHDR's "disable
