@@ -1,5 +1,6 @@
 name = "main"
 position = "top"
+layer = "bottom"
 height = 44
 margin = { top = 10, left = 10, right = 10 }
 popup_gap = 14
@@ -33,6 +34,7 @@ format_popup = "%A, %d %B %Y"
 type = "workspaces"
 all_monitors = false
 sort = "index"
+hidden = ["special:magic"]
 
 [center.name_map]
 6 = "1"
