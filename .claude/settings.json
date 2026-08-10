@@ -2,16 +2,6 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
-  "statusLine": {
-    "type": "command",
-    "command": "bash /home/matei/.claude/statusline-command.sh"
-  },
-  "enabledPlugins": {
-    "codex@openai-codex": true,
-    "superpowers@claude-plugins-official": true
-  },
-  "effortLevel": "xhigh",
   "hooks": {
     "PreToolUse": [
       {
@@ -27,6 +17,15 @@
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "bash /home/matei/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "codex@openai-codex": true,
+    "superpowers@claude-plugins-official": false
+  },
+  "effortLevel": "xhigh",
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "agentPushNotifEnabled": true
