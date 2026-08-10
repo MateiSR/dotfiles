@@ -1,15 +1,11 @@
 # Ambilight: HyperHDR to Govee
 
-Screen-driven ambient lighting on Hyprland. HyperHDR captures the screen through
-the PipeWire portal, averages it down to a handful of segments, and emits them as
-UDP Raw. `goove_hyperhdr_bridge.py` translates that stream into the Govee LAN
-API's Razer/DreamView packets.
+HyperHDR captures the screen through the PipeWire portal and emits it as UDP Raw.
+`goove_hyperhdr_bridge.py` translates that into Govee LAN Razer/DreamView packets.
 
-Nothing here is installed by `install.sh` or linked by stow. `extras` is listed
-in `.stow-local-ignore`. Set it up by hand on machines that have the hardware.
-
-Hardware this was built against: a Govee strip supporting Razer/DreamView at a
-static LAN address, 10 segments.
+Not installed by `install.sh`, not stowed (`extras` is in `.stow-local-ignore`).
+Set up by hand on machines with the hardware: a Govee strip supporting
+Razer/DreamView at a static LAN address, 10 segments.
 
 ## Install
 
@@ -25,10 +21,9 @@ systemctl --user daemon-reload
 systemctl --user enable govee-bridge.service
 ```
 
-`govee-bridge.service` runs the script from `%h/Scripts/`. Put it somewhere else
-and the unit needs its `ExecStart` updated to match.
+`ExecStart` points at `%h/Scripts/`; update it if the script lives elsewhere.
 
-Add the autostart line to `~/.config/dotfiles/machine.lua`:
+Autostart in `~/.config/dotfiles/machine.lua`:
 
 ```lua
 autostart = {
@@ -36,55 +31,42 @@ autostart = {
 },
 ```
 
-Do not `systemctl --user enable hyperhdr.service`. The packaged unit is
-`WantedBy=default.target`, so enabling it starts HyperHDR at login before
-Hyprland has exported `WAYLAND_DISPLAY` into the systemd user environment; its
-`ExecStartPre` then fails and it retries every 10 seconds forever. Starting it
-from `machine.lua` autostart runs it once the session environment exists.
+Do not `enable` hyperhdr.service. The packaged unit is `WantedBy=default.target`,
+so it starts before Hyprland exports `WAYLAND_DISPLAY` into the systemd user
+environment; `ExecStartPre` then fails and it retries every 10s forever.
 
-`govee-bridge.service` is `enabled` and pulls itself in through
-`hyperhdr.service.wants/`. Never start it directly — it is `BindsTo=` HyperHDR
-and systemd stops it immediately if HyperHDR is not active.
+Never start `govee-bridge.service` directly either — it is `BindsTo=` HyperHDR
+and pulls itself in through `hyperhdr.service.wants/`.
 
 ## Configure
-
-Set the device address if DHCP moved it, either by editing the constant or with
-the environment override:
 
 ```sh
 systemctl --user edit govee-bridge.service   # Environment=GOVEE_IP=192.168.1.36
 ```
 
-In the HyperHDR web UI at `http://localhost:8090` (enable Advanced, top right):
+In the web UI at `http://localhost:8090` (enable Advanced, top right):
 
-- LED hardware: **UDP Raw**, host `127.0.0.1`, port `5569`, RGB order, LED count
-  matching `PIXELS` in the script (10).
-- Capturing: the PipeWire/Portal software grabber. Confirm the log shows
-  `Using DmaBuf frame type. The hardware acceleration is ENABLED.` — without it,
-  HyperHDR falls back to CPU framebuffer readback, which is expensive.
-- Image processing: all brightness and dimming belongs here. The bridge sets the
-  Govee's hardware brightness to 100 once at startup and leaves it alone.
+- LED hardware: **UDP Raw**, `127.0.0.1:5569`, RGB order, LED count = `PIXELS` (10).
+- Capturing: PipeWire/Portal grabber. The log must show `Using DmaBuf frame type`
+  — without it HyperHDR falls back to CPU framebuffer readback.
+- Image processing: all dimming belongs here. The bridge sets hardware brightness
+  to 100 once and leaves it alone.
 
-The `--desktop --pipewire` flags come from `systemd/hyperhdr.service.d/override.conf`.
-The packaged unit runs bare `hyperhdr`, which picks the wrong grabber on Wayland.
+`--desktop --pipewire` come from `systemd/hyperhdr.service.d/override.conf`; the
+packaged unit runs bare `hyperhdr`, which picks the wrong grabber on Wayland.
 
 ## Verify
 
 ```sh
 systemctl --user is-active hyperhdr.service govee-bridge.service
-journalctl --user -u govee-bridge.service -f
-```
-
-The bridge only logs startup and grabber bounces. Its own throughput was never
-the useful number — it reads healthy through every failure mode below. Read
-HyperHDR's log instead; `[LED0: FPS = 30.30, send = 1818, dropped = 0]` is
-healthy, a `send` near 59 is a dead capture:
-
-```sh
 journalctl --user -u hyperhdr.service -f | grep PERFORMANCE
 ```
 
-To see the raw stream, stop the bridge and take the port yourself:
+`[LED0: FPS = 30.30, send = 1818, dropped = 0]` is healthy; `send = 59,
+dropped = 1769` is a dead capture. The bridge's own log is useless for this — it
+reads healthy through every failure mode below, and only logs bounces.
+
+To see the raw stream, take the port yourself:
 
 ```sh
 systemctl --user stop govee-bridge.service
@@ -94,24 +76,21 @@ for _ in range(20): print(s.recvfrom(2048)[0].hex())'
 systemctl --user start govee-bridge.service
 ```
 
-HyperHDR emits identical frames several times per refresh, so the bridge drops
-byte-identical repeats and caps the rest at 40 FPS (`GOVEE_FPS`). Govee's Razer
-mode has no backpressure — it accepts everything and lags rather than erroring —
-so the cap matters. LedFx uses 40 for the same devices.
+HyperHDR repeats identical frames, so the bridge drops byte-identical repeats and
+caps the rest at 40 FPS (`GOVEE_FPS`). Razer mode has no backpressure — it accepts
+everything and lags rather than erroring — so the cap matters. LedFx uses 40 too.
 
 ## Gotchas
 
 **The strip silently leaves Razer mode.** After a few hours it freezes on a dim
-solid colour. Everything upstream looks perfect — HyperHDR still grabs at 30 FPS
-with no drops, the device still pings — because Razer LED data is
-fire-and-forget UDP and a device that has left the mode accepts and discards it
-without an error. The strip just keeps whatever scene it fell back to. The
+solid colour. Nothing upstream looks wrong, because Razer LED data is
+fire-and-forget UDP: a device that left the mode accepts and discards it. The
 trigger is device-side (Wi-Fi reconnect, Govee app or cloud activity, firmware
-session expiry) and there is no way to observe it: the device answers `devStatus`
-and multicast discovery on UDP 4002, which firewalld drops. The bridge re-sends
-the activate command every `REARM` (30) seconds to cover it. Only that command —
-`turn` and `brightness` are normal-mode commands and the device leaves the stream
-to apply them, dipping the strip for a second or two. To recover by hand:
+session expiry) and unobservable — `devStatus` and discovery answer on UDP 4002,
+which firewalld drops. The bridge re-sends activate every `REARM` (30) seconds.
+Only that command: `turn` and `brightness` are normal-mode commands and the
+device leaves the stream to apply them, dipping the strip for a second or two.
+By hand:
 
 ```sh
 python3 -c 'import socket, json
@@ -119,11 +98,10 @@ s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.sendto(json.dumps({"msg":{"cmd":"razer","data":{"pt":"uwABsQEK"}}}).encode(), ("192.168.1.36", 4003))'
 ```
 
-**A boot effect with `duration_ms: 0` locks the whole thing up.** Zero means
-infinite, not off. Foreground effects hold priority 0, the highest, so the effect
-never releases and permanently outranks the grabber — including the web UI you
-would use to undo it. Recovery is editing the settings database directly with
-HyperHDR stopped, so it cannot overwrite the change on exit:
+**A boot effect with `duration_ms: 0` locks everything up.** Zero means infinite.
+Foreground effects hold priority 0 and permanently outrank the grabber, including
+the web UI you would use to undo it. Edit the database with HyperHDR stopped, so
+it cannot overwrite the change on exit:
 
 ```sh
 systemctl --user stop hyperhdr.service
@@ -141,26 +119,21 @@ EOF
 systemctl --user start hyperhdr.service
 ```
 
-**Do not use a Music effect as the boot effect.** It depends on an audio capture
-device being selected; without one it renders black while still holding priority
-0, which looks identical to a hang.
+**No Music effect as the boot effect.** It needs an audio capture device selected;
+without one it renders black while still holding priority 0 — identical to a hang.
 
-**HyperHDR is single-instance.** A copy started by hand outside systemd holds the
-lock and the unit fails with `The HyperHDR Daemon is already running, abort start`
-in a restart loop. Kill the stray process before starting the service.
+**HyperHDR is single-instance.** A copy started by hand holds the lock and the
+unit fails with `The HyperHDR Daemon is already running, abort start` in a restart
+loop. Kill the stray process first.
 
-**Brightness stacks multiplicatively.** The Govee's own brightness (the
-`BRIGHTNESS` constant, sent once at startup) and HyperHDR's brightness adjustment
-compound. The device constant is at 100 so HyperHDR owns dimming — it can be
-changed live and its pipeline dithers, whereas dimming in the RGB domain crushes
-colour depth. Do not dim in both.
+**Brightness stacks multiplicatively.** The Govee's own brightness and HyperHDR's
+compound. The device constant stays at 100 so HyperHDR owns dimming — it dithers,
+whereas dimming in the RGB domain crushes colour depth. Do not dim in both.
 
-**The capture goes stale after a few hours and the strip freezes on one colour.**
-HyperHDR counts the repeated buffers as captured frames, so its grabber FPS looks
-perfect; the LED line gives it away, reading `send = 59, dropped = 1769` where a
-healthy one reads `send = 1818, dropped = 0`. Restarting HyperHDR clears it and
-misleads, because that restarts the bridge too. Toggling the grabber component
-renegotiates the stream in about a second and is enough:
+**The capture goes stale and the strip freezes on one colour.** HyperHDR counts
+repeated buffers as captured frames, so grabber FPS looks perfect and only the LED
+line gives it away. Toggling the grabber renegotiates the stream in about a
+second, where restarting HyperHDR also restarts the bridge and misleads:
 
 ```sh
 for s in false true; do
@@ -170,36 +143,58 @@ for s in false true; do
 done
 ```
 
-The bridge does this itself after `STALE` (60) seconds of byte-identical frames.
-A genuinely static screen trips it too, and nothing distinguishes the two cases:
-HyperHDR drops repeated frames exactly as the bridge does, so its counters read
-the same whether the portal died or the desktop is idle. The bounce is made
-harmless instead of rare — HyperHDR blanks the LEDs when the grabber stops and
-sends nothing for the second it takes to come back, so the bridge discards that
-blank frame and the backlog behind it and the strip holds its last colour.
-Upstream is
+The bridge does this after `STALE` (60) seconds of byte-identical frames. A static
+screen trips it too and nothing distinguishes the two — HyperHDR drops repeated
+frames exactly as the bridge does. So the bounce is made harmless rather than
+rare: HyperHDR blanks the LEDs while the grabber is down, and the bridge discards
+that blank frame and the backlog behind it, holding its last colour. Upstream is
 [xdg-desktop-portal-hyprland#131](https://github.com/hyprwm/xdg-desktop-portal-hyprland/issues/131).
-The same stream also stalls when an application goes fullscreen or a screensaver
-activates — use borderless fullscreen for games, and enable HyperHDR's "disable
-on OS lock or monitor off" so PipeWire keeps the saved session token instead of
-forcing a monitor re-selection.
+The stream also stalls on fullscreen and screensavers — use borderless fullscreen
+for games, and enable "disable on OS lock or monitor off" so PipeWire keeps the
+session token instead of forcing a monitor re-selection.
+
+**The bounce itself wedges the portal eventually.** One renegotiation never
+completes: HyperHDR logs `SelectSources finished` and stops, the portal logs
+nothing for that session, the grabber sits `enabled` producing nothing, and
+HyperHDR powers its LED device off (`COMPONENTCTRL0: LED device: disabled`). So
+the stream stops instead of repeating, which a stale check reading only arriving
+frames cannot see. Only a fresh process clears it. The bridge treats `SILENT` (90)
+seconds without a datagram as the escalation and restarts `hyperhdr.service`,
+taking itself down and back up with it. An idle desktop still sends frames, so the
+static-screen ambiguity never reaches this path.
+
+**A restart re-prompts for the monitor; a bounce does not.** HyperHDR opens two
+portal sessions at startup, spends its restore token on the first and destroys it,
+so the session that captures has none:
+
+```sh
+journalctl --user -u xdg-desktop-portal-hyprland -f | grep -E "prompting|Selection"
+```
+
+Answer with the same screen (`DP-2`) and allow the restore token. That makes a
+restart an attended repair, so the bridge rations it to one an hour, stamped in
+`$XDG_RUNTIME_DIR/govee-bridge.restart` because the restart kills the process
+holding the count. Rationed, it keeps bouncing — free and silent — instead of
+stacking pickers nobody is awake to click. Re-arm it with:
+
+```sh
+rm -f "$XDG_RUNTIME_DIR/govee-bridge.restart"
+```
 
 ## Music mode
 
-HyperHDR's audio visualiser is a normal effect, so switching modes is the
-priority muxer, not a setting: starting the effect outranks the grabber, and
-clearing it lets the grabber resume. Both live on the Remote Control page.
+The audio visualiser is a normal effect, so switching modes is the priority muxer,
+not a setting: start the effect to outrank the grabber, clear it to resume. Both
+on the Remote Control page.
 
-It needs an audio capture device selected first. HyperHDR enumerates through
-PulseAudio, so PipeWire monitor sources appear in the dropdown — pick the monitor
-matching the sink actually in use:
+Select an audio capture device first. HyperHDR enumerates through PulseAudio, so
+PipeWire monitor sources appear — pick the monitor for the sink in use:
 
 ```sh
 pactl get-default-sink
 pactl list short sources | grep monitor
 ```
 
-Ten segments makes for a coarse spectrum. LedFx has a native Govee device and is
-better suited to audio-reactive work; it drives the strip directly with no bridge
-involved. Only one of them can hold Razer mode, so stop `govee-bridge.service`
-first.
+Ten segments is a coarse spectrum. LedFx has a native Govee device and drives the
+strip directly with no bridge. Only one can hold Razer mode, so stop
+`govee-bridge.service` first.

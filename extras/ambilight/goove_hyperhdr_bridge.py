@@ -6,6 +6,7 @@ import json
 import os
 import signal
 import socket
+import subprocess
 import sys
 import time
 import urllib.request
@@ -19,8 +20,11 @@ BRIGHTNESS = 100     # dim in HyperHDR, not here: the two multiply
 MIN_INTERVAL = 1 / int(os.environ.get("GOVEE_FPS", "40"))
 KEEPALIVE = 5.0      # Razer mode expires ~60s after the last LED packet
 REARM = 30.0         # and the device drops out on its own, silently, after hours
-STALE = 60.0         # identical frames this long means HyperHDR's capture died
+STALE = 60.0         # identical frames this long: the capture died
+SILENT = 90.0        # no frames at all: the bounce did not revive it
+RESTART_GAP = 3600.0  # a restart re-prompts for the monitor, so ration them
 HYPERHDR = "http://127.0.0.1:8090/json-rpc"
+STAMP = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "govee-bridge.restart")
 
 # BB 00 <variant> B0 <mode> <count> <rgb...> <xor>
 # variant: FA DreamView, 0E Chroma, 20 Govee. Wrong colours: try another.
@@ -45,8 +49,8 @@ def packet(rgb):
 
 
 def bounce():
-    # Renegotiate the capture: the portal repeats one frame forever after a few
-    # hours (xdg-desktop-portal-hyprland#131) and HyperHDR counts the repeats.
+    # The portal repeats one frame forever after a few hours and HyperHDR counts
+    # the repeats: xdg-desktop-portal-hyprland#131. Renegotiate the stream.
     print("capture stale, bouncing grabber", flush=True)
     for state in (False, True):
         body = {"command": "componentstate",
@@ -58,6 +62,24 @@ def bounce():
         except OSError as e:
             return print(f"bounce failed: {e}", flush=True)
         time.sleep(1.0)
+
+
+def restart():
+    """Restart HyperHDR, unless one is already spent this hour. True if issued."""
+    # For the wedge the bounce cannot clear: SelectSources returns, Start never
+    # answers. A new process re-prompts for the monitor, and nobody clicks a
+    # picker at 4am, so ration it — unattended, the bounce keeps trying for free.
+    try:
+        if time.time() - os.stat(STAMP).st_mtime < RESTART_GAP:
+            return False
+    except FileNotFoundError:
+        pass  # the restart kills this process, so the count lives on disk
+    open(STAMP, "w").close()
+    print("no frames after bouncing, restarting hyperhdr", flush=True)
+    # --no-block, or systemd kills this process mid-call: HyperHDR takes the
+    # bridge with it. Exiting here is the same thing, done in order.
+    subprocess.run(["systemctl", "--user", "restart", "--no-block", "hyperhdr.service"])
+    return True
 
 
 def flush(sock):
@@ -76,6 +98,7 @@ def arm(sock):
 
 
 def selftest():
+    assert STALE < SILENT, "the cheap bounce must get its chance before a restart"
     known = base64.b64decode(ACTIVATE)
     assert reduce(xor, known[:-1]) == known[-1], known.hex()
     p = base64.b64decode(packet(bytes(range(3 * PIXELS))))
@@ -113,24 +136,30 @@ def main():
     print(f"HyperHDR {LISTEN[0]}:{LISTEN[1]} -> Govee {GOVEE[0]}:{GOVEE[1]}, {PIXELS} pixels")
 
     last = None
-    sent = armed = fresh = time.monotonic()
+    sent = armed = fresh = heard = time.monotonic()
     try:
         while True:
             try:
                 rgb, _ = rx.recvfrom(2048)
             except TimeoutError:
-                continue
-            if len(rgb) != PIXELS * 3:
-                sys.exit(f"HyperHDR sent {len(rgb)} bytes, want {PIXELS * 3}: set its LED count to {PIXELS}")
+                if last is None:
+                    continue
+                rgb = last  # hold the colour, and Razer mode, across the gap
+            else:
+                if len(rgb) != PIXELS * 3:
+                    sys.exit(f"HyperHDR sent {len(rgb)} bytes, want {PIXELS * 3}: set its LED count to {PIXELS}")
+                heard = time.monotonic()
 
             now = time.monotonic()
             if now - armed >= REARM:
                 send(tx, "razer", {"pt": ACTIVATE})  # only this: turn/brightness dip the strip ~2s
                 armed = now
-            # Throttle changing frames; resend unchanged ones only as keepalive.
             if rgb != last:
                 fresh = now
             elif now - fresh >= STALE:
+                # One cadence for both cures, so a rationed restart still bounces.
+                if now - heard >= SILENT and restart():
+                    return
                 bounce()
                 flush(rx)
                 fresh = time.monotonic()
