@@ -30,16 +30,6 @@ git pull --ff-only
 ./install.sh --gpu nvidia
 ```
 
-For an existing pre-v3 checkout, create a restore point and migrate with:
-
-```sh
-./migrate-v3.sh check
-./migrate-v3.sh migrate
-```
-
-Use `./migrate-v3.sh list` and `./migrate-v3.sh restore latest` to inspect or
-restore archived configuration.
-
 Optional flags:
 
 ```text
@@ -74,24 +64,16 @@ Fonts are defined in `.config/matugen/keywords.json`.
 
 ## Desktop shell
 
-The Hyprland session uses a small, composable shell rather than a full desktop
-shell:
+Ironbar is the top bar and owns the launcher and power controls. External
+DDC/CI brightness needs `ddcci-driver-linux-clemax-dkms-git`. SwayNC owns
+notification history, do-not-disturb, and the control center. SwayOSD shows
+volume, microphone, brightness, and lock-key feedback.
 
-- Ironbar provides the three-island top bar, native system popups, and the
-  launcher and power controls. External DDC/CI brightness uses
-  `ddcci-driver-linux-clemax-dkms-git`.
-- SwayNC is the only notification daemon and owns the notification history,
-  do-not-disturb state, and control center. Ironbar's bell is its controller,
-  not a second notification implementation.
-- SwayOSD displays volume, microphone, brightness, and lock-key feedback from
-  the hardware bindings.
-- Matugen generates the shared CSS palette for Ironbar, SwayNC, and SwayOSD.
-  Ironbar and SwayNC reload after palette changes; SwayOSD reads the new
-  palette on its next direct start.
+Matugen generates the shared CSS palette for all three. Ironbar and SwayNC
+reload on change; SwayOSD picks it up on its next start.
 
-All three processes are launched directly from `.config/hypr/execs.lua`; no
-custom user services are installed. `Super+X` toggles the bar. The supplied
-layouts live in `.config/ironbar`, `.config/swaync`, and `.config/swayosd`.
+All three launch from `.config/hypr/execs.lua`. `Super+X` toggles the bar.
+Layouts live in `.config/ironbar`, `.config/swaync`, and `.config/swayosd`.
 
 ## SDDM
 

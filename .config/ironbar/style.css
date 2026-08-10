@@ -43,12 +43,6 @@ tooltip label {
     color: @on_background;
 }
 
-/*
- * Target:
- * start padding: 12px
- * center padding: 10px approximately
- * end padding: 8px
- */
 #bar #start {
     padding: 0 12px;
 }
@@ -61,9 +55,6 @@ tooltip label {
     padding: 0 8px;
 }
 
-/*
- * The current 2px spacing makes the left island too compressed.
- */
 #bar #start > * + * {
     margin-left: 10px;
 }
@@ -133,18 +124,10 @@ button:hover {
     background: @surface_container;
 }
 
-/*
- * Slightly reduce the time widget's right padding because time and date are
- * separate Ironbar widgets, unlike the single grouped element in the HTML mock.
- */
 #time {
     padding: 5px 6px 5px 10px;
 }
 
-/*
- * The current date background stretches through almost the entire island.
- * Target date chip is roughly 24px high inside a 40px interior.
- */
 #date {
     margin-top: 8px;
     margin-bottom: 8px;

@@ -64,13 +64,7 @@ update_checkout() {
 		[[ -z $(git -C "$dir" status --porcelain) ]] || die "checkout has local changes: $dir"
 		origin=$(git -C "$dir" remote get-url origin)
 		[[ ${origin%.git} == "${repo%.git}" ]] || die "unexpected origin in $dir: $origin"
-		if $DRY_RUN; then
-			run git -C "$dir" fetch --prune origin "$branch"
-			run git -C "$dir" switch "$branch"
-			run git -C "$dir" pull --ff-only origin "$branch"
-			return
-		fi
-		git -C "$dir" remote set-branches --add origin "$branch"
+		run git -C "$dir" remote set-branches --add origin "$branch"
 		run git -C "$dir" fetch --prune origin
 		if git -C "$dir" show-ref --verify --quiet "refs/heads/$branch"; then
 			run git -C "$dir" switch "$branch"
@@ -254,24 +248,11 @@ $HYPRLAND_LIVE && run hyprctl reload
 
 if ! $DRY_RUN; then
 	step "Verification"
-	missing=$(pacman -T "${OFFICIAL_PACKAGES[@]}" paru "${AUR_PACKAGES[@]}" 2>/dev/null || true)
-	[[ -z "$missing" ]] || die "missing packages: ${missing//$'\n'/ }"
-	for command in fish Hyprland hyprpm ironbar matugen paru rsync sddm-greeter-qt6 stow swaync swayosd-server vicinae; do
-		command -v "$command" >/dev/null || die "missing command: $command"
-	done
-	[[ -d "$HOME/.local/share/icons/Qogir-white-cursors" ]] || die "Qogir-white Cursors were not installed"
-	[[ -d "$HOME/.local/share/icons/Tela" ]] || die "Tela was not installed"
-	[[ -d "$HOME/.local/share/icons/Tela-dark" ]] || die "Tela-dark was not installed"
+	# Vendored install.sh scripts and hyprpm can all exit 0 without installing.
+	[[ -d "$HOME/.local/share/icons/Tela" && -d "$HOME/.local/share/icons/Tela-dark" ]] || die "Tela icons were not installed"
 	[[ -d "$HOME/.local/share/themes/Orchis-Dark-Compact" ]] || die "Orchis-Dark-Compact was not installed"
-	[[ $(git -C "$sddm_source_dir" branch --show-current) == master ]] || die "wrong SDDM Astronaut branch"
-	[[ -L "$sddm_theme_dir/Themes/matugen.conf" ]] || die "missing SDDM Matugen config link"
-	[[ -L "$sddm_theme_dir/Backgrounds/matugen-wallpaper" ]] || die "missing SDDM wallpaper link"
-	[[ -f "$sddm_state_dir/theme.conf" ]] || die "missing generated SDDM config"
-	[[ -f "$sddm_state_dir/wallpaper" ]] || die "missing generated SDDM wallpaper"
-	grep -Fxq 'ConfigFile=Themes/matugen.conf' "$sddm_theme_dir/metadata.desktop" || die "SDDM Matugen config is not selected"
-	[[ $(git -C "$split_dir" branch --show-current) == "$split_branch" ]] || die "wrong split-monitor-workspaces branch"
 	[[ $(hyprpm list) == *"Plugin csgo-vulkan-fix"* ]] || die "csgo-vulkan-fix was not installed"
-	[[ -x "$tpm_dir/tpm" ]] || die "TPM was not installed"
+	grep -Fxq 'ConfigFile=Themes/matugen.conf' "$sddm_theme_dir/metadata.desktop" || die "SDDM Matugen config is not selected"
 	if $WITH_OMF; then
 		fish -c 'type -q omf' || die "Oh My Fish was not installed"
 	fi

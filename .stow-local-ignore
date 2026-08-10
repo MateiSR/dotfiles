@@ -1,7 +1,5 @@
 \.git
 \.gitignore
-\.agents
-\.codex
 \.claude
 .+~
 ^/README.*
@@ -9,9 +7,6 @@
 ^/\.stow-local-ignore
 ^/bootstrap\.sh
 ^/install\.sh
-^/migrate-v3\.sh
-^/node_modules
-^/yarn\.lock$
 ^/system
 ^/tests
 ^/extras
@@ -19,5 +14,3 @@
 ^/\.config/dotfiles/git\.conf$
 ^/\.config/dotfiles/scripts/gs_zipline_conf\.sh$
 ^/\.config/waypaper/config\.ini$
-^/\.config/waybar
-^/\.config/yazi
