@@ -22,6 +22,7 @@ KEEPALIVE = 5.0      # Razer mode expires ~60s after the last LED packet
 REARM = 30.0         # and the device drops out on its own, silently, after hours
 STALE = 60.0         # identical frames this long: the capture died
 SILENT = 90.0        # no frames at all: the bounce did not revive it
+BOUNCES = 2          # frozen, not silent: escalate once the bounce has proven futile
 RESTART_GAP = 3600.0  # a restart re-prompts for the monitor, so ration them
 HYPERHDR = "http://127.0.0.1:8090/json-rpc"
 STAMP = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "govee-bridge.restart")
@@ -99,6 +100,7 @@ def arm(sock):
 
 def selftest():
     assert STALE < SILENT, "the cheap bounce must get its chance before a restart"
+    assert BOUNCES >= 1, "the cheap bounce must get its chance before a restart"
     known = base64.b64decode(ACTIVATE)
     assert reduce(xor, known[:-1]) == known[-1], known.hex()
     p = base64.b64decode(packet(bytes(range(3 * PIXELS))))
@@ -136,6 +138,7 @@ def main():
     print(f"HyperHDR {LISTEN[0]}:{LISTEN[1]} -> Govee {GOVEE[0]}:{GOVEE[1]}, {PIXELS} pixels")
 
     last = None
+    futile = 0
     sent = armed = fresh = heard = time.monotonic()
     try:
         while True:
@@ -155,10 +158,13 @@ def main():
                 send(tx, "razer", {"pt": ACTIVATE})  # only this: turn/brightness dip the strip ~2s
                 armed = now
             if rgb != last:
-                fresh = now
+                fresh, futile = now, 0
             elif now - fresh >= STALE:
+                # A frozen stream still arrives, so SILENT never fires on it —
+                # count the bounces that failed to thaw it and escalate on those.
+                futile += 1
                 # One cadence for both cures, so a rationed restart still bounces.
-                if now - heard >= SILENT and restart():
+                if (now - heard >= SILENT or futile > BOUNCES) and restart():
                     return
                 bounce()
                 flush(rx)
