@@ -35,8 +35,8 @@ Do not `enable` hyperhdr.service. The packaged unit is `WantedBy=default.target`
 so it starts before Hyprland exports `WAYLAND_DISPLAY` into the systemd user
 environment; `ExecStartPre` then fails and it retries every 10s forever.
 
-Never start `govee-bridge.service` directly either — it is `BindsTo=` HyperHDR
-and pulls itself in through `hyperhdr.service.wants/`.
+Use HyperHDR as the entry point at login. The bridge is bound to it and starts
+through `hyperhdr.service.wants/`.
 
 ## Configure
 
@@ -47,8 +47,8 @@ systemctl --user edit govee-bridge.service   # Environment=GOVEE_IP=192.168.1.36
 In the web UI at `http://localhost:8090` (enable Advanced, top right):
 
 - LED hardware: **UDP Raw**, `127.0.0.1:5569`, RGB order, LED count = `PIXELS` (10).
-- Capturing: PipeWire/Portal grabber. The log must show `Using DmaBuf frame type`
-  — without it HyperHDR falls back to CPU framebuffer readback.
+- Capturing: PipeWire/Portal grabber. `Using DmaBuf frame type` confirms the
+  DMA-BUF path; a fallback frame type is not by itself proof that capture is dead.
 - Image processing: all dimming belongs here. The bridge sets hardware brightness
   to 100 once and leaves it alone.
 
@@ -62,9 +62,9 @@ systemctl --user is-active hyperhdr.service govee-bridge.service
 journalctl --user -u hyperhdr.service -f | grep PERFORMANCE
 ```
 
-`[LED0: FPS = 30.30, send = 1818, dropped = 0]` is healthy; `send = 59,
-dropped = 1769` is a dead capture. The bridge's own log is useless for this — it
-reads healthy through every failure mode below, and only logs bounces.
+`[LED0: FPS = 30.30, send = 1818, dropped = 0]` and `send = 59, dropped =
+1769` describe different LED output cadences. Either can be normal: these
+counters do not measure PipeWire capture health and must not trigger recovery.
 
 To see the raw stream, take the port yourself:
 
@@ -76,9 +76,10 @@ for _ in range(20): print(s.recvfrom(2048)[0].hex())'
 systemctl --user start govee-bridge.service
 ```
 
-HyperHDR repeats identical frames, so the bridge drops byte-identical repeats and
-caps the rest at 40 FPS (`GOVEE_FPS`). Razer mode has no backpressure — it accepts
-everything and lags rather than erroring — so the cap matters. LedFx uses 40 too.
+The bridge coalesces byte-identical output to its keepalive cadence and caps
+changed output at 40 FPS (`GOVEE_FPS`). Razer mode has no backpressure — it
+accepts everything and lags rather than erroring — so the cap matters. LedFx
+uses 40 too.
 
 ## Gotchas
 
@@ -130,72 +131,53 @@ loop. Kill the stray process first.
 compound. The device constant stays at 100 so HyperHDR owns dimming — it dithers,
 whereas dimming in the RGB domain crushes colour depth. Do not dim in both.
 
-**The capture goes stale and the strip freezes on one colour.** HyperHDR counts
-repeated buffers as captured frames, so grabber FPS looks perfect and only the LED
-line gives it away. Toggling the grabber renegotiates the stream in about a
-second, where restarting HyperHDR also restarts the bridge and misleads:
+**Capture recovery is attended.** Identical LED output cannot distinguish a
+frozen capture from a static screen, black side bars, unchanged sampled edges, or
+an effect. The bridge therefore does not toggle the grabber or restart HyperHDR.
 
-```sh
-for s in false true; do
-  curl -s -X POST http://127.0.0.1:8090/json-rpc -H 'Content-Type: application/json' \
-    -d "{\"command\":\"componentstate\",\"componentstate\":{\"component\":\"SYSTEMGRABBER\",\"state\":$s}}"
-  sleep 1
-done
-```
-
-The bridge does this after `STALE` (60) seconds of byte-identical frames. A static
-screen trips it too and nothing distinguishes the two — HyperHDR drops repeated
-frames exactly as the bridge does. So the bounce is made harmless rather than
-rare: HyperHDR blanks the LEDs while the grabber is down, and the bridge discards
-that blank frame and the backlog behind it, holding its last colour. Upstream is
-[xdg-desktop-portal-hyprland#131](https://github.com/hyprwm/xdg-desktop-portal-hyprland/issues/131).
-The stream also stalls on fullscreen and screensavers — use borderless fullscreen
-for games, and enable "disable on OS lock or monitor off" so PipeWire keeps the
-session token instead of forcing a monitor re-selection.
-
-**The bounce itself wedges the portal eventually.** One renegotiation never
-completes: HyperHDR logs `SelectSources finished` and stops, the portal logs
-nothing for that session, the grabber sits `enabled` producing nothing, and
-HyperHDR powers its LED device off (`COMPONENTCTRL0: LED device: disabled`). So
-the stream stops instead of repeating, which a stale check reading only arriving
-frames cannot see. Only a fresh process clears it. The bridge treats `SILENT` (90)
-seconds without a datagram as the escalation and restarts `hyperhdr.service`,
-taking itself down and back up with it. An idle desktop still sends frames, so the
-static-screen ambiguity never reaches this path.
-
-**An effect holds the LEDs static, and that is not a stale capture.** Any effect
-outranks the grabber — Cinema dim lights is a solid amber for as long as it runs,
-so every frame is byte-identical and the bounce fired every minute for as long as
-the film lasted. Hundreds of portal sessions in an evening; each one can pop a
-picker, and a stream sharing a window at the time is collateral. So the bridge
-asks who owns the LEDs before repairing anything, and stays quiet unless it is
-the grabber:
+First check which input owns the LEDs:
 
 ```sh
 curl -s -X POST http://127.0.0.1:8090/json-rpc -H 'Content-Type: application/json' \
   -d '{"command":"serverinfo"}' | jq '.info.priorities[] | select(.visible)'
 ```
 
-`"componentId": "EFFECT"` there means the strip is doing what it was told. Clear
-it from Remote Control to hand the grabber back.
-
-**A restart re-prompts for the monitor; a bounce does not.** HyperHDR opens two
-portal sessions at startup, spends its restore token on the first and destroys it,
-so the session that captures has none:
+An `EFFECT`, `COLOR`, `IMAGE`, or other visible component means the grabber is not
+supposed to control the strip. Clear that input from Remote Control if the
+grabber should take over. If `SYSTEMGRABBER` is visible, independently check
+whether the screen changes when useful:
 
 ```sh
-journalctl --user -u xdg-desktop-portal-hyprland -f | grep -E "prompting|Selection"
+grim -t ppm - | sha256sum
+sleep 2
+grim -t ppm - | sha256sum
 ```
 
-Answer with the same screen (`DP-2`) and allow the restore token. That makes a
-restart an attended repair, so the bridge rations it to one an hour, stamped in
-`$XDG_RUNTIME_DIR/govee-bridge.restart` because the restart kills the process
-holding the count. Rationed, it keeps bouncing — free and silent — instead of
-stacking pickers nobody is awake to click. Re-arm it with:
+Different hashes prove the desktop changed, but identical hashes prove nothing.
+If capture still appears frozen, toggle the system grabber only while present to
+answer a picker. **Re-enabling it creates a new portal session and may open a
+screen-share picker or disturb another active share:**
 
 ```sh
-rm -f "$XDG_RUNTIME_DIR/govee-bridge.restart"
+for state in false true; do
+  curl -s -X POST http://127.0.0.1:8090/json-rpc -H 'Content-Type: application/json' \
+    -d "{\"command\":\"componentstate\",\"componentstate\":{\"component\":\"SYSTEMGRABBER\",\"state\":$state}}"
+  sleep 1
+done
 ```
+
+If that fails, restart HyperHDR as a final attended step; startup and internal
+PipeWire retries can create more sessions and may prompt again:
+
+```sh
+systemctl --user restart hyperhdr.service
+```
+
+Leave XDPH's `screencopy.allow_token_by_default` at its default (`false`). Setting
+it to `true` only pre-ticks the picker's restore-token checkbox; it neither avoids
+portal sessions nor guarantees a silent restore. It applies to every application,
+and a saved window token may fall back to another window of the same class after
+the original window disappears. Choose restoration explicitly in the picker.
 
 ## Music mode
 
