@@ -163,34 +163,21 @@ seconds without a datagram as the escalation and restarts `hyperhdr.service`,
 taking itself down and back up with it. An idle desktop still sends frames, so the
 static-screen ambiguity never reaches this path.
 
-The other wedge leaves the stream *frozen* rather than stopped: the portal keeps
-its PipeWire node linked and HyperHDR keeps rewriting the same colour about once
-a second, so `SILENT` never fires and the bounce runs every minute forever. That
-churn is what re-prompts for the monitor — each bounce opens a portal session,
-the frontend rotates the stored restore token on every `Start`, and three bounces
-in quick succession race HyperHDR's single saved copy out of the permission
-store. So the escalation counts futile bounces too: `BOUNCES` (2) that fail to
-change a pixel means the bounce cannot fix this one, and the restart is rationed
-as before. Confirm a freeze without touching HyperHDR's config:
+**An effect holds the LEDs static, and that is not a stale capture.** Any effect
+outranks the grabber — Cinema dim lights is a solid amber for as long as it runs,
+so every frame is byte-identical and the bounce fired every minute for as long as
+the film lasted. Hundreds of portal sessions in an evening; each one can pop a
+picker, and a stream sharing a window at the time is collateral. So the bridge
+asks who owns the LEDs before repairing anything, and stays quiet unless it is
+the grabber:
 
 ```sh
-python3 - <<'EOF'
-import socket, json, hashlib
-s = socket.create_connection(("127.0.0.1", 19444), 5)
-s.sendall(b'{"command":"ledcolors","subcommand":"ledstream-start"}\n')
-buf, seen = b"", set()
-while len(seen) < 2 and len(buf) < 1 << 20:
-    buf += s.recv(65536)
-    while b"\n" in buf:
-        line, buf = buf.split(b"\n", 1)
-        leds = json.loads(line).get("result", {}).get("leds")
-        if leds:
-            seen.add(hashlib.md5(bytes(leds)).hexdigest())
-print("distinct frames:", len(seen))
-EOF
+curl -s -X POST http://127.0.0.1:8090/json-rpc -H 'Content-Type: application/json' \
+  -d '{"command":"serverinfo"}' | jq '.info.priorities[] | select(.visible)'
 ```
 
-One distinct frame while the screen is moving is a freeze.
+`"componentId": "EFFECT"` there means the strip is doing what it was told. Clear
+it from Remote Control to hand the grabber back.
 
 **A restart re-prompts for the monitor; a bounce does not.** HyperHDR opens two
 portal sessions at startup, spends its restore token on the first and destroys it,

@@ -22,7 +22,6 @@ KEEPALIVE = 5.0      # Razer mode expires ~60s after the last LED packet
 REARM = 30.0         # and the device drops out on its own, silently, after hours
 STALE = 60.0         # identical frames this long: the capture died
 SILENT = 90.0        # no frames at all: the bounce did not revive it
-BOUNCES = 2          # frozen, not silent: escalate once the bounce has proven futile
 RESTART_GAP = 3600.0  # a restart re-prompts for the monitor, so ration them
 HYPERHDR = "http://127.0.0.1:8090/json-rpc"
 STAMP = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "govee-bridge.restart")
@@ -47,6 +46,28 @@ def packet(rgb):
     p.extend(rgb)
     p.append(reduce(xor, p))
     return base64.b64encode(p).decode()
+
+
+def owner(info):
+    """componentId of the priority that owns the LEDs, or None."""
+    return next((p["componentId"] for p in info["priorities"] if p.get("visible")), None)
+
+
+def grabbing():
+    # An effect outranks the grabber and holds one colour for as long as it runs —
+    # Cinema dim lights is a static amber. Identical frames are then the point, not
+    # a fault, and bouncing a grabber nobody is watching only churns portal sessions.
+    try:
+        with urllib.request.urlopen(urllib.request.Request(
+                HYPERHDR, b'{"command":"serverinfo"}',
+                {"Content-Type": "application/json"}), timeout=5) as r:
+            who = owner(json.load(r)["info"])
+    except OSError as e:
+        print(f"serverinfo failed: {e}", flush=True)
+        return True  # cannot ask: repair as before
+    if who != "SYSTEMGRABBER":
+        print(f"identical frames, but {who} owns the LEDs: nothing to repair", flush=True)
+    return who == "SYSTEMGRABBER"
 
 
 def bounce():
@@ -100,7 +121,10 @@ def arm(sock):
 
 def selftest():
     assert STALE < SILENT, "the cheap bounce must get its chance before a restart"
-    assert BOUNCES >= 1, "the cheap bounce must get its chance before a restart"
+    assert owner({"priorities": [
+        {"componentId": "EFFECT", "visible": True},
+        {"componentId": "SYSTEMGRABBER", "visible": False}]}) == "EFFECT"
+    assert owner({"priorities": []}) is None
     known = base64.b64decode(ACTIVATE)
     assert reduce(xor, known[:-1]) == known[-1], known.hex()
     p = base64.b64decode(packet(bytes(range(3 * PIXELS))))
@@ -138,7 +162,6 @@ def main():
     print(f"HyperHDR {LISTEN[0]}:{LISTEN[1]} -> Govee {GOVEE[0]}:{GOVEE[1]}, {PIXELS} pixels")
 
     last = None
-    futile = 0
     sent = armed = fresh = heard = time.monotonic()
     try:
         while True:
@@ -158,16 +181,14 @@ def main():
                 send(tx, "razer", {"pt": ACTIVATE})  # only this: turn/brightness dip the strip ~2s
                 armed = now
             if rgb != last:
-                fresh, futile = now, 0
+                fresh = now
             elif now - fresh >= STALE:
-                # A frozen stream still arrives, so SILENT never fires on it —
-                # count the bounces that failed to thaw it and escalate on those.
-                futile += 1
                 # One cadence for both cures, so a rationed restart still bounces.
-                if (now - heard >= SILENT or futile > BOUNCES) and restart():
+                if now - heard >= SILENT and restart():
                     return
-                bounce()
-                flush(rx)
+                if grabbing():
+                    bounce()
+                    flush(rx)
                 fresh = time.monotonic()
 
             if now - sent < (KEEPALIVE if rgb == last else MIN_INTERVAL):
