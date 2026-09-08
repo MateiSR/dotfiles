@@ -80,6 +80,36 @@ button:hover {
     background: @surface_container;
 }
 
+/* ---------- switches ---------- */
+/* The `*` reset zeroes GTK's built-in switch sizing, so state it explicitly. */
+
+/* Size the slider, not the switch: GTK derives the track from it. */
+switch {
+    padding: 2px;
+    border-radius: 999px;
+    background: @surface_container_highest;
+}
+
+switch:hover {
+    background: @outline_variant;
+}
+
+switch:checked,
+switch:checked:hover {
+    background: @primary;
+}
+
+switch slider {
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 999px;
+    background: @on_surface_variant;
+}
+
+switch:checked slider {
+    background: @on_primary;
+}
+
 /* ---------- launcher and power: target is 26x26, not full-height ---------- */
 
 #launcher button,
@@ -223,17 +253,11 @@ popover.menu contents {
     color: @on_surface;
 }
 
-.popup-clock .calendar-clock,
-#brightness-title {
+.popup-clock .calendar-clock {
     margin-bottom: 10px;
     color: @on_surface;
     font-size: 13px;
     font-weight: 700;
-}
-
-#brightness-devices {
-    color: @on_surface_variant;
-    font-size: 11px;
 }
 
 .popup-clock .calendar {
@@ -254,8 +278,116 @@ popover.menu contents {
     background: @surface_container_low;
 }
 
-.popup-volume .device-box {
+/* ---------- bluetooth popup ---------- */
+
+.popup-bluetooth .header {
+    margin-bottom: 10px;
+}
+
+.popup-bluetooth .header .label {
+    margin-left: 10px;
+    font-size: 13px;
+}
+
+.popup-bluetooth .devices .box .device + .device {
+    margin-top: 6px;
+}
+
+.popup-bluetooth .devices .box .device .icon-box {
     margin-right: 10px;
+}
+
+.popup-bluetooth .devices .box .device .switch {
+    margin-left: 12px;
+}
+
+.popup-bluetooth .devices .box .device .status .footer-label {
+    color: @on_surface_variant;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+/* ---------- volume popup ---------- */
+
+.popup-volume .device-box {
+    margin-bottom: 10px;
+}
+
+.popup-volume .device-selector > button {
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: @surface_container;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.popup-volume .apps-box .app-box {
+    padding: 4px 8px;
+    border-radius: 10px;
+    background: @surface_container_low;
+}
+
+.popup-volume .apps-box .app-box .title {
+    color: @on_surface_variant;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.popup-volume .btn-mute {
+    min-height: 18px;
+    padding: 0;
+    border-radius: 6px;
+    background: @surface_container;
+    font-size: 11px;
+}
+
+.popup-volume .slider {
+    min-height: 16px;
+}
+
+.popup-volume .btn-mute:checked {
+    background: @error_container;
+    color: @on_error_container;
+}
+
+/* ---------- brightness popup ---------- */
+
+#brightness-header {
+    margin-bottom: 12px;
+}
+
+/* Width, not expansion, is what pushes the sync toggle to the right edge. */
+#brightness-title {
+    min-width: 252px;
+    color: @on_surface;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+#brightness-sync {
+    min-width: 28px;
+    min-height: 24px;
+    padding: 0;
+    border-radius: 8px;
+    background: @surface_container_high;
+    color: @on_surface_variant;
+    font-size: 13px;
+}
+
+#brightness-sync:hover {
+    background: @primary_container;
+    color: @on_primary_container;
+}
+
+.brightness-row + .brightness-row {
+    margin-top: 10px;
+}
+
+.brightness-name {
+    min-width: 90px;
+    color: @on_surface_variant;
+    font-size: 12px;
+    font-weight: 400;
 }
 
 scale trough {

@@ -69,12 +69,16 @@ type = "volume"
 format = "{icon} {percentage}%"
 mute_format = "{icon} {percentage}%"
 show_sources = false
+popup_orientation = "vertical"
+truncate_popup = { mode = "end", max_length = 24 }
+tooltip = "Volume · right-click for pavucontrol"
+on_click_right = "hyprctl dispatch \"hl.dsp.exec_cmd('pavucontrol')\""
 
 [[end]]
 type = "custom"
 name = "brightness"
 class = "brightness"
-show_if = "~/.config/ironbar/brightness.sh get"
+show_if = "~/.config/ironbar/brightness.sh has 1"
 
 [[end.bar]]
 type = "button"
@@ -86,25 +90,78 @@ type = "box"
 orientation = "vertical"
 
 [[end.popup.widgets]]
+type = "box"
+name = "brightness-header"
+
+[[end.popup.widgets.widgets]]
 type = "label"
 name = "brightness-title"
 label = "󰃠  Brightness"
 
-[[end.popup.widgets]]
-type = "label"
-name = "brightness-devices"
-label = "{{1000:~/.config/ironbar/brightness.sh label}}"
+[[end.popup.widgets.widgets]]
+type = "button"
+name = "brightness-sync"
+label = "{{1000:~/.config/ironbar/brightness.sh sync-icon}}"
+tooltip = "Link displays to one slider"
+on_click = "!~/.config/ironbar/brightness.sh toggle"
+show_if = "30000:~/.config/ironbar/brightness.sh has 2"
 
 [[end.popup.widgets]]
 type = "slider"
 name = "brightness-slider"
+show_if = "1000:~/.config/ironbar/brightness.sh synced"
 min = 5
 max = 100
 step = 5
-length = 240
+length = 260
 show_label = false
 value = "1000:~/.config/ironbar/brightness.sh get"
-on_change = "!~/.config/ironbar/brightness.sh set ${0%.*}"
+on_change = "!~/.config/ironbar/brightness.sh set all ${0%.*}"
+
+# honey: one hardcoded row per display -- ironbar widgets are static config.
+# Copy a brightness-row block and bump the index if a third display appears.
+
+[[end.popup.widgets]]
+type = "box"
+class = "brightness-row"
+show_if = "1000:~/.config/ironbar/brightness.sh row 1"
+
+[[end.popup.widgets.widgets]]
+type = "label"
+class = "brightness-name"
+label = "{{30000:~/.config/ironbar/brightness.sh label 1}}"
+
+[[end.popup.widgets.widgets]]
+type = "slider"
+class = "brightness-slider"
+min = 5
+max = 100
+step = 5
+length = 190
+show_label = false
+value = "1000:~/.config/ironbar/brightness.sh get 1"
+on_change = "!~/.config/ironbar/brightness.sh set 1 ${0%.*}"
+
+[[end.popup.widgets]]
+type = "box"
+class = "brightness-row"
+show_if = "1000:~/.config/ironbar/brightness.sh row 2"
+
+[[end.popup.widgets.widgets]]
+type = "label"
+class = "brightness-name"
+label = "{{30000:~/.config/ironbar/brightness.sh label 2}}"
+
+[[end.popup.widgets.widgets]]
+type = "slider"
+class = "brightness-slider"
+min = 5
+max = 100
+step = 5
+length = 190
+show_label = false
+value = "1000:~/.config/ironbar/brightness.sh get 2"
+on_change = "!~/.config/ironbar/brightness.sh set 2 ${0%.*}"
 
 [[end]]
 type = "battery"
