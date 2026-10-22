@@ -54,3 +54,8 @@
 #browser {
   background: {{colors.surface.default.hex}} !important;
 }
+
+/* Dark themes outline active-tab favicons in white. */
+#browser .tab.active .tab-header .favicon:not(.svg) {
+  filter: none !important;
+}
