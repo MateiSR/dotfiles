@@ -20,5 +20,7 @@ Vivaldi has to be pointed at the folder by hand once per profile.
 - Vivaldi 8's unified UI draws the toolbar, panel strip and start page
   transparent over the window background, which the theme sets inline on
   `#browser`; the template overrides that background too.
+- The template also hides the "Press Escape key to exit fullscreen." bubble
+  (Vivaldi dropped its setting); other toasts in fullscreen go with it.
 - Internal pages (settings, history) are themed, but they use Matugen's
   surface tones, which are only faintly tinted.

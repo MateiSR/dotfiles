@@ -59,3 +59,8 @@
 #browser .tab.active .tab-header .favicon:not(.svg) {
   filter: none !important;
 }
+
+/* "Press Escape key to exit fullscreen." shares this bubble with toasts; scope to fullscreen. */
+#browser.fullscreen .overlayinfobubble {
+  display: none !important;
+}
