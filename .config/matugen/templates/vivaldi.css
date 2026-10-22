@@ -1,0 +1,56 @@
+/* Vivaldi CSS mod: overrides the theme engine's inline --color* vars on #browser. */
+:root, #browser {
+  --colorBg: {{colors.surface_container.default.hex}} !important;
+  --colorBgDark: {{colors.surface_container_low.default.hex}} !important;
+  --colorBgDarker: {{colors.surface.default.hex}} !important;
+  --colorBgIntense: {{colors.surface_container_lowest.default.hex}} !important;
+  --colorBgIntenser: {{colors.surface_container_lowest.default.hex}} !important;
+  --colorBgLight: {{colors.surface_container_high.default.hex}} !important;
+  --colorBgLightIntense: {{colors.surface_container_highest.default.hex}} !important;
+  --colorBgLighter: {{colors.surface_bright.default.hex}} !important;
+  --colorBgAlpha: color-mix(in srgb, {{colors.surface_container.default.hex}} 80%, transparent) !important;
+  --colorBgAlphaHeavy: color-mix(in srgb, {{colors.surface_container.default.hex}} 90%, transparent) !important;
+  --colorBgAlphaHeavier: color-mix(in srgb, {{colors.surface_container.default.hex}} 95%, transparent) !important;
+  --colorWindowBg: {{colors.surface.default.hex}} !important;
+  --colorTabBar: {{colors.surface_container_lowest.default.hex}} !important;
+
+  --colorFg: {{colors.on_surface.default.hex}} !important;
+  --colorFgIntense: {{colors.on_surface.default.hex}} !important;
+  --colorFgFaded: {{colors.on_surface_variant.default.hex}} !important;
+  --colorFgFadedMore: {{colors.on_surface_variant.default.hex}} !important;
+  --colorFgFadedMost: {{colors.outline.default.hex}} !important;
+  --colorFgAlpha: color-mix(in srgb, {{colors.on_surface.default.hex}} 15%, transparent) !important;
+
+  --colorAccentBg: {{colors.primary_container.default.hex}} !important;
+  --colorAccentBgDark: color-mix(in srgb, {{colors.primary_container.default.hex}} 85%, black) !important;
+  --colorAccentBgDarker: color-mix(in srgb, {{colors.primary_container.default.hex}} 70%, black) !important;
+  --colorAccentBgAlpha: color-mix(in srgb, {{colors.primary_container.default.hex}} 50%, transparent) !important;
+  --colorAccentFg: {{colors.on_primary_container.default.hex}} !important;
+
+  --colorHighlightBg: {{colors.primary.default.hex}} !important;
+  --colorHighlightBgDark: color-mix(in srgb, {{colors.primary.default.hex}} 80%, black) !important;
+  --colorHighlightBgAlpha: color-mix(in srgb, {{colors.primary.default.hex}} 25%, transparent) !important;
+  --colorHighlightFg: {{colors.on_primary.default.hex}} !important;
+
+  --colorBorder: {{colors.outline_variant.default.hex}} !important;
+  --colorBorderSubtle: {{colors.surface_container_high.default.hex}} !important;
+  --colorBorderIntense: {{colors.outline.default.hex}} !important;
+
+  --colorErrorBg: {{colors.error.default.hex}} !important;
+  --colorErrorFg: {{colors.on_error.default.hex}} !important;
+
+  /* Unified UI: header, toolbar, panel strip and start page are transparent over this. */
+  --browserBackgroundColor: {{colors.surface.default.hex}} !important;
+  --browserBackgroundImage: none !important;
+  --colorImageFg: {{colors.on_surface.default.hex}} !important;
+  --colorImageCenterFg: {{colors.on_surface.default.hex}} !important;
+  --colorImageTopFg: {{colors.on_surface.default.hex}} !important;
+  --colorImageBottomFg: {{colors.on_surface.default.hex}} !important;
+  --colorImageBg: {{colors.surface.default.hex}} !important;
+  --colorImageBgAlpha: color-mix(in srgb, {{colors.surface.default.hex}} 70%, transparent) !important;
+  --colorImageBgAlphaHeavy: color-mix(in srgb, {{colors.surface.default.hex}} 85%, transparent) !important;
+}
+
+#browser {
+  background: {{colors.surface.default.hex}} !important;
+}
